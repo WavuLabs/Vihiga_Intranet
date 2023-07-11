@@ -1,16 +1,17 @@
 import { Navigate } from "react-router-dom";
 import { ContextData } from "../APIs/contexts/Context";
+import Navbar from "../components/Navbar";
 
 const ProtectedRoute = ({ children }) => {
   // const ProtectedRoute = () => {
-  const { user } = ContextData();
+  // const { user } = ContextData();
 
-  if (!user) {
-    // return <Navigate to='/' />;
-  }
+  // if (!user) {
+  //   // return <Navigate to='/' />;
+  // }
   return (
     <>
-      <h1>Hello world!</h1>
+      <Navbar />
       {children}
     </>
   );

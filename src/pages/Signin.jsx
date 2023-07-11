@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRef } from "react";
 import { auth } from "../APIs/firebase";
 import { ContextData } from "../APIs/contexts/Context";
+import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
@@ -9,9 +10,13 @@ const Signin = () => {
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
   const { signIn } = ContextData();
+
+  const navigate = useNavigate();
+
   const HandleSignin = async () => {
     try {
-      await auth.signIn(email, password);
+      await signIn(email, password);
+      navigate("app/chat");
     } catch (error) {
       console.error(error);
     }
