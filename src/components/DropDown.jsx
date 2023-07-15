@@ -14,7 +14,7 @@ const DropDown = ({ Title, ...props }) => {
 
   return (
     <>
-      <Button  onClick={handleButtonClick}>{Title}</Button>
+      <Button onClick={handleButtonClick}>{Title}</Button>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -27,10 +27,8 @@ const DropDown = ({ Title, ...props }) => {
           vertical: "top",
           horizontal: "left",
         }}
+        onClick={handleMenuClose}
       >
-        <MenuItem onClick={handleMenuClose}>Option 1</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Option 2</MenuItem>
-        <MenuItem onClick={handleMenuClose}>Option 3</MenuItem>
         {props.children}
       </Menu>
     </>

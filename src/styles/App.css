@@ -43,13 +43,18 @@
   background: #1e1e24;
   outline: 1px solid slategrey;
 }
-.chatContainer .received-chat {
+.chatContainer .receiver-chat {
   display: flex;
   flex-direction: row;
   @apply bg-blue-950;
 }
-.chatContainer .sent-chat {
-  @apply flex-row-reverse bg-gray-400;
+.chatContainer .sender-chat {
+  @apply flex-row-reverse bg-gray-400 place-self-end;
   display: flex;
-  align-self: flex-end;
+  /* align-self: flex-end; */
+}
+.single-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -1,23 +1,39 @@
 import React, { useRef, useState } from "react";
 import { ContextData } from "../APIs/contexts/Context";
 import { useNavigate } from "react-router-dom";
+import { TextInputComponents } from "../components/TextInputComponents";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const emailInputRef = useRef(null);
-  const passwordInputRef = useRef(null);
   const navigate = useNavigate();
+  const { addingNewUsers, createUser } = ContextData();
 
   const HandleSignup = async () => {
     try {
-      await createUser(email, password);
+      await createUser(email, password)
+        .then((userCredential) => {
+          // Signed in
+          const uid = userCredential.user.uid;
+          const userObject = {
+            name: name,
+            email: email,
+            uid: uid,
+          };
+          addingNewUsers(userObject);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+        });
+
       navigate("/");
     } catch (error) {
       console.error(error);
     }
   };
-  const { createUser } = ContextData();
 
   return (
     <div className="w-full h-full flex justify-center items-center bg-gray-100">
@@ -25,22 +41,24 @@ const Signup = () => {
         <h1 className="text-3xl font-semibold text-gray-800">Sign up</h1>
         <p className="text-gray-600">Create account</p>
 
-        <input
-          ref={emailInputRef}
+        <TextInputComponents
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="my-4 w-full bg-gray-200 rounded border-gray-400 focus:bg-white focus:border-gray-700"
+        />
+        <TextInputComponents
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
 
-        <input
-          ref={passwordInputRef}
+        <TextInputComponents
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="my-4 w-full bg-gray-200 rounded border-gray-400 focus:bg-white focus:border-gray-700"
         />
 
         <button

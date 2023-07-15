@@ -1,28 +1,28 @@
-import { Avatar, Stack } from "@mui/material";
+import { Avatar, Button, Stack } from "@mui/material";
 import React from "react";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 const UsersSideBar = (props) => {
-  const { name, profile_picture } = props.user;
+  const { hideSender } = props;
+  const { name, profile_picture, uid } = props.user;
+  const { setThisReceiverName } = useOutletContext();
+  
+  const navigate = useNavigate();
+
+  const HandleClick = async () => {
+    navigate(`/chatpage/${uid}`);
+    setThisReceiverName(name);
+  };
+
   return (
-    <Stack
-      direction="column"
-      spacing={0}
-      className=" justify-center items-center "
+    <button
+      onClick={HandleClick}
+      className={`flex flex-col m-1 p-2 rounded-md justify-center items-center ${hideSender}`}
     >
       <Avatar src={profile_picture} alt="User Avatar" />
       <p className="text-white p-3"> {name}</p>
-    </Stack>
+    </button>
   );
 };
 
 export default UsersSideBar;
-[
-  {
-    is_online: true,
-    contacts: "0700000000",
-    groups: [],
-    name: "Test",
-    email: "test@gmail.com",
-    profile_picture: "https://avatars.dicebear.com/api/avataaars/your-seed.svg",
-  },
-];

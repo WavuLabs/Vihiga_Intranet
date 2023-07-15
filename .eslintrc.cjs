@@ -13,5 +13,7 @@ module.exports = {
     "react-refresh/only-export-components": "warn",
     "react/prop-types": "off",
     "no-unused-vars": "warn",
+    "react-hooks/exhaustive-deps": "off",
   },
 };
+/* eslint-disable react-hooks/exhaustive-deps */

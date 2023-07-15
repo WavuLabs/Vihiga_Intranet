@@ -12,9 +12,14 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import DropDown from "./DropDown";
 import { auth } from "../APIs/firebase";
+import { Logout } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { ContextData } from "../APIs/contexts/Context";
 
 export default function Navbar() {
   const [state, setState] = React.useState(false);
+  const { setLoggedInUser } = ContextData();
+  const navigate = useNavigate();
   const left = "left";
   const user = auth.currentUser;
   const toggleDrawer = (open) => (event) => {
@@ -62,6 +67,25 @@ export default function Navbar() {
       </List>
     </Box>
   );
+  const HandleSignOut = async () => {
+    await auth.signOut();
+    await setLoggedInUser(null);
+    navigate("/", { replace: true });
+  };
+  const SignInDetails = () => {
+    if (user) {
+      return (
+        <DropDown Title={user?.email}>
+          <ListItemButton onClick={HandleSignOut}>
+            <ListItemIcon>
+              <Logout />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItemButton>
+        </DropDown>
+      );
+    }
+  };
 
   return (
     <div className="relative flex flex-row top-0 bg-[#161B1C] h-[10vh] w-full justify-between items-center">
@@ -75,8 +99,8 @@ export default function Navbar() {
       >
         {list(left)}
       </SwipeableDrawer>
-      <p className="text-white ">{user?.email}</p>
-      <p className="text-white bg-primary p-3">Logo</p>
+      {/* Box with user name and avatar */}
+      <SignInDetails />
     </div>
   );
 }

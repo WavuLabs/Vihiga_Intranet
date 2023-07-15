@@ -1,22 +1,31 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
 import { auth } from "../APIs/firebase";
 import { ContextData } from "../APIs/contexts/Context";
 import { useNavigate } from "react-router-dom";
+import { ProgressIndicator } from "../components/ProgressIndicator";
+import { TextInputComponents } from "../components/TextInputComponents";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
+  const [user, setUser] = useState(null);
   const [password, setPassword] = useState("");
-  const emailInputRef = useRef(null);
-  const passwordInputRef = useRef(null);
-  const { signIn } = ContextData();
-
+  const { signIn, loggedInUser, setLoggedInUser } = ContextData();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      const uid = currentUser?.uid;
+      setUser(uid);
+      if (uid) navigate("chatpage", { replace: true });
+    });
+    return unsubscribe;
+  }, []);
 
   const HandleSignin = async () => {
     try {
       await signIn(email, password);
-      navigate("app/chat");
+      navigate("chatpage", { replace: true });
     } catch (error) {
       console.error(error);
     }
@@ -28,22 +37,18 @@ const Signin = () => {
         <h1 className="text-3xl font-semibold text-gray-800">Sign in</h1>
         <p className="text-gray-600">Sign in to your account</p>
 
-        <input
-          ref={emailInputRef}
+        <TextInputComponents
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="my-4 w-full bg-gray-200 rounded border-gray-400 focus:bg-white focus:border-gray-700"
         />
 
-        <input
-          ref={passwordInputRef}
+        <TextInputComponents
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="my-4 w-full bg-gray-200 rounded border-gray-400 focus:bg-white focus:border-gray-700"
         />
 
         <button
@@ -52,6 +57,12 @@ const Signin = () => {
           className="my-4 w-full bg-gray-700 text-white rounded hover:bg-gray-800"
         >
           Sign in
+        </button>
+        <button
+          onClick={() => navigate("/signup")}
+          className="my-4 w-full bg-gray-700 text-white rounded hover:bg-gray-800"
+        >
+          Create account
         </button>
       </div>
     </div>
