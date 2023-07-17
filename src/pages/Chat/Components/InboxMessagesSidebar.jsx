@@ -9,11 +9,11 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { auth, db } from "../APIs/firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import InboxReceiverItem from "./InboxReceiverItem";
 import { useOutletContext } from "react-router-dom";
-// import MessagesSenderItem from "./MessagesSenderItem";
+
+import { auth, db } from "../../../APIs/firebase";
 
 const InboxMessagesSidebar = (props) => {
   const uid = auth.currentUser?.uid;
@@ -21,9 +21,9 @@ const InboxMessagesSidebar = (props) => {
 
   const [receiverState, setReceiverState] = useState({});
 
-  const usersRef = collection(db, `users/${uid}/messages`);
+  const userMessagesRef = collection(db, `messages/${uid}/messages`);
   //   where("state", "==", "CA")
-  const q = query(usersRef, orderBy("sentAt", "asc"));
+  const q = query(userMessagesRef, orderBy("sentAt", "asc"));
   const [messagesOfThisUser, loading, error, snapshot] = useCollectionData(q, {
     idField: "id",
   });

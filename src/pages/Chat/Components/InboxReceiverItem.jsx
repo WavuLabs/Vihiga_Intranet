@@ -1,6 +1,5 @@
 import { Avatar } from "@mui/material";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { ContextData } from "../APIs/contexts/Context";
 import { useEffect, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
@@ -11,22 +10,22 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { auth, db } from "../APIs/firebase";
 
+import { auth, db } from "../../../APIs/firebase";
+import { ContextData } from "../../../APIs/contexts/Context";
 //This component will display the message inbox from different senders and the pass the messages of the senders to the chat component
 
 export default function InboxReceiverItem(props) {
   const uid = auth.currentUser?.uid;
   const navigate = useNavigate();
   const { thisReceiver, messagesOfThisReceiver, hideThisReceiver } = props;
-  const { setThisReceiverMessages, thisReceiverName, setThisReceiverName } =
-    useOutletContext();
+  const { setThisReceiverMessages } = useOutletContext();
   const [userName, setUserName] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const { loadingUSERS, USERS } = ContextData();
 
   /// Query the last messages sent by the user.
-  const usersRef = collection(db, `users/${uid}/messages`);
+  const usersRef = collection(db, `messages/${uid}/messages`);
   const last = query(
     usersRef,
     or(
@@ -64,7 +63,6 @@ export default function InboxReceiverItem(props) {
 
   //messages are going to be passed to the chat component
   const HandleClick = async () => {
-    await setThisReceiverName(userName);
     navigate(`/chatpage/${thisReceiver}`);
   };
 
@@ -83,9 +81,9 @@ export default function InboxReceiverItem(props) {
         >
           <Avatar src={profilePic} alt="DP" className="m-1 custom-borders" />
           <>
-            <div className="flex flex-col justify-center items-start m-2 flex-1">
-              <p className=" ">{userName} </p>
-              <p className="text-primary single-line text-xs">
+            <div className="flex flex-col justify-between items-start m-2 flex-1">
+              <p className="text-left single-line ">{userName ? userName : thisReceiver} </p>
+              <p className="text-primary  single-line text-xs">
                 {message.message}
               </p>
             </div>

@@ -58,3 +58,13 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.rows-center {
+  @apply flex flex-row justify-start items-center;
+}
+.cols-center {
+  @apply flex flex-col justify-start items-center;
+}
+.pop-up {
+  @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
+   bg-white/25 border-2 border-black shadow-xl p-4 w-1/2 h-1/2 z-10;
+}

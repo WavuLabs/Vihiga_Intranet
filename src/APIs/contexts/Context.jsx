@@ -11,7 +11,9 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 const UserContext = createContext();
 
 export const ContextProvider = ({ children }) => {
+  const userID = auth.currentUser?.uid;
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [userGroups, setUserGroups] = useState([]);
 
   const usersRef = collection(db, `users`);
   const queryUsers = query(usersRef, orderBy("name", "asc"));
@@ -23,7 +25,7 @@ export const ContextProvider = ({ children }) => {
   );
 
   const groupsRef = collection(db, `groups`);
-  const queryGROUPS = query(groupsRef, orderBy("name", "asc"));
+  const queryGROUPS = query(groupsRef, orderBy("groupName", "asc"));
   const [GROUPS, loadingGROUPS, errorGROUPS, snapshotGROUPS] =
     useCollectionData(queryGROUPS, {
       idField: "id",
@@ -39,11 +41,13 @@ export const ContextProvider = ({ children }) => {
   }, []);
 
   const getUserName = (uid, setName, setProfilePic) => {
+    setName("");
+    setProfilePic("");
     const user = USERS?.find((user) => user.uid === uid);
 
     if (!user) {
       console.log("Error: User not found");
-      return null;
+      return;
     }
     setName(user.name);
     setProfilePic(user.profile_picture);
@@ -61,28 +65,13 @@ export const ContextProvider = ({ children }) => {
     return signOut(auth);
   };
 
-  const addingNewUsers = async (userObject) => {
-    const { name, email, uid } = userObject;
-    const usersObject = {
-      name: name,
-      email: email,
-      profile_picture: "https://api.dicebear.com/6.x/adventurer/svg?seed=Abby",
-      is_online: true,
-      groups: [],
-      contacts: "0700000000",
-      uid: uid,
-    };
+  const addingNewUsers = async (uid, userObject) => {
+    await setDoc(doc(db, "users", uid), userObject, { merge: true });
+    console.log("Document successfully written!");
+  };
 
-    await setDoc(doc(db, "users", uid), usersObject, { merge: true });
-
-    // const userRefMessages = collection(db, `users/${uid}/messages`);
-    // await addDoc(userRefMessages, {
-    //   sentAt: serverTimestamp(),
-    //   senderID: "admin",
-    //   receiverID: "admin",
-    //   message: "Welcome to the chat app",
-    // });
-
+  const addingUserToGroup = async (groupName, groupObject) => {
+    await setDoc(doc(db, "groups", groupName), groupObject, { merge: true });
     console.log("Document successfully written!");
   };
 
@@ -92,12 +81,15 @@ export const ContextProvider = ({ children }) => {
     loadingUSERS,
     GROUPS,
     loadingGROUPS,
+    userGroups,
+    setUserGroups,
     getUserName,
     setLoggedInUser,
     addingNewUsers,
     createUser,
     signIn,
     logout,
+    addingUserToGroup,
   };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

@@ -4,14 +4,12 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 
 const UsersSideBar = (props) => {
   const { hideSender } = props;
-  const { name, profile_picture, uid } = props.user;
-  const { setThisReceiverName } = useOutletContext();
+  const { name, profile_picture, uid, groups } = props.user;
   
   const navigate = useNavigate();
 
   const HandleClick = async () => {
     navigate(`/chatpage/${uid}`);
-    setThisReceiverName(name);
   };
 
   return (

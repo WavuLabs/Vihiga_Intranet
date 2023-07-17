@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useRef } from "react";
-import { auth } from "../APIs/firebase";
-import { ContextData } from "../APIs/contexts/Context";
 import { useNavigate } from "react-router-dom";
-import { ProgressIndicator } from "../components/ProgressIndicator";
-import { TextInputComponents } from "../components/TextInputComponents";
+
+import { ProgressIndicator } from "../../components/ProgressIndicator";
+import { TextInputComponents } from "../../components/TextInputComponents";
+import { ContextData } from "../../APIs/contexts/Context";
+import { auth } from "../../APIs/firebase";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
@@ -32,9 +33,9 @@ const Signin = () => {
   };
 
   return (
-    <div className="w-full h-full flex justify-center items-center bg-gray-100">
+    <div className="w-full h-full flex justify-center items-center">
       <div className="max-w-md w-full px-4 py-8 text-center">
-        <h1 className="text-3xl font-semibold text-gray-800">Sign in</h1>
+        <h1 className="text-3xl font-semibold">Sign in</h1>
         <p className="text-gray-600">Sign in to your account</p>
 
         <TextInputComponents

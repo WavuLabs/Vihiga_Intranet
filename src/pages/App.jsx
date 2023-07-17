@@ -4,7 +4,7 @@ import "../styles/App.css";
 
 function App() {
   return (
-    <Container>
+    <Container className="relative">
       <RouteStates />
     </Container>
   );

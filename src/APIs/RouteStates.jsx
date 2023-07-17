@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 
-import ChatPage from "../pages/ChatPage";
-import Signin from "../pages/Signin";
-import Signup from "../pages/Signup";
-import ErrorPage from "../components/ErrorPage";
+import Signin from "../pages/Signin/Signin";
+import Signup from "../pages/Signup/Signup";
+import ErrorPage from "../pages/ErrorPage/ErrorPage";
 import ProtectedRoute from "./ProtectedRoute";
-import Chat from "../components/Chat";
+import ChatPage from "../pages/Chat/ChatPage";
+import Chat from "../pages/Chat/Chat";
 import ChatContext from "./contexts/ChatContext";
 
 const RouteStates = () => {
