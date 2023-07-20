@@ -9,11 +9,16 @@ import DropDown from "../../components/DropDown";
 import { GroupsItem } from "./Components/GroupsItem";
 import UsersSideBar from "./Components/UsersSideBar";
 import InboxMessagesSidebar from "./Components/InboxMessagesSidebar";
-import { MenuItem } from "@mui/material";
+import { Container, InputAdornment, MenuItem, TextField } from "@mui/material";
 import { useNavigate, useOutletContext } from "react-router-dom";
+
+import SearchIcon from "@mui/icons-material/Search";
 
 const ChatPage = ({ children }) => {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredResults, setFilteredResults] = useState([]);
+
   const uid = auth.currentUser?.uid;
   const {
     USERS,
@@ -23,6 +28,10 @@ const ChatPage = ({ children }) => {
     userGroups,
     setUserGroups,
   } = ContextData();
+
+  useEffect(() => {
+    loadingUSERS == false && setFilteredResults(USERS);
+  }, [loadingUSERS]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
@@ -50,6 +59,16 @@ const ChatPage = ({ children }) => {
     navigate(`/chatpage/${group}`);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    const searchTermToLowerCase = event.target.value.toLowerCase();
+
+    const resultsOfSearch = USERS?.filter((user) =>
+      user.name.toLowerCase().includes(searchTermToLowerCase)
+    );
+    setFilteredResults(resultsOfSearch);
+  };
+
   return (
     <div className="w-full h-[89vh] flex flex-row overflow-clip">
       {/* Main sidebar div */}
@@ -57,17 +76,27 @@ const ChatPage = ({ children }) => {
         {/* departments div*/}
         <div className="custom-borders">
           <div className="flex flex-row justify-between items-center">
-            <p className="text-white p-3">Users</p>
-            <button
-              onClick={() => {}}
-              className="bg-[#0A0E0F] text-white/50 p-3 text-sm flex flex-row justify-between items-center"
-            >
-              New Chat <AiOutlineCaretRight className="ml-1" />
-            </button>
+            <p className="text-white p-3 w-fit">Users</p>
+            <TextField
+              type="search"
+              label="Search"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="flex-1 rounded-sm m-2"
+              size="small"
+              autoComplete="on"
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
           </div>
           <div className="flex flex-row overflow-y-hidden overflow-x-scroll">
             {loadingUSERS == false ? (
-              USERS?.map((user, index) => (
+              filteredResults?.map((user, index) => (
                 <UsersSideBar
                   key={index}
                   user={user}

@@ -137,6 +137,7 @@ const Chat = (props) => {
                 <MessageItem
                   key={index}
                   messageItem={message.message}
+                  profilePic={profilePic}
                   hideSender={hideSender}
                   sentAT={timeSent}
                   messageClass={messageClass}
@@ -148,7 +149,7 @@ const Chat = (props) => {
           <ProgressIndicator />
         )}
 
-        <span ref={bottomRef} className="h-1"></span>
+        <span ref={bottomRef} className=""></span>
       </div>
 
       <form
