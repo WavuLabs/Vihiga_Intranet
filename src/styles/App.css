@@ -46,10 +46,10 @@
 .chatContainer .receiver-chat {
   display: flex;
   flex-direction: row;
-  @apply bg-blue-950;
+  @apply bg-blue-950/50;
 }
 .chatContainer .sender-chat {
-  @apply flex-row-reverse bg-gray-400 place-self-end;
+  @apply flex-row-reverse bg-gray-400/40 place-self-end;
   display: flex;
   /* align-self: flex-end; */
 }
@@ -57,6 +57,9 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.rows-justify-between {
+  @apply flex flex-row justify-between items-center;
 }
 .rows-center {
   @apply flex flex-row justify-start items-center;

@@ -10,6 +10,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
 
 import { auth, db } from "../../../APIs/firebase";
 import { ContextData } from "../../../APIs/contexts/Context";
@@ -22,15 +23,15 @@ export default function InboxReceiverItem(props) {
   const { setThisReceiverMessages } = useOutletContext();
   const [userName, setUserName] = useState("");
   const [profilePic, setProfilePic] = useState("");
-  const { loadingUSERS, USERS } = ContextData();
+  const { loadingUSERS, USERS, getUserName } = ContextData();
 
   /// Query the last messages sent by the user.
   const usersRef = collection(db, `messages/${uid}/messages`);
   const last = query(
     usersRef,
     or(
-      where("senderID", "==", `${thisReceiver}`),
-      where("receiverID", "==", `${thisReceiver}`)
+      where("senderID.uid", "==", `${thisReceiver}`),
+      where("receiverID.uid", "==", `${thisReceiver}`)
     ),
     orderBy("sentAt", "desc"),
     limit(1)
@@ -42,27 +43,15 @@ export default function InboxReceiverItem(props) {
     snapshotLastMessage,
   ] = useCollectionData(last, { idField: "id" });
 
-  /// Query the last messages sent by the user.
-
-  // console.log(messagesOfThisSender, "messagesOfThisSender");
-  const getUserName = (uid) => {
-    const user = USERS?.find((user) => user.uid === uid);
-
-    if (!user) {
-      console.log("Error: User not found");
-      return null;
-    }
-
-    setUserName(user.name);
-    setProfilePic(user.profile_picture);
-  };
-
   useEffect(() => {
-    getUserName(thisReceiver);
+    getUserName(thisReceiver, setUserName, setProfilePic);
+
+    errorLastMessage && console.log(errorLastMessage, "errorLastMessage");
   }, [loadingUSERS]);
 
   //messages are going to be passed to the chat component
   const HandleClick = async () => {
+    console.log(hideThisReceiver);
     navigate(`/chatpage/${thisReceiver}`);
   };
 
@@ -76,21 +65,23 @@ export default function InboxReceiverItem(props) {
       return (
         <button
           key={index}
-          className={`flex flex-row my-1 py-1 w-full ${hideThisReceiver}`}
+          className={`flex flex-row my-1 px-2 mx-2 py-1 w-[97%] ${hideThisReceiver}`}
           onClick={HandleClick}
         >
           <Avatar src={profilePic} alt="DP" className="m-1 custom-borders" />
-          <>
-            <div className="flex flex-col justify-between items-start m-2 flex-1">
-              <p className="text-left single-line ">{userName ? userName : thisReceiver} </p>
-              <p className="text-primary  single-line text-xs">
-                {message.message}
-              </p>
+          <div className="flex flex-col flex-1 items-start m-1 overflow-x-clip">
+            <p className="text-left single-line ">
+              {userName ? userName : thisReceiver}
+            </p>
+            <div className="flex flex-row items-center w-full overflow-clip ">
+              {message.senderID.uid === uid && (
+                <DoneAllIcon fontSize="small" className="mx-1" />
+              )}
+              <p className="text-primary text-xs text-left single-line max-w-[15vw]">{message.message}</p>
             </div>
-            <div className="self-end">
-              <p className="text-white/50 text-xs  text-right">{time}</p>
-            </div>
-          </>
+          </div>
+
+          <p className="text-white/50 text-xs text-right single-line mt-2 ">{time}</p>
         </button>
       );
     })

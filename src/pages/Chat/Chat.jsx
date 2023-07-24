@@ -29,25 +29,30 @@ import { MessageItem } from "./Components/MessageItem";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 
 const Chat = (props) => {
-  const [userName, setUserName] = useState("");
-  const [profilePic, setProfilePic] = useState("");
-  const { USERS, getUserName } = ContextData();
-  const { receiverID } = useParams();
-  const { thisReceiverMessages } = useOutletContext();
+  const { USERS, getUserName, setLoggedInUserName, loggedInUserName } =
+    ContextData();
+  const navigate = useNavigate();
   const uid = auth.currentUser?.uid;
+  const { receiverID } = useParams();
+
+  const [userName, setUserName] = useState("");
+  const [userType, setUserType] = useState("");
+  const [loggedInUserNameDP, setLoggedInUserNameDP] = useState("");
+  const [profilePic, setProfilePic] = useState("");
   const [messageText, setMessageText] = useState("");
   const [groupedMessagesState, setGroupedMessagesState] = useState();
-  const navigate = useNavigate();
-  const bottomRef = useRef();
+  const [isOnline, setIsOnline] = useState(null);
+  const { thisReceiverMessages } = useOutletContext();
 
+  const bottomRef = useRef();
   const receiverRef = collection(db, `messages/${receiverID}/messages`);
   const senderRef = collection(db, `messages/${uid}/messages`);
 
   const q = query(
     userName ? senderRef : receiverRef,
     or(
-      where("senderID", "==", `${receiverID}`),
-      where("receiverID", "==", `${receiverID}`)
+      where("senderID.uid", "==", `${receiverID}`),
+      where("receiverID.uid", "==", `${receiverID}`)
     ),
     orderBy("sentAt", "asc")
   );
@@ -57,19 +62,27 @@ const Chat = (props) => {
   );
 
   const addData = async () => {
+    uid &&
+      receiverID &&
+      loggedInUserName &&
+      messageText &&
+      (await addMessageToBothSides());
+
     //store message on both sender and receiver side
-    const MessageObject = {
-      sentAt: serverTimestamp(),
-      senderID: uid,
-      receiverID: receiverID,
-      message: messageText,
-    };
+    async function addMessageToBothSides() {
+      const MessageObject = {
+        sentAt: serverTimestamp(),
+        senderID: { uid: uid, name: loggedInUserName },
+        receiverID: { uid: receiverID, name: userName },
+        message: messageText,
+      };
 
-    await addDoc(senderRef, MessageObject); //sender
-    console.log("Senders Document successfully written!");
+      await addDoc(senderRef, MessageObject); //sender
+      console.log("Senders Document successfully written!");
 
-    await addDoc(receiverRef, MessageObject); //receiver
-    console.log("Receivers Document successfully written!");
+      await addDoc(receiverRef, MessageObject); //receiver
+      console.log("Receivers Document successfully written!");
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -80,7 +93,12 @@ const Chat = (props) => {
   };
 
   const testing = () => {
-    console.log(receiverID);
+    console.log(userType);
+  };
+
+  const getOnlineStatus = async () => {
+    const user = USERS?.find((user) => user.uid === receiverID);
+    setIsOnline(user?.is_online);
   };
 
   const groupMessagesByDate = async (messages) => {
@@ -105,37 +123,51 @@ const Chat = (props) => {
   };
 
   useEffect(() => {
+    getOnlineStatus();
     getUserName(receiverID, setUserName, setProfilePic);
+    getUserName(uid, setLoggedInUserName, setLoggedInUserNameDP);
+    userName ? setUserType("user") : setUserType("group");
     bottomRef.current.scrollIntoView({ behavior: "smooth" });
   }, [MessagesBtnTheTwoUsers]);
 
-  error && alert("Error occurred in fetching Data");
+  useEffect(() => {
+    console.log(error);
+  }, [error]);
+
   return (
     <>
-      <div className="flex flex-row justify-between items-center p-1 bg-yellow-900">
+      <div className="flex flex-row justify-between items-center p-1 bg-primary/10">
         <Avatar src={profilePic} className="m-1" alt="DP" />
         <div className="flex flex-col justify-center items-start m-2 flex-1">
           <p className="text-white">{userName ? userName : receiverID}</p>
-          {/* <p className="text-white/50 text-sm">D</p> */}
+          {userName && (
+            <p className="text-white/50 text-sm">
+              {isOnline == true ? "online" : "offline"}
+            </p>
+          )}
         </div>
       </div>
       {/* message items */}
-      <div className="chatContainer">
+      <div className="chatContainer ">
         <button onClick={testing}>Testing</button>
         {!loading ? (
           <>
             {MessagesBtnTheTwoUsers?.map((message, index) => {
+              const senderID = message.senderID.uid;
+              const name = message.senderID.name;
+
               const timeSent = message.sentAt?.toDate().toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
               });
+              const hideSender = senderID === uid ? "hidden" : null;
               const messageClass =
-                message.senderID === uid ? "sender-chat" : "receiver-chat";
-
-              const hideSender = message.senderID === uid ? "hidden" : "block";
+                senderID === uid ? "sender-chat" : "receiver-chat";
               return (
                 <MessageItem
                   key={index}
+                  name={name}
+                  userType={userType}
                   messageItem={message.message}
                   profilePic={profilePic}
                   hideSender={hideSender}

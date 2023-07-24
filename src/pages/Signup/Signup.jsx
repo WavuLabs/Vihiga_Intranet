@@ -16,6 +16,8 @@ import { ContextData } from "../../APIs/contexts/Context";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 import { TextInputComponents } from "../../components/TextInputComponents";
 import DropDown from "../../components/DropDown";
+import { auth } from "../../APIs/firebase";
+import { updateProfile } from "firebase/auth";
 
 const MyComponent = (props) => {
   const { group, setGroup } = props.values;
@@ -86,6 +88,12 @@ const Signup = () => {
             };
             await addingUserToGroup(group, groupObject);
             navigate("/", { replace: true });
+
+            await updateProfile(auth.currentUser, {
+              displayName: name,
+              photoURL: faker.image.avatar(),
+            });
+            
           })
           .catch((error) => {
             const errorCode = error.code;

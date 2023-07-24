@@ -1,4 +1,3 @@
-import { Avatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   collection,
@@ -22,17 +21,30 @@ const InboxMessagesSidebar = (props) => {
   const [receiverState, setReceiverState] = useState({});
 
   const userMessagesRef = collection(db, `messages/${uid}/messages`);
-  //   where("state", "==", "CA")
-  const q = query(userMessagesRef, orderBy("sentAt", "asc"));
+  const q = query(userMessagesRef, orderBy("sentAt", "desc"));
   const [messagesOfThisUser, loading, error, snapshot] = useCollectionData(q, {
     idField: "id",
   });
 
-
-  const QueryLastFive = async () => {
-    // Query the first page of docs
-    // !loadingLastMessage && console.log("QueryLastFive", lastMessage);
-  };
+  /* 
+  /// Query the last messages sent by the user.
+  const usersRef = collection(db, `messages/${uid}/messages`);
+  const last = query(
+    usersRef,
+    or(
+      where("senderID.uid", "==", `${thisReceiver}`),
+      where("receiverID.uid", "==", `${thisReceiver}`)
+    ),
+    orderBy("sentAt", "desc"),
+    limit(1)
+  );
+  const [
+    lastMessage,
+    loadingLastMessage,
+    errorLastMessage,
+    snapshotLastMessage,
+  ] = useCollectionData(last, { idField: "id" });
+  */
 
   const sortedMessages = () => {
     //  QueryMakes sure the object is empty
@@ -45,12 +57,12 @@ const InboxMessagesSidebar = (props) => {
       const messageData = doc;
       const receiverID = messageData.receiverID;
 
-      if (!messagesByAReceiver[receiverID]) {
+      if (!messagesByAReceiver[receiverID.uid]) {
         // If not, create an empty array for the sender.
-        messagesByAReceiver[receiverID] = [];
+        messagesByAReceiver[receiverID.uid] = [];
       }
 
-      messagesByAReceiver[receiverID].push(messageData);
+      messagesByAReceiver[receiverID.uid].push(messageData);
     });
 
     // Access the messages for each sender.
@@ -67,8 +79,11 @@ const InboxMessagesSidebar = (props) => {
     if (loading === false) sortedMessages();
   }, [messagesOfThisUser]);
 
+  const test = () => {
+    console.log(receiverState);
+  };
   return (
-    <>
+    <div className="flex flex-col flex-1 justify-start items-center">
       {Object.keys(receiverState).length > 0
         ? Object.entries(receiverState).map(
             ([thisReceiver, messagesOfThisReceiver]) => {
@@ -84,7 +99,7 @@ const InboxMessagesSidebar = (props) => {
             }
           )
         : null}
-    </>
+    </div>
   );
 };
 

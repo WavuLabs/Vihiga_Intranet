@@ -11,13 +11,14 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [user, setUser] = useState(null);
   const [password, setPassword] = useState("");
-  const { signIn, loggedInUser, setLoggedInUser } = ContextData();
+  const { signIn, setOnlineStatusTrue } = ContextData();
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       const uid = currentUser?.uid;
       setUser(uid);
+      setOnlineStatusTrue(uid);
       if (uid) navigate("chatpage", { replace: true });
     });
     return unsubscribe;
@@ -26,6 +27,7 @@ const Signin = () => {
   const HandleSignin = async () => {
     try {
       await signIn(email, password);
+      setOnlineStatusTrue(user);
       navigate("chatpage", { replace: true });
     } catch (error) {
       console.error(error);
@@ -37,7 +39,6 @@ const Signin = () => {
       <div className="max-w-md w-full px-4 py-8 text-center">
         <h1 className="text-3xl font-semibold">Sign in</h1>
         <p className="text-gray-600">Sign in to your account</p>
-
         <TextInputComponents
           type="email"
           placeholder="Email"

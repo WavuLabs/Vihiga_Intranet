@@ -11,18 +11,22 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import DropDown from "./DropDown";
+import MenuIcon from "@mui/icons-material/Menu";
 import { auth } from "../APIs/firebase";
-import { Logout } from "@mui/icons-material";
+import { Logout as LogoutIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { ContextData } from "../APIs/contexts/Context";
+import ChatPage from "../pages/Chat/ChatPage";
 
 export default function Navbar() {
   const [state, setState] = React.useState(false);
-  const { setLoggedInUser } = ContextData();
+  const { logout } = ContextData();
   const navigate = useNavigate();
   const left = "left";
   const user = auth.currentUser;
+
   const toggleDrawer = (open) => (event) => {
+    console.log(user?.displayName);
     if (
       event &&
       event.type === "keydown" &&
@@ -35,7 +39,7 @@ export default function Navbar() {
 
   const list = (anchor) => (
     <Box
-      sx={{ width: anchor === "top" || anchor === "bottom" ? "auto" : 250 }}
+      sx={{ width: "30%" }}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -68,8 +72,7 @@ export default function Navbar() {
     </Box>
   );
   const HandleSignOut = async () => {
-    await auth.signOut();
-    await setLoggedInUser(null);
+    await logout();
     navigate("/", { replace: true });
   };
   const SignInDetails = () => {
@@ -78,7 +81,7 @@ export default function Navbar() {
         <DropDown Title={user?.email}>
           <ListItemButton onClick={HandleSignOut}>
             <ListItemIcon>
-              <Logout />
+              <LogoutIcon />
             </ListItemIcon>
             <ListItemText primary="Logout" />
           </ListItemButton>
@@ -90,7 +93,12 @@ export default function Navbar() {
   return (
     <div className="relative flex flex-row top-0 bg-[#161B1C] h-[10vh] w-full justify-between items-center">
       {/* Box with Logo */}
-      <Button onClick={toggleDrawer(true)}>{left}</Button>
+      <div className="">
+        <Button onClick={toggleDrawer(true)}>
+          <MenuIcon />
+        </Button>
+      </div>
+      <p></p>
       <SwipeableDrawer
         anchor={left}
         open={state}
@@ -99,7 +107,6 @@ export default function Navbar() {
       >
         {list(left)}
       </SwipeableDrawer>
-      {/* Box with user name and avatar */}
       <SignInDetails />
     </div>
   );
