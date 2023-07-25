@@ -92,37 +92,37 @@ const Chat = (props) => {
     bottomRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
-  const testing = () => {
-    console.log(userType);
-  };
-
   const getOnlineStatus = async () => {
     const user = USERS?.find((user) => user.uid === receiverID);
     setIsOnline(user?.is_online);
   };
 
-  const groupMessagesByDate = async (messages) => {
-    const groupedMessages = {};
-    await messages?.forEach((message) => {
-      const date = message.sentAt?.toDate().toDateString();
-      if (!groupedMessages[date]) {
-        groupedMessages[date] = [];
-      }
-      // Convert sentAt to a string
-      const sentAtString = message.sentAt?.toDate().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
+  // Function to group messages by date
+  const groupMessagesByDate = (messageList) => {
+    const groupedMessages = [];
+    let currentDate = null;
 
-      groupedMessages[date].push({ ...message, sentAt: sentAtString });
+    messageList?.forEach((message) => {
+      const messageDate = new Date(message.sentAt?.toDate()).toDateString();
+      if (messageDate !== currentDate) {
+        groupedMessages.push({
+          sentAt: messageDate,
+          messages: [message],
+        });
+        currentDate = messageDate;
+      } else {
+        groupedMessages[groupedMessages.length - 1].messages.push(message);
+      }
     });
 
-    setGroupedMessagesState(groupedMessages);
-    console.log(groupedMessages, "groupedMessages");
-    // return groupedMessages;
+    return groupedMessages;
   };
 
+  // Group the messages by date
+
   useEffect(() => {
+    const groupedMessages = groupMessagesByDate(MessagesBtnTheTwoUsers);
+    setGroupedMessagesState(groupedMessages);
     getOnlineStatus();
     getUserName(receiverID, setUserName, setProfilePic);
     getUserName(uid, setLoggedInUserName, setLoggedInUserNameDP);
@@ -133,6 +133,8 @@ const Chat = (props) => {
   useEffect(() => {
     console.log(error);
   }, [error]);
+
+  const handleTest = () => console.log("clicked", groupedMessagesState);
 
   return (
     <>
@@ -149,33 +151,39 @@ const Chat = (props) => {
       </div>
       {/* message items */}
       <div className="chatContainer ">
-        <button onClick={testing}>Testing</button>
         {!loading ? (
           <>
-            {MessagesBtnTheTwoUsers?.map((message, index) => {
-              const senderID = message.senderID.uid;
-              const name = message.senderID.name;
+            {groupedMessagesState?.map((group, index) => (
+              <div key={index} className="w-full flex flex-col">
+                {group?.sentAt && <p className="text-center text-xs text-white/50">{group.sentAt}</p>}
+                {group?.messages.map((message, index) => {
+                  const senderID = message.senderID.uid;
+                  const name = message.senderID.name;
 
-              const timeSent = message.sentAt?.toDate().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              });
-              const hideSender = senderID === uid ? "hidden" : null;
-              const messageClass =
-                senderID === uid ? "sender-chat" : "receiver-chat";
-              return (
-                <MessageItem
-                  key={index}
-                  name={name}
-                  userType={userType}
-                  messageItem={message.message}
-                  profilePic={profilePic}
-                  hideSender={hideSender}
-                  sentAT={timeSent}
-                  messageClass={messageClass}
-                />
-              );
-            })}
+                  const timeSent = message.sentAt
+                    ?.toDate()
+                    .toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    });
+                  const hideSender = senderID === uid ? "hidden" : null;
+                  const messageClass =
+                    senderID === uid ? "sender-chat" : "receiver-chat";
+                  return (
+                    <MessageItem
+                      key={index}
+                      name={name}
+                      userType={userType}
+                      messageItem={message.message}
+                      profilePic={profilePic}
+                      hideSender={hideSender}
+                      sentAT={timeSent}
+                      messageClass={messageClass}
+                    />
+                  );
+                })}
+              </div>
+            ))}
           </>
         ) : (
           <ProgressIndicator />

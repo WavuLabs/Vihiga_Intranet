@@ -72,16 +72,15 @@ const InboxMessagesSidebar = (props) => {
     }
 
     setReceiverState(messagesByAReceiver);
+    console.log(Object.keys(messagesByAReceiver).length);
     return messagesByAReceiver;
   };
 
   useEffect(() => {
     if (loading === false) sortedMessages();
+    error && alert(error.message);
   }, [messagesOfThisUser]);
 
-  const test = () => {
-    console.log(receiverState);
-  };
   return (
     <div className="flex flex-col flex-1 justify-start items-center">
       {Object.keys(receiverState).length > 0

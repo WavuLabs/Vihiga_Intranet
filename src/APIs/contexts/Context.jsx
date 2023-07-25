@@ -4,7 +4,15 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { doc, setDoc, collection, query, orderBy } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  query,
+  orderBy,
+  addDoc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
@@ -67,9 +75,21 @@ export const ContextProvider = ({ children }) => {
     setOnlineStatusFalse(uid);
   };
 
-  const addingNewUsers = async (uid, userObject) => {
+  const addingNewUsers = async (uid, userObject, name) => {
+    const userMessagesRef = collection(db, `messages/${uid}/messages`);
+    
     await setDoc(doc(db, "users", uid), userObject, { merge: true });
     console.log("Document successfully written!");
+    
+    const messageObject = {
+      sentAt: serverTimestamp(),
+      senderID: { uid: "admin", name: "Chat Bot" },
+      receiverID: { uid: uid, name: name },
+      message: "Welcome!!",
+    };
+    await addDoc(userMessagesRef, messageObject);
+
+    console.log("Message successfully written!");
   };
 
   const addingUserToGroup = async (groupName, groupObject) => {

@@ -44,14 +44,10 @@
   outline: 1px solid slategrey;
 }
 .chatContainer .receiver-chat {
-  display: flex;
-  flex-direction: row;
-  @apply bg-blue-950/50;
+  @apply flex flex-row bg-blue-950/50 rounded-2xl pt-1;
 }
 .chatContainer .sender-chat {
-  @apply flex-row-reverse bg-gray-400/40 place-self-end;
-  display: flex;
-  /* align-self: flex-end; */
+  @apply flex flex-row-reverse bg-gray-400/40 place-self-end rounded-2xl pt-1;
 }
 .single-line {
   white-space: nowrap;

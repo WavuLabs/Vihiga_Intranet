@@ -55,7 +55,7 @@ const UsersSideBar = () => {
     <>
       <TextField
         type="search"
-        label="Search"
+        label="Search Chat"
         value={searchTerm}
         onChange={handleSearchChange}
         className="w-full rounded-sm m-2"

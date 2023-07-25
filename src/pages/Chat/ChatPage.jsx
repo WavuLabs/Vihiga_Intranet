@@ -5,7 +5,7 @@ import UsersSideBar from "./Components/UsersSideBar";
 
 const ChatPage = ({ children }) => {
   return (
-    <div className="w-full h-[89vh] flex flex-row overflow-clip">
+    <div className="w-full h-[90vh] flex flex-row overflow-clip">
       {/* Main sidebar div */}
       <div className="flex flex-col bg-[#0A0E0F] w-1/3 ">
         <div className="custom-borders">
