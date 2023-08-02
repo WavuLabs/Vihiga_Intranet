@@ -161,7 +161,6 @@ const Signup = () => {
     } finally {
       setShowProgressIndicator(false);
     }
-
   };
 
   const handleSetProfilePicture = async (image) => {
@@ -190,17 +189,17 @@ const Signup = () => {
           className="max-w-md w-full px-4 py-8 text-center overflow-clip"
         >
           <h1 className="text-3xl font-semibold text-gray-400">Sign up</h1>
-          <p className="text-gray-200">
-            Create account
-          </p>
+          <p className="text-gray-200">Create account</p>
 
           <TextInputComponents
+            id="email"
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <TextInputComponents
+            id="name"
             type="text"
             placeholder="Name"
             value={name}
@@ -208,6 +207,7 @@ const Signup = () => {
           />
 
           <TextInputComponents
+            id="number"
             type="number"
             placeholder="Enter Phone Number"
             value={number}
@@ -215,6 +215,7 @@ const Signup = () => {
           />
 
           <TextInputComponents
+            id="password"
             type="password"
             placeholder="Password"
             value={password}

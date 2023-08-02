@@ -12,7 +12,7 @@ function App() {
 
   const handleUserActivity = () => {
     clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(logout, 15 * 60 * 1000); 
+    timeoutRef.current = setTimeout(logout, 15 * 60 * 1000);
   };
 
   useEffect(() => {

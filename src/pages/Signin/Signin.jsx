@@ -40,6 +40,7 @@ const Signin = () => {
         <h1 className="text-3xl font-semibold">Sign in</h1>
         <p className="text-gray-600">Sign in to your account</p>
         <TextInputComponents
+          id="email-signin"
           type="email"
           placeholder="Email"
           value={email}
@@ -47,6 +48,7 @@ const Signin = () => {
         />
 
         <TextInputComponents
+          id="password-signin"
           type="password"
           placeholder="Password"
           value={password}

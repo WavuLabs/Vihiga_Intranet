@@ -17,58 +17,32 @@ import { Logout as LogoutIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { ContextData } from "../APIs/contexts/Context";
 import ChatPage from "../pages/Chat/ChatPage";
+import UsersSideBar from "../pages/Chat/Components/UsersSideBar";
+import InboxMessagesSidebar from "../pages/Chat/Components/InboxMessagesSidebar";
 
 export default function Navbar() {
   const [state, setState] = React.useState(false);
   const { logout } = ContextData();
   const navigate = useNavigate();
-  const left = "left";
   const user = auth.currentUser;
 
   const toggleDrawer = (open) => (event) => {
-    console.log(user?.displayName);
     if (
       event &&
       event.type === "keydown" &&
       (event.key === "Tab" || event.key === "Shift")
-    ) {
+    )
       return;
-    }
+
     setState(open);
   };
 
-  const list = (anchor) => (
-    <Box
-      sx={{ width: "30%" }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+  const List = () => (
+    <Box className="w-[70vw] h-[100vh] m-2 overflow-clip" role="presentation">
+      <UsersSideBar />
+      <div onClick={toggleDrawer(false)} className="flex flex-col h-[70vh]  ">
+        <InboxMessagesSidebar />
+      </div>
     </Box>
   );
   const HandleSignOut = async () => {
@@ -93,19 +67,19 @@ export default function Navbar() {
   return (
     <div className="relative flex flex-row top-0 bg-[#161B1C] h-[10vh] w-full justify-between items-center">
       {/* Box with Logo */}
-      <div className="">
+      <div className="sm:hidden">
         <Button onClick={toggleDrawer(true)}>
           <MenuIcon />
-        </Button>
+        </Button> 
       </div>
-      <p></p>
+      <p> </p>
       <SwipeableDrawer
-        anchor={left}
+        anchor="left"
         open={state}
         onClose={toggleDrawer(false)}
         onOpen={toggleDrawer(true)}
       >
-        {list(left)}
+        <List />
       </SwipeableDrawer>
       <SignInDetails />
     </div>

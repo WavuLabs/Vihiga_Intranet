@@ -42,6 +42,7 @@ const Chat = (props) => {
   const [messageText, setMessageText] = useState("");
   const [groupedMessagesState, setGroupedMessagesState] = useState();
   const [isOnline, setIsOnline] = useState(null);
+  const [lastMessage, setLastMessage] = useState(null);
   const { thisReceiverMessages } = useOutletContext();
 
   const bottomRef = useRef();
@@ -128,13 +129,41 @@ const Chat = (props) => {
     getUserName(uid, setLoggedInUserName, setLoggedInUserNameDP);
     userName ? setUserType("user") : setUserType("group");
     bottomRef.current.scrollIntoView({ behavior: "smooth" });
+
+    !loading && handleLastMessage();
   }, [MessagesBtnTheTwoUsers]);
+
+  const handleLastMessage = () => {
+    if (!MessagesBtnTheTwoUsers) return;
+    const lastMsg = MessagesBtnTheTwoUsers[MessagesBtnTheTwoUsers.length - 1];
+    if (lastMessage !== lastMsg) {
+      setLastMessage(lastMsg);
+      if (lastMsg?.senderID.uid !== uid) {
+        handleNotification();
+      }
+    }
+    console.log(lastMsg, "lastMessage");
+  };
 
   useEffect(() => {
     console.log(error);
   }, [error]);
 
   const handleTest = () => console.log("clicked", groupedMessagesState);
+
+  const handleNotification = () => {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        const notification = new Notification("You have a new message!", {
+          body: lastMessage?.message || "No message",
+          icon: "https://i.imgur.com/2gWZv9S.png",
+        });
+        notification.onclick = (e) => {
+          navigate(`/chatpage/${receiverID}`);
+        };
+      }
+    });
+  };
 
   return (
     <>
@@ -151,11 +180,16 @@ const Chat = (props) => {
       </div>
       {/* message items */}
       <div className="chatContainer ">
+        <button onClick={handleLastMessage}>test</button>
         {!loading ? (
           <>
             {groupedMessagesState?.map((group, index) => (
               <div key={index} className="w-full flex flex-col">
-                {group?.sentAt && <p className="text-center text-xs text-white/50">{group.sentAt}</p>}
+                {group?.sentAt && (
+                  <p className="text-center text-xs text-white/50">
+                    {group.sentAt}
+                  </p>
+                )}
                 {group?.messages.map((message, index) => {
                   const senderID = message.senderID.uid;
                   const name = message.senderID.name;

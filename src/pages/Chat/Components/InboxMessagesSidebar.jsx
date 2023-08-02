@@ -82,23 +82,28 @@ const InboxMessagesSidebar = (props) => {
   }, [messagesOfThisUser]);
 
   return (
-    <div className="flex flex-col flex-1 justify-start items-center">
-      {Object.keys(receiverState).length > 0
-        ? Object.entries(receiverState).map(
-            ([thisReceiver, messagesOfThisReceiver]) => {
-              const hideThisReceiver = thisReceiver === uid ? "hidden" : "";
-              return (
-                <InboxReceiverItem
-                  hideThisReceiver={hideThisReceiver}
-                  key={thisReceiver}
-                  thisReceiver={thisReceiver}
-                  messagesOfThisReceiver={messagesOfThisReceiver}
-                />
-              );
-            }
-          )
-        : null}
-    </div>
+    <>
+      <p className="p-2">Inbox</p>
+      <div className="overflow-x-hidden overflow-y-scroll flex-1 custom-borders">
+        <div className="flex flex-col flex-1 justify-start items-center">
+          {Object.keys(receiverState).length > 0
+            ? Object.entries(receiverState).map(
+                ([thisReceiver, messagesOfThisReceiver]) => {
+                  const hideThisReceiver = thisReceiver === uid ? "hidden" : "";
+                  return (
+                    <InboxReceiverItem
+                      hideThisReceiver={hideThisReceiver}
+                      key={thisReceiver}
+                      thisReceiver={thisReceiver}
+                      messagesOfThisReceiver={messagesOfThisReceiver}
+                    />
+                  );
+                }
+              )
+            : null}
+        </div>
+      </div>
+    </>
   );
 };
 
