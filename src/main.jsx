@@ -1,4 +1,4 @@
-import { router } from "./APIs/RouteStates";
+import { Router } from "./APIs/RouteStates";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./pages/App";
@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <ContextProvider>
-        <RouterProvider router={router} />
+        <RouterProvider router={Router} />
       </ContextProvider>
     </ThemeProvider>
   </React.StrictMode>

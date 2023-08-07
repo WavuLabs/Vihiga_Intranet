@@ -19,12 +19,21 @@ import { ContextData } from "../APIs/contexts/Context";
 import ChatPage from "../pages/Chat/ChatPage";
 import UsersSideBar from "../pages/Chat/Components/UsersSideBar";
 import InboxMessagesSidebar from "../pages/Chat/Components/InboxMessagesSidebar";
+import { Avatar } from "@mui/material";
 
 export default function Navbar() {
-  const [state, setState] = React.useState(false);
-  const { logout } = ContextData();
+  const { logout, getUserName, USERS } = ContextData();
   const navigate = useNavigate();
-  const user = auth.currentUser;
+  const userUID = auth.currentUser?.uid;
+
+  const [state, setState] = React.useState(false);
+  const [DP, setDP] = React.useState(null);
+  const [name, setName] = React.useState(null);
+
+  React.useEffect(() => {
+    const user = USERS?.find((user) => user.uid === userUID);
+    setDP(user?.profile_picture);
+  }, [userUID]);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -49,20 +58,6 @@ export default function Navbar() {
     await logout();
     navigate("/", { replace: true });
   };
-  const SignInDetails = () => {
-    if (user) {
-      return (
-        <DropDown Title={user?.email}>
-          <ListItemButton onClick={HandleSignOut}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItemButton>
-        </DropDown>
-      );
-    }
-  };
 
   return (
     <div className="relative flex flex-row top-0 bg-[#161B1C] h-[10vh] w-full justify-between items-center">
@@ -70,7 +65,7 @@ export default function Navbar() {
       <div className="sm:hidden">
         <Button onClick={toggleDrawer(true)}>
           <MenuIcon />
-        </Button> 
+        </Button>
       </div>
       <p> </p>
       <SwipeableDrawer
@@ -81,7 +76,16 @@ export default function Navbar() {
       >
         <List />
       </SwipeableDrawer>
-      <SignInDetails />
+      <div>
+        <DropDown Title={<Avatar className="border border-white/40 " src={DP} alt={name} />}>
+          <ListItemButton onClick={HandleSignOut}>
+            <ListItemIcon>
+              <LogoutIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItemButton>
+        </DropDown>
+      </div>
     </div>
   );
 }

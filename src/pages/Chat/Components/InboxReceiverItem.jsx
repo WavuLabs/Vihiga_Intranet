@@ -1,5 +1,5 @@
 import { Avatar } from "@mui/material";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
@@ -26,7 +26,7 @@ export default function InboxReceiverItem(props) {
 
   /// Query the last messages sent by the user.
   const usersRef = collection(db, `messages/${uid}/messages`);
-  const last = query(
+  const lastQuery = query(
     usersRef,
     or(
       where("senderID.uid", "==", `${thisReceiver}`),
@@ -36,7 +36,7 @@ export default function InboxReceiverItem(props) {
     limit(1)
   );
   const [lastMessage, loadingLastMessage, errorLastMessage] =
-    useCollectionData(last);
+    useCollectionData(lastQuery);
 
   useEffect(() => {
     getUserName(thisReceiver, setUserName, setProfilePic);

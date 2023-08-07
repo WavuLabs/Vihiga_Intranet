@@ -1,6 +1,6 @@
 import { Avatar, Button, Stack } from "@mui/material";
 import React from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const UsersSideBarItem = (props) => {
   const { hideSender } = props;

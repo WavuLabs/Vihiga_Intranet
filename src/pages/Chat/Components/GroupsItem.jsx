@@ -1,6 +1,6 @@
 import { Avatar } from "@mui/material";
 import React from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const GroupsItem = (props) => {
   const { groupName, profile_picture } = props.group;

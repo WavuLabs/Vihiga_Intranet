@@ -3,7 +3,7 @@ import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { auth } from "./firebase";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const navigate = useNavigate();
   const values = useOutletContext();
 

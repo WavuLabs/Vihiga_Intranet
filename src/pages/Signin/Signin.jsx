@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRef } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 import { TextInputComponents } from "../../components/TextInputComponents";

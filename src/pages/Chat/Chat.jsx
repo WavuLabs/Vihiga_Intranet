@@ -19,7 +19,7 @@ import {
   where,
   or,
 } from "firebase/firestore";
-import { useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
 import { auth, db } from "../../APIs/firebase";
@@ -28,7 +28,7 @@ import { MessageItem } from "./Components/MessageItem";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 
 const Chat = (props) => {
-  const { getUserName, setLoggedInUserName, loggedInUserName, userState } =
+  const { getUserName, setLoggedInUserName, loggedInUserName, USERS } =
     ContextData();
   const navigate = useNavigate();
   const uid = auth.currentUser?.uid;
@@ -43,7 +43,6 @@ const Chat = (props) => {
   const [isOnline, setIsOnline] = useState(null);
   const [lastMessage, setLastMessage] = useState(null);
   const [unread, setUnread] = useState(false);
-  const { USERS } = useOutletContext();
 
   const bottomRef = useRef();
   const receiverRef = collection(db, `messages/${receiverID}/messages`);

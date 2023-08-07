@@ -10,7 +10,7 @@ import Home from "../pages/Home/Home";
 import App from "../pages/App";
 import ChatContext from "./contexts/ChatContext";
 
-export const router = createBrowserRouter([
+export const Router = createBrowserRouter([
   {
     element: <App />,
     children: [
@@ -36,14 +36,12 @@ export const router = createBrowserRouter([
           {
             path: "chatpage",
             element: <ChatPage />,
-          },
-          {
-            path: "chatpage/:receiverID",
-            element: (
-              <ChatPage>
-                <Chat />
-              </ChatPage>
-            ),
+            children: [
+              {
+                path: ":receiverID",
+                element: <Chat />,
+              },
+            ],
           },
         ],
       },

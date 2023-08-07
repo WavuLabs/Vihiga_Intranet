@@ -8,12 +8,10 @@ import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "../APIs/firebase";
 
 function App() {
-  const { logout } = ContextData();
+  const { logout, handleGetUsers } = ContextData();
   const timeoutRef = useRef();
 
-  const usersRef = collection(db, `users`);
-  const queryUsers = query(usersRef, orderBy("name", "asc"));
-  const [USERS, loadingUSERS, errorUSERS] = useCollectionData(queryUsers);
+  const values = {};
 
   const handleUserActivity = () => {
     clearTimeout(timeoutRef.current);
@@ -36,8 +34,6 @@ function App() {
       clearTimeout(timeoutRef.current);
     };
   }, []);
-
-  const values = { USERS, loadingUSERS, errorUSERS };
 
   return (
     <Container className="relative">

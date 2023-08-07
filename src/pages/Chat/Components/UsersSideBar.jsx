@@ -12,21 +12,13 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const UsersSideBar = () => {
   const uid = auth.currentUser?.uid;
-  const {
-    USERS,
-    userState,
-    loadingUSERS,
-    GROUPS,
-    loadingGROUPS,
-    userGroups,
-    setUserGroups,
-  } = ContextData();
+  const {  USERS, loadingUSERS ,userGroups, setUserGroups } = ContextData();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
 
   const getGroups = async () => {
-    const user = userState?.find((user) => user.uid === uid);
+    const user = USERS?.find((user) => user.uid === uid);
     setUserGroups(user?.groups);
   };
 
@@ -34,7 +26,7 @@ const UsersSideBar = () => {
     setSearchTerm(event.target.value);
     const searchTermToLowerCase = event.target.value.toLowerCase();
 
-    const resultsOfSearch = userState?.filter((user) =>
+    const resultsOfSearch = USERS?.filter((user) =>
       user.name.toLowerCase().includes(searchTermToLowerCase)
     );
     setFilteredResults(resultsOfSearch);
@@ -45,11 +37,11 @@ const UsersSideBar = () => {
   };
 
   useEffect(() => {
-    if (userState) {
-      setFilteredResults(userState);
+    if (USERS) {
+      setFilteredResults(USERS);
       getGroups();
     }
-  }, [userState]);
+  }, [USERS]);
 
   return (
     <>
