@@ -44,6 +44,7 @@ export const ContextProvider = ({ children }) => {
 
   useEffect(() => {
     loadingUSERS == false && setUserState(USERS);
+    console.log(errorUSERS, "error loading users")
   }, [loadingUSERS]);
 
   const groupsRef = collection(db, `groups`);
