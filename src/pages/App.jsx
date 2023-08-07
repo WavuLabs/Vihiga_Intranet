@@ -1,14 +1,19 @@
 import { Container } from "@mui/material";
-import RouteStates from "../APIs/RouteStates";
 import { useEffect, useRef } from "react";
-import { auth } from "../APIs/firebase";
 
 import { ContextData } from "../APIs/contexts/Context";
-import "../styles/App.css";
+import { Outlet } from "react-router-dom";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { collection, orderBy, query } from "firebase/firestore";
+import { db } from "../APIs/firebase";
 
 function App() {
   const { logout } = ContextData();
   const timeoutRef = useRef();
+
+  const usersRef = collection(db, `users`);
+  const queryUsers = query(usersRef, orderBy("name", "asc"));
+  const [USERS, loadingUSERS, errorUSERS] = useCollectionData(queryUsers);
 
   const handleUserActivity = () => {
     clearTimeout(timeoutRef.current);
@@ -32,9 +37,11 @@ function App() {
     };
   }, []);
 
+  const values = { USERS, loadingUSERS, errorUSERS };
+
   return (
     <Container className="relative">
-      <RouteStates />
+      <Outlet context={values} />
     </Container>
   );
 }

@@ -1,15 +1,16 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { auth } from "./firebase";
 
 const ProtectedRoute = ({ children }) => {
   const navigate = useNavigate();
+  const values = useOutletContext();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       const uid = currentUser?.uid;
-      if (!uid) navigate("/", { replace: true });
+      if (!uid) navigate("/signin", { replace: true });
     });
     return unsubscribe;
   }, []);
@@ -17,7 +18,7 @@ const ProtectedRoute = ({ children }) => {
   return (
     <>
       <Navbar />
-      {children}
+      <Outlet context={values} />
     </>
   );
 };

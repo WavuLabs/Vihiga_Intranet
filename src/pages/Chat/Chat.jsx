@@ -24,12 +24,11 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 
 import { auth, db } from "../../APIs/firebase";
 import { ContextData } from "../../APIs/contexts/Context";
-import DropDown from "../../components/DropDown";
 import { MessageItem } from "./Components/MessageItem";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 
 const Chat = (props) => {
-  const { USERS, getUserName, setLoggedInUserName, loggedInUserName } =
+  const { getUserName, setLoggedInUserName, loggedInUserName, userState } =
     ContextData();
   const navigate = useNavigate();
   const uid = auth.currentUser?.uid;
@@ -43,7 +42,8 @@ const Chat = (props) => {
   const [groupedMessagesState, setGroupedMessagesState] = useState();
   const [isOnline, setIsOnline] = useState(null);
   const [lastMessage, setLastMessage] = useState(null);
-  const { thisReceiverMessages } = useOutletContext();
+  const [unread, setUnread] = useState(false);
+  const { USERS } = useOutletContext();
 
   const bottomRef = useRef();
   const receiverRef = collection(db, `messages/${receiverID}/messages`);
@@ -86,11 +86,15 @@ const Chat = (props) => {
     }
   };
 
+  const handleScrollToBottom = () => {
+    bottomRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     await addData();
     setMessageText("");
-    bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    handleScrollToBottom();
   };
 
   const getOnlineStatus = async () => {
@@ -128,28 +132,25 @@ const Chat = (props) => {
     getUserName(receiverID, setUserName, setProfilePic);
     getUserName(uid, setLoggedInUserName, setLoggedInUserNameDP);
     userName ? setUserType("user") : setUserType("group");
-    bottomRef.current.scrollIntoView({ behavior: "smooth" });
-
-    !loading && handleLastMessage();
+    handleScrollToBottom();
+    error && console.log(error);
   }, [MessagesBtnTheTwoUsers]);
 
   const handleLastMessage = () => {
-    if (!MessagesBtnTheTwoUsers) return;
-    const lastMsg = MessagesBtnTheTwoUsers[MessagesBtnTheTwoUsers.length - 1];
-    if (lastMessage !== lastMsg) {
-      setLastMessage(lastMsg);
-      if (lastMsg?.senderID.uid !== uid) {
-        handleNotification();
-      }
-    }
-    console.log(lastMsg, "lastMessage");
+    // if (!MessagesBtnTheTwoUsers) return;
+    // setUnread("");
+    // const lastMsg = MessagesBtnTheTwoUsers[MessagesBtnTheTwoUsers.length - 1];
+    // if (lastMessage !== lastMsg) {
+    //   setUnread("there is a new message");
+    //   setLastMessage(null);
+    //   if (lastMsg?.senderID.uid !== uid) {
+    //     // handleNotification();
+    //     setLastMessage(lastMsg);
+    //     console.log(lastMsg, "lastMessage");
+    //   }
+    // }
+    console.log(USERS.length);
   };
-
-  useEffect(() => {
-    console.log(error);
-  }, [error]);
-
-  const handleTest = () => console.log("clicked", groupedMessagesState);
 
   const handleNotification = () => {
     Notification.requestPermission().then((permission) => {
@@ -180,7 +181,6 @@ const Chat = (props) => {
       </div>
       {/* message items */}
       <div className="chatContainer ">
-        <button onClick={handleLastMessage}>test</button>
         {!loading ? (
           <>
             {groupedMessagesState?.map((group, index) => (
@@ -218,12 +218,16 @@ const Chat = (props) => {
                 })}
               </div>
             ))}
+            <button onClick={handleLastMessage}>test</button>
+            <p>
+              {lastMessage?.message} {unread}
+            </p>
           </>
         ) : (
           <ProgressIndicator />
         )}
 
-        <span ref={bottomRef} className=""></span>
+        <span ref={bottomRef}></span>
       </div>
 
       <form

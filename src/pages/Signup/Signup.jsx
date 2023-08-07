@@ -102,7 +102,7 @@ const Signup = () => {
 
             await addingUserToGroup(group, groupObject);
 
-            navigate("/", { replace: true });
+            navigate("/signin", { replace: true });
 
             await updateProfile(auth.currentUser, {
               displayName: name,

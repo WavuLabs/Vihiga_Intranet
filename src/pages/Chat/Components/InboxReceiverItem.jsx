@@ -20,10 +20,9 @@ export default function InboxReceiverItem(props) {
   const uid = auth.currentUser?.uid;
   const navigate = useNavigate();
   const { thisReceiver, messagesOfThisReceiver, hideThisReceiver } = props;
-  const { setThisReceiverMessages } = useOutletContext();
   const [userName, setUserName] = useState("");
   const [profilePic, setProfilePic] = useState("");
-  const { loadingUSERS, USERS, getUserName } = ContextData();
+  const { getUserName } = ContextData();
 
   /// Query the last messages sent by the user.
   const usersRef = collection(db, `messages/${uid}/messages`);
@@ -36,18 +35,13 @@ export default function InboxReceiverItem(props) {
     orderBy("sentAt", "desc"),
     limit(1)
   );
-  const [
-    lastMessage,
-    loadingLastMessage,
-    errorLastMessage,
-    snapshotLastMessage,
-  ] = useCollectionData(last, { idField: "id" });
+  const [lastMessage, loadingLastMessage, errorLastMessage] =
+    useCollectionData(last);
 
   useEffect(() => {
     getUserName(thisReceiver, setUserName, setProfilePic);
-
     errorLastMessage && console.log(errorLastMessage, "errorLastMessage");
-  }, [loadingUSERS]);
+  }, []);
 
   //messages are going to be passed to the chat component
   const HandleClick = async () => {
@@ -77,11 +71,15 @@ export default function InboxReceiverItem(props) {
               {message.senderID.uid === uid && (
                 <DoneAllIcon fontSize="small" className="mx-1" />
               )}
-              <p className="text-primary text-xs text-left single-line max-w-[15vw]">{message.message}</p>
+              <p className="text-primary text-xs text-left single-line max-w-[15vw]">
+                {message.message}
+              </p>
             </div>
           </div>
 
-          <p className="text-white/50 text-xs text-right single-line mt-2 ">{time}</p>
+          <p className="text-white/50 text-xs text-right single-line mt-2 ">
+            {time}
+          </p>
         </button>
       );
     })

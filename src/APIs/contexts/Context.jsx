@@ -12,6 +12,7 @@ import {
   orderBy,
   addDoc,
   serverTimestamp,
+  getDocs,
 } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -20,24 +21,34 @@ const UserContext = createContext();
 
 export const ContextProvider = ({ children }) => {
   const userID = auth.currentUser?.uid;
+  const [userState, setUserState] = useState([]);
   const [loggedInUserName, setLoggedInUserName] = useState(null);
   const [userGroups, setUserGroups] = useState([]);
 
   const usersRef = collection(db, `users`);
   const queryUsers = query(usersRef, orderBy("name", "asc"));
-  const [USERS, loadingUSERS, errorUSERS, snapshotUSERS] = useCollectionData(
-    queryUsers,
-    {
-      idField: "id",
-    }
-  );
+  const [USERS, loadingUSERS, errorUSERS] = useCollectionData(queryUsers);
+
+  const handleGetUsers = async () => {
+    const dataArray = [];
+    const querySnapshot = await getDocs(queryUsers);
+
+    querySnapshot.forEach((doc) => {
+      const docData = doc.data();
+      const snapshotData = { ...docData, documentID: doc.id };
+      dataArray.push(snapshotData);
+    });
+
+    setUserState(dataArray);
+  };
+
+  useEffect(() => {
+    loadingUSERS == false && setUserState(USERS);
+  }, [loadingUSERS]);
 
   const groupsRef = collection(db, `groups`);
   const queryGROUPS = query(groupsRef, orderBy("groupName", "asc"));
-  const [GROUPS, loadingGROUPS, errorGROUPS, snapshotGROUPS] =
-    useCollectionData(queryGROUPS, {
-      idField: "id",
-    });
+  const [GROUPS, loadingGROUPS, errorGROUPS] = useCollectionData(queryGROUPS);
 
   //querying the Users
   useEffect(() => {
@@ -51,12 +62,10 @@ export const ContextProvider = ({ children }) => {
   const getUserName = (uid, setName, setProfilePic) => {
     setName("");
     setProfilePic("");
-    const user = USERS?.find((user) => user.uid === uid);
-
-    if (!user) {
-      console.log("Error: User not found");
-      return;
-    }
+    if (!userState) handleGetUsers();
+    const user = userState?.find((user) => user.uid === uid);
+    if (!user) return;
+    
     setName(user.name);
     setProfilePic(user.profile_picture);
   };
@@ -77,10 +86,10 @@ export const ContextProvider = ({ children }) => {
 
   const addingNewUsers = async (uid, userObject, name) => {
     const userMessagesRef = collection(db, `messages/${uid}/messages`);
-    
+
     await setDoc(doc(db, "users", uid), userObject, { merge: true });
     console.log("Document successfully written!");
-    
+
     const messageObject = {
       sentAt: serverTimestamp(),
       senderID: { uid: "admin", name: "Chat Bot" },
@@ -129,6 +138,7 @@ export const ContextProvider = ({ children }) => {
     loadingGROUPS,
     userGroups,
     loggedInUserName,
+    userState,
     setLoggedInUserName,
     setUserGroups,
     getUserName,
@@ -139,6 +149,7 @@ export const ContextProvider = ({ children }) => {
     addingUserToGroup,
     setOnlineStatusTrue,
     setOnlineStatusFalse,
+    handleGetUsers,
   };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
