@@ -14,7 +14,7 @@ import DropDown from "./DropDown";
 import MenuIcon from "@mui/icons-material/Menu";
 import { auth } from "../APIs/firebase";
 import { Logout as LogoutIcon } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ContextData } from "../APIs/contexts/Context";
 import ChatPage from "../pages/Chat/ChatPage";
 import UsersSideBar from "../pages/Chat/Components/UsersSideBar";
@@ -67,7 +67,7 @@ export default function Navbar() {
           <MenuIcon />
         </Button>
       </div>
-      <p> </p>
+      <Link to="/">Home </Link>
       <SwipeableDrawer
         anchor="left"
         open={state}
@@ -77,7 +77,11 @@ export default function Navbar() {
         <List />
       </SwipeableDrawer>
       <div>
-        <DropDown Title={<Avatar className="border border-white/40 " src={DP} alt={name} />}>
+        <DropDown
+          Title={
+            <Avatar className="border border-white/40 " src={DP} alt={name} />
+          }
+        >
           <ListItemButton onClick={HandleSignOut}>
             <ListItemIcon>
               <LogoutIcon />
