@@ -23,26 +23,6 @@ const InboxMessagesSidebar = (props) => {
   const q = query(userMessagesRef, orderBy("sentAt", "desc"));
   const [messagesOfThisUser, loading, error] = useCollectionData(q);
 
-  /* 
-  /// Query the last messages sent by the user.
-  const usersRef = collection(db, `messages/${uid}/messages`);
-  const last = query(
-    usersRef,
-    or(
-      where("senderID.uid", "==", `${thisReceiver}`),
-      where("receiverID.uid", "==", `${thisReceiver}`)
-    ),
-    orderBy("sentAt", "desc"),
-    limit(1)
-  );
-  const [
-    lastMessage,
-    loadingLastMessage,
-    errorLastMessage,
-    snapshotLastMessage,
-  ] = useCollectionData(last, { idField: "id" });
-  */
-
   const sortedMessages = () => {
     //  QueryMakes sure the object is empty
     for (let key in messagesByAReceiver) {
@@ -69,7 +49,6 @@ const InboxMessagesSidebar = (props) => {
     }
 
     setReceiverState(messagesByAReceiver);
-    console.log(Object.keys(messagesByAReceiver).length);
     return messagesByAReceiver;
   };
 

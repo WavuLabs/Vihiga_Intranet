@@ -1,5 +1,5 @@
 import { Avatar } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import {
@@ -13,7 +13,6 @@ import {
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 
 import { auth, db } from "../../../APIs/firebase";
-import { ContextData } from "../../../APIs/contexts/Context";
 //This component will display the message inbox from different senders and the pass the messages of the senders to the chat component
 
 export default function InboxReceiverItem(props) {
@@ -22,7 +21,7 @@ export default function InboxReceiverItem(props) {
   const { thisReceiver, messagesOfThisReceiver, hideThisReceiver } = props;
   const [userName, setUserName] = useState("");
   const [profilePic, setProfilePic] = useState("");
-  const { getUserName } = ContextData();
+  const { USERS } = useOutletContext();
 
   /// Query the last messages sent by the user.
   const usersRef = collection(db, `messages/${uid}/messages`);
@@ -37,6 +36,16 @@ export default function InboxReceiverItem(props) {
   );
   const [lastMessage, loadingLastMessage, errorLastMessage] =
     useCollectionData(lastQuery);
+
+  const getUserName = (uid, setName, setDP) => {
+    setName("");
+    setDP("");
+    const user = USERS?.find((user) => user.uid === uid);
+    if (!user) return;
+
+    setName(user.name);
+    setDP(user.profile_picture);
+  };
 
   useEffect(() => {
     getUserName(thisReceiver, setUserName, setProfilePic);

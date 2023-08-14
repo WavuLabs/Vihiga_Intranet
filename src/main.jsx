@@ -4,8 +4,6 @@ import ReactDOM from "react-dom/client";
 import App from "./pages/App";
 import { BrowserRouter, RouterProvider } from "react-router-dom";
 import { ContextProvider } from "./APIs/contexts/Context";
-import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "./constants/Constants";
 import "./styles/index.css";
 import "./styles/App.css";
 
@@ -20,13 +18,15 @@ import "./styles/App.css";
 //     </BrowserRouter>
 //   </React.StrictMode>
 // );
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <ContextProvider>
         <RouterProvider router={Router} />
       </ContextProvider>
-    </ThemeProvider>
+    </LocalizationProvider>
   </React.StrictMode>
 );

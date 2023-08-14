@@ -1,4 +1,4 @@
-import { Route, Routes, createBrowserRouter } from "react-router-dom";
+import { Route, Routes, createBrowserRouter, redirect } from "react-router-dom";
 
 import Signin from "../pages/Signin/Signin";
 import Signup from "../pages/Signup/Signup";
@@ -9,6 +9,7 @@ import Chat from "../pages/Chat/Chat";
 import Home from "../pages/Home/Home";
 import App from "../pages/App";
 import ChatContext from "./contexts/ChatContext";
+import { auth } from "./firebase";
 
 export const Router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ export const Router = createBrowserRouter([
         element: <ErrorPage />,
       },
       {
-        path: "signin",
+        path: "/",
         element: <Signin />,
       },
       {
@@ -30,7 +31,7 @@ export const Router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            path: "/",
+            path: "/home",
             element: <Home />,
           },
           {

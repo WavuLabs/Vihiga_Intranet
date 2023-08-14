@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineCaretRight } from "react-icons/ai";
-import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../../../APIs/firebase";
-import { ContextData } from "../../../APIs/contexts/Context";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { InputAdornment, MenuItem, TextField } from "@mui/material";
 import UsersSideBarItem from "./UsersSideBarItem";
 import DropDown from "../../../components/DropDown";
@@ -11,9 +8,10 @@ import { ProgressIndicator } from "../../../components/ProgressIndicator";
 import SearchIcon from "@mui/icons-material/Search";
 
 const UsersSideBar = () => {
-  const uid = auth.currentUser?.uid;
-  const {  USERS, loadingUSERS ,userGroups, setUserGroups } = ContextData();
   const navigate = useNavigate();
+  const uid = auth.currentUser?.uid;
+  const [userGroups, setUserGroups] = useState([]);
+  const { USERS, loadingUSERS } = useOutletContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
 

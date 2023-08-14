@@ -19,30 +19,29 @@ import {
   where,
   or,
 } from "firebase/firestore";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
 import { auth, db } from "../../APIs/firebase";
-import { ContextData } from "../../APIs/contexts/Context";
 import { MessageItem } from "./Components/MessageItem";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 
 const Chat = (props) => {
-  const { getUserName, setLoggedInUserName, loggedInUserName, USERS } =
-    ContextData();
+  const { USERS, getUserName } = useOutletContext();
   const navigate = useNavigate();
   const uid = auth.currentUser?.uid;
   const { receiverID } = useParams();
 
   const [userName, setUserName] = useState("");
   const [userType, setUserType] = useState("");
-  const [loggedInUserNameDP, setLoggedInUserNameDP] = useState("");
   const [profilePic, setProfilePic] = useState("");
   const [messageText, setMessageText] = useState("");
   const [groupedMessagesState, setGroupedMessagesState] = useState();
   const [isOnline, setIsOnline] = useState(null);
   const [lastMessage, setLastMessage] = useState(null);
   const [unread, setUnread] = useState(false);
+  const [loggedInUserName, setLoggedInUserName] = useState(false);
+  const [loggedInUserNameDP, setLoggedInUserNameDP] = useState("");
 
   const bottomRef = useRef();
   const receiverRef = collection(db, `messages/${receiverID}/messages`);
@@ -56,11 +55,12 @@ const Chat = (props) => {
     ),
     orderBy("sentAt", "asc")
   );
-  const [MessagesBtnTheTwoUsers, loading, error, snapshot] = useCollectionData(
-    q,
-    { idField: "id" }
-  );
+  const [MessagesBtnTheTwoUsers, loading, error, snapshot] =
+    useCollectionData(q);
 
+  useEffect(() => {
+    !loading && handleScrollToBottom();
+  }, [loading]);
   const addData = async () => {
     uid &&
       receiverID &&
@@ -123,7 +123,6 @@ const Chat = (props) => {
   };
 
   // Group the messages by date
-
   useEffect(() => {
     const groupedMessages = groupMessagesByDate(MessagesBtnTheTwoUsers);
     setGroupedMessagesState(groupedMessages);
@@ -148,7 +147,7 @@ const Chat = (props) => {
     //     console.log(lastMsg, "lastMessage");
     //   }
     // }
-    console.log(USERS.length);
+    handleScrollToBottom();
   };
 
   const handleNotification = () => {
@@ -180,6 +179,7 @@ const Chat = (props) => {
       </div>
       {/* message items */}
       <div className="chatContainer ">
+        <button onClick={handleLastMessage}>test</button>
         {!loading ? (
           <>
             {groupedMessagesState?.map((group, index) => (
@@ -217,7 +217,6 @@ const Chat = (props) => {
                 })}
               </div>
             ))}
-            <button onClick={handleLastMessage}>test</button>
             <p>
               {lastMessage?.message} {unread}
             </p>
@@ -225,7 +224,6 @@ const Chat = (props) => {
         ) : (
           <ProgressIndicator />
         )}
-
         <span ref={bottomRef}></span>
       </div>
 

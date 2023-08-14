@@ -1,39 +1,43 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import Button from "@mui/material/Button";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import DropDown from "./DropDown";
-import MenuIcon from "@mui/icons-material/Menu";
-import { auth } from "../APIs/firebase";
-import { Logout as LogoutIcon } from "@mui/icons-material";
+import React, { useEffect } from "react";
+import {
+  SwipeableDrawer,
+  Box,
+  Button,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { ContextData } from "../APIs/contexts/Context";
-import ChatPage from "../pages/Chat/ChatPage";
-import UsersSideBar from "../pages/Chat/Components/UsersSideBar";
-import InboxMessagesSidebar from "../pages/Chat/Components/InboxMessagesSidebar";
+import { doc, onSnapshot } from "firebase/firestore";
+import { Logout as LogoutIcon } from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Avatar } from "@mui/material";
 
-export default function Navbar() {
-  const { logout, getUserName, USERS } = ContextData();
+import { db } from "../APIs/firebase";
+import DropDown from "./DropDown";
+import { auth } from "../APIs/firebase";
+import InboxMessagesSidebar from "../pages/Chat/Components/InboxMessagesSidebar";
+import { ContextData } from "../APIs/contexts/Context";
+import UsersSideBar from "../pages/Chat/Components/UsersSideBar";
+
+export default function Navbar(props) {
+  const { logout } = ContextData();
   const navigate = useNavigate();
-  const userUID = auth.currentUser?.uid;
+  const uid = auth.currentUser?.uid;
 
   const [state, setState] = React.useState(false);
   const [DP, setDP] = React.useState(null);
   const [name, setName] = React.useState(null);
 
-  React.useEffect(() => {
-    const user = USERS?.find((user) => user.uid === userUID);
-    setDP(user?.profile_picture);
-  }, [userUID]);
+  useEffect(() => {
+    const userRef = doc(db, "users", uid);
+    const getUserData = onSnapshot(userRef, (doc) => {
+      const result = doc.data();
+      setDP(result.profile_picture);
+      setName(result.name);
+    });
+    return () => uid && getUserData();
+  }, []);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -82,12 +86,15 @@ export default function Navbar() {
             <Avatar className="border border-white/40 " src={DP} alt={name} />
           }
         >
-          <ListItemButton onClick={HandleSignOut}>
-            <ListItemIcon>
-              <LogoutIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItemButton>
+          <div className=" mx-1 cols-center">
+            <p> {name && "Hello " + name} </p>
+            <ListItemButton onClick={HandleSignOut}>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
+            </ListItemButton>
+          </div>
         </DropDown>
       </div>
     </div>

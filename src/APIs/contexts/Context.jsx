@@ -21,55 +21,6 @@ const UserContext = createContext();
 
 export const ContextProvider = ({ children }) => {
   const userID = auth.currentUser?.uid;
-  const [userState, setUserState] = useState([]);
-  const [loggedInUserName, setLoggedInUserName] = useState(null);
-  const [userGroups, setUserGroups] = useState([]);
-
-  const usersRef = collection(db, `users`);
-  const queryUsers = query(usersRef, orderBy("name", "asc"));
-  const [USERS, loadingUSERS, errorUSERS] = useCollectionData(queryUsers);
-
-  const handleGetUsers = async () => {
-    const dataArray = [];
-    const querySnapshot = await getDocs(queryUsers);
-
-    querySnapshot.forEach((doc) => {
-      const docData = doc.data();
-      const snapshotData = { ...docData, documentID: doc.id };
-      dataArray.push(snapshotData);
-    });
-
-    setUserState(dataArray);
-  };
-
-  useEffect(() => {
-    loadingUSERS == false && setUserState(USERS);
-  errorUSERS && alert(errorUSERS, "error loading users")
-  }, [loadingUSERS]);
-
-  const groupsRef = collection(db, `groups`);
-  const queryGROUPS = query(groupsRef, orderBy("groupName", "asc"));
-  const [GROUPS, loadingGROUPS, errorGROUPS] = useCollectionData(queryGROUPS);
-
-  //querying the Users
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      const uid = currentUser?.uid;
-      setOnlineStatusTrue(uid);
-    });
-    return unsubscribe;
-  }, []);
-
-  const getUserName = (uid, setName, setProfilePic) => {
-    setName("");
-    setProfilePic("");
-    if (!userState) handleGetUsers();
-    const user = userState?.find((user) => user.uid === uid);
-    if (!user) return;
-    
-    setName(user.name);
-    setProfilePic(user.profile_picture);
-  };
 
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -133,16 +84,6 @@ export const ContextProvider = ({ children }) => {
   };
 
   const value = {
-    USERS,
-    loadingUSERS,
-    GROUPS,
-    loadingGROUPS,
-    userGroups,
-    loggedInUserName,
-    userState,
-    setLoggedInUserName,
-    setUserGroups,
-    getUserName,
     addingNewUsers,
     createUser,
     signIn,
@@ -150,7 +91,6 @@ export const ContextProvider = ({ children }) => {
     addingUserToGroup,
     setOnlineStatusTrue,
     setOnlineStatusFalse,
-    handleGetUsers,
   };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

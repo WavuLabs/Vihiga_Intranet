@@ -31,7 +31,7 @@ export const MessageItem = (props) => {
   );
 
   const ReceiverMessaageItem = () => (
-    <div className="rows-center">
+    <div className="flex flex-row justify-start items-center">
       <Avatar src={profilePic} className="m-1" />
       <div className={`${messageClass} m-1 px-3`}>
         <div>

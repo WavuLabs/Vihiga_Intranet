@@ -9,33 +9,40 @@ import { auth } from "../../APIs/firebase";
 
 const Signin = () => {
   const [email, setEmail] = useState("");
-  const [user, setUser] = useState(null);
   const [password, setPassword] = useState("");
+  const [signedIn, setSignedIn] = useState(false);
   const { signIn, setOnlineStatusTrue } = ContextData();
   const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((currentUser) => {
       const uid = currentUser?.uid;
-      setUser(uid);
-      setOnlineStatusTrue(uid);
-      if (uid) navigate("chatpage", { replace: true });
+      if (uid) {
+        setOnlineStatusTrue(uid);
+        setSignedIn(true);
+        navigate("/home", { replace: true });
+      }
     });
     return unsubscribe;
   }, []);
 
   const HandleSignin = async () => {
-    try {
-      await signIn(email, password);
-      setOnlineStatusTrue(user);
-      navigate("chatpage", { replace: true });
-    } catch (error) {
-      console.error(error);
-    }
+    await signIn(email, password)
+      .then(async (user) => {
+        setSignedIn(true);
+        await setOnlineStatusTrue(user.uid);
+        navigate("/home", { replace: true });
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
     <div className="w-full h-full flex justify-center items-center">
+      {signedIn && (
+        <p className="absolute p-4  top-0 bg-green-700/50 w-[20vw] text-center">
+          Successfully
+        </p>
+      )}
       <div className="max-w-md w-full px-4 py-8 text-center">
         <h1 className="text-3xl font-semibold">Sign in</h1>
         <p className="text-gray-600">Sign in to your account</p>

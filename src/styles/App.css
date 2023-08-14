@@ -58,12 +58,17 @@
   @apply flex flex-row justify-between items-center;
 }
 .rows-center {
-  @apply flex flex-row justify-start items-center;
+  @apply flex flex-row justify-center items-center;
 }
 .cols-center {
-  @apply flex flex-col justify-start items-center;
+  @apply flex flex-col justify-center items-center;
 }
 .pop-up {
   @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2
    bg-white/25 border-2 border-black shadow-xl p-4 w-1/2 h-1/2 z-10;
+}
+.curved-bottom {
+  @apply bg-purple-800/20 w-full h-[30vh] scale-x-105 -z-10;
+  border-bottom-left-radius: 50% 50%;
+  border-bottom-right-radius: 50% 50%;
 }

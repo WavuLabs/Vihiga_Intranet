@@ -2,13 +2,14 @@ import { Container } from "@mui/material";
 import { useEffect, useRef } from "react";
 
 import { ContextData } from "../APIs/contexts/Context";
-import { Outlet } from "react-router-dom";
-import { useCollectionData } from "react-firebase-hooks/firestore";
-import { collection, orderBy, query } from "firebase/firestore";
-import { db } from "../APIs/firebase";
+import { Outlet, useNavigate } from "react-router-dom";
+import { auth, db } from "../APIs/firebase";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "../constants/Constants";
 
 function App() {
-  const { logout, handleGetUsers } = ContextData();
+  const navigate = useNavigate();
+  const { logout, setOnlineStatusTrue } = ContextData();
   const timeoutRef = useRef();
 
   const values = {};
@@ -35,10 +36,22 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      const uid = currentUser?.uid;
+      uid && setOnlineStatusTrue(uid);
+      !uid && navigate("/", { replace: true });
+    });
+    return unsubscribe;
+  }, []);
+
   return (
-    <Container className="relative">
-      <Outlet context={values} />
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container className="relative">
+     
+        <Outlet context={values} />
+      </Container>
+    </ThemeProvider>
   );
 }
 
