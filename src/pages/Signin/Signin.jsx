@@ -26,7 +26,8 @@ const Signin = () => {
     return unsubscribe;
   }, []);
 
-  const HandleSignin = async () => {
+  const HandleSignin = async (e) => {
+    e.preventDefault();
     await signIn(email, password)
       .then(async (user) => {
         setSignedIn(true);
@@ -43,7 +44,10 @@ const Signin = () => {
           Successfully
         </p>
       )}
-      <div className="max-w-md w-full px-4 py-8 text-center">
+      <form
+        onSubmit={HandleSignin}
+        className="max-w-md w-full px-4 py-8 text-center"
+      >
         <h1 className="text-3xl font-semibold">Sign in</h1>
         <p className="text-gray-600">Sign in to your account</p>
         <TextInputComponents
@@ -64,7 +68,6 @@ const Signin = () => {
 
         <button
           type="submit"
-          onClick={HandleSignin}
           className="my-4 w-full bg-gray-700 text-white rounded hover:bg-gray-800"
         >
           Sign in
@@ -75,7 +78,7 @@ const Signin = () => {
         >
           Create account
         </button>
-      </div>
+      </form>
     </div>
   );
 };

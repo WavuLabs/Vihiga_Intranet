@@ -118,7 +118,6 @@ const Chat = (props) => {
         groupedMessages[groupedMessages.length - 1].messages.push(message);
       }
     });
-
     return groupedMessages;
   };
 
@@ -130,9 +129,12 @@ const Chat = (props) => {
     getUserName(receiverID, setUserName, setProfilePic);
     getUserName(uid, setLoggedInUserName, setLoggedInUserNameDP);
     userName ? setUserType("user") : setUserType("group");
-    handleScrollToBottom();
     error && console.log(error);
   }, [MessagesBtnTheTwoUsers]);
+
+  useEffect(() => {
+    handleScrollToBottom();
+  }, [groupedMessagesState]);
 
   const handleLastMessage = () => {
     // if (!MessagesBtnTheTwoUsers) return;
@@ -166,7 +168,7 @@ const Chat = (props) => {
 
   return (
     <>
-      <div className="flex flex-row justify-between items-center p-1 bg-primary/10">
+      <div className="flex flex-row justify-between items-center p-1 bg-primary/5">
         <Avatar src={profilePic} className="m-1" alt="DP" />
         <div className="flex flex-col justify-center items-start m-2 flex-1">
           <p className="text-white">{userName ? userName : receiverID}</p>
@@ -179,7 +181,6 @@ const Chat = (props) => {
       </div>
       {/* message items */}
       <div className="chatContainer ">
-        <button onClick={handleLastMessage}>test</button>
         {!loading ? (
           <>
             {groupedMessagesState?.map((group, index) => (

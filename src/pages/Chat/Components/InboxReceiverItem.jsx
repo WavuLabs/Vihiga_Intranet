@@ -68,7 +68,7 @@ export default function InboxReceiverItem(props) {
       return (
         <button
           key={index}
-          className={`flex flex-row my-1 px-2 mx-2 py-1 w-[97%] ${hideThisReceiver}`}
+          className={`flex flex-row my-1 px-2 mx-2 py-2 w-[97%] ${hideThisReceiver}`}
           onClick={HandleClick}
         >
           <Avatar src={profilePic} alt="DP" className="m-1 custom-borders" />

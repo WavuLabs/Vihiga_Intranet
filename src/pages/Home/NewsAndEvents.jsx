@@ -9,10 +9,10 @@ const NewsAndEvents = () => {
   const now = dayjs(date).get("date");
   const FormattedDate = dayjs(date).format("DD MMM");
   return (
-    <div className="my-5">
-      <h2>NewsAndEvents</h2>
+    <div className="my-5 mx-3 ">
+      <p className="p-title my-3 p-3">News & Events</p>
       <div className="grid grid-flow-col space-x-2">
-        <div className="col-span-2  ">
+        <div className="col-span-2 grid grid-flow-row customs-border  ">
           <NewsEventItem />
           <NewsEventItem />
           <NewsEventItem />

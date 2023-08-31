@@ -47,10 +47,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container className="relative">
-     
+      <div className="relative sm:mx-[2vw]">
         <Outlet context={values} />
-      </Container>
+      </div>
     </ThemeProvider>
   );
 }

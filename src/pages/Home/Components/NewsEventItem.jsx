@@ -1,10 +1,10 @@
-import { Avatar } from "@mui/material";
 import React from "react";
+import { Avatar } from "@mui/material";
 import { faker } from "@faker-js/faker";
 
 const NewsEventItem = () => {
   return (
-    <div className="grid grid-flow-col space-x-3 grid-cols-3 m-2 py-2 custom-borders">
+    <div className="grid grid-flow-col space-x-3 grid-cols-3 mx-2 my-1 py-2 custom-borders">
       <img
         src={faker.image.url()}
         alt=""

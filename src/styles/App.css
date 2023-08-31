@@ -60,6 +60,12 @@
 .rows-center {
   @apply flex flex-row justify-center items-center;
 }
+.row-center {
+  @apply flex flex-row;
+}
+.col-center {
+  @apply flex flex-col;
+}
 .cols-center {
   @apply flex flex-col justify-center items-center;
 }
@@ -68,7 +74,24 @@
    bg-white/25 border-2 border-black shadow-xl p-4 w-1/2 h-1/2 z-10;
 }
 .curved-bottom {
-  @apply bg-purple-800/20 w-full h-[30vh] scale-x-105 -z-10;
+  @apply w-screen bg-gradient-to-b from-primary/20 to-secondaryLight/40 h-[40vh] scale-x-105 -z-10;
   border-bottom-left-radius: 50% 50%;
   border-bottom-right-radius: 50% 50%;
+}
+.p-title {
+  @apply text-5xl text-white;
+  font-weight: 400;
+}
+.bg-logo {
+  @apply bg-no-repeat;
+  background-image: url("/assets/VihigaLogo.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.filter-blur {
+  backdrop-filter: blur(10px); /* Adjust the blur value as needed */
+}
+.links {
+  @apply m-2 rounded-xl hover:border hover:bg-primary/10 p-3;
 }

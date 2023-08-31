@@ -5,8 +5,11 @@ export default {
     extend: {
       colors: {
         primary: "#f44336",
-        secondary: "#11cb5f",
-        danger: "#e53e3e",
+        secondary: "#311B92",
+        secondaryLight: "#9C27B0",
+        gold: "#1B5E20",
+        goldDark: "#FFC107",
+        green: "#11cb5f",
       },
     },
   },

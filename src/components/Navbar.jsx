@@ -6,10 +6,11 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Icon,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
-import { Logout as LogoutIcon } from "@mui/icons-material";
+import { Image, Logout as LogoutIcon } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Avatar } from "@mui/material";
 
@@ -19,6 +20,7 @@ import { auth } from "../APIs/firebase";
 import InboxMessagesSidebar from "../pages/Chat/Components/InboxMessagesSidebar";
 import { ContextData } from "../APIs/contexts/Context";
 import UsersSideBar from "../pages/Chat/Components/UsersSideBar";
+import Logo from "../../public/assets/VihigaLogo.png";
 
 export default function Navbar(props) {
   const { logout } = ContextData();
@@ -64,14 +66,7 @@ export default function Navbar(props) {
   };
 
   return (
-    <div className="relative flex flex-row top-0 bg-[#161B1C] h-[10vh] w-full justify-between items-center">
-      {/* Box with Logo */}
-      <div className="sm:hidden">
-        <Button onClick={toggleDrawer(true)}>
-          <MenuIcon />
-        </Button>
-      </div>
-      <Link to="/">Home </Link>
+    <>
       <SwipeableDrawer
         anchor="left"
         open={state}
@@ -80,23 +75,47 @@ export default function Navbar(props) {
       >
         <List />
       </SwipeableDrawer>
-      <div>
-        <DropDown
-          Title={
-            <Avatar className="border border-white/40 " src={DP} alt={name} />
-          }
-        >
-          <div className=" mx-1 cols-center">
-            <p> {name && "Hello " + name} </p>
-            <ListItemButton onClick={HandleSignOut}>
-              <ListItemIcon>
-                <LogoutIcon />
-              </ListItemIcon>
-              <ListItemText primary="Logout" />
-            </ListItemButton>
+      <div className="sticky grid grid-cols-2 top-0 mb-2 h-[10vh] w-full ">
+        {/* Box with Logo */}
+        <div className=" bg-[#020202]/60 overflow-clip">
+          <div className="sm:hidden">
+            <Button onClick={toggleDrawer(true)}></Button>
           </div>
-        </DropDown>
+          <img src={Logo} className="w-1/4 h-[9vh] m-2" />
+
+          {/* <div className="flex-1"></div> */}
+        </div>
+
+        <div className=" bg rows-center">
+          <ol className="rows-center flex-1 space-x-3 text-primary">
+            <Link className="links" to="/">HOME </Link>
+            <Link className="links" to="/">SIGNIN</Link>
+            <Link className="links" to="/signup">SIGNUP</Link>
+            <Link className="links" to="/chatpage">CHAT</Link>
+          </ol>
+          <div className="mx-5">
+            <DropDown
+              Title={
+                <Avatar
+                  className="border border-white/40 "
+                  src={DP}
+                  alt={name}
+                />
+              }
+            >
+              <div className=" mx-1 cols-center">
+                <p> {name && "Hello " + name} </p>
+                <ListItemButton onClick={HandleSignOut}>
+                  <ListItemIcon>
+                    <LogoutIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </ListItemButton>
+              </div>
+            </DropDown>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
