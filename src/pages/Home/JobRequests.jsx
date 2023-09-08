@@ -19,7 +19,7 @@ const JobRequests = () => {
     </div>
   );
   return (
-    <div className="h-[50vh]">
+    <div className="w-full h-full">
       <p className="p-title m-2 p-3">JobRequests</p>
       <div className="grid grid-cols-3 place-items-center">
         <Item title={"Request Leave"} color={"bg-slate-900"} />

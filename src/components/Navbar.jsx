@@ -20,7 +20,7 @@ import { auth } from "../APIs/firebase";
 import InboxMessagesSidebar from "../pages/Chat/Components/InboxMessagesSidebar";
 import { ContextData } from "../APIs/contexts/Context";
 import UsersSideBar from "../pages/Chat/Components/UsersSideBar";
-import Logo from "../../public/assets/VihigaLogo.png";
+import Logo from "/assets/VihigaLogo.png";
 
 export default function Navbar(props) {
   const { logout } = ContextData();
@@ -75,31 +75,41 @@ export default function Navbar(props) {
       >
         <List />
       </SwipeableDrawer>
-      <div className="sticky grid grid-cols-2 top-0 mb-2 h-[10vh] w-full ">
+      <div className="sticky grid grid-cols-2 top-0 mb-3 h-[10vh] w-full ">
         {/* Box with Logo */}
         <div className=" bg-[#020202]/60 overflow-clip">
           <div className="sm:hidden">
             <Button onClick={toggleDrawer(true)}></Button>
           </div>
-          <img src={Logo} className="w-1/4 h-[9vh] m-2" />
+          <img src={Logo} className="w-[10vw] h-[9vh] m-2" />
 
           {/* <div className="flex-1"></div> */}
         </div>
 
-        <div className=" bg rows-center">
-          <ol className="rows-center flex-1 space-x-3 text-primary">
-            <Link className="links" to="/">HOME </Link>
-            <Link className="links" to="/">SIGNIN</Link>
-            <Link className="links" to="/signup">SIGNUP</Link>
-            <Link className="links" to="/chatpage">CHAT</Link>
+        <div className=" row-center ">
+          <ol className="row-center justify-end items-center mx-4 flex-1 space-x-[1vw] text-primary">
+            <Link className="links" to="/">
+              HOME
+            </Link>
+            <Link className="links" to="/">
+              SIGNIN
+            </Link>
+            <Link className="links" to="/signup">
+              SIGNUP
+            </Link>
+            <Link className="links" to="/chatpage">
+              CHAT
+            </Link>
           </ol>
-          <div className="mx-5">
+          <div className="bg-[#3a1107] w-[10vw] h-full flex rows-center">
             <DropDown
+              Class="w-full h-full"
               Title={
                 <Avatar
-                  className="border border-white/40 "
+                  className=" border-white/40 "
                   src={DP}
                   alt={name}
+                  sx={{ width: "3vw", height: "3vw" }}
                 />
               }
             >

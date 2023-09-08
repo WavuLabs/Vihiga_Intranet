@@ -10,10 +10,12 @@ import Typed from "react-typed";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import PhonelinkIcon from "@mui/icons-material/Phonelink";
 import ChatIcon from "@mui/icons-material/Chat";
-import Logo from "../../../public/assets/VihigaLogo.png";
+import Logo from "/assets/VihigaLogo.png";
 import NewsAndEvents from "./NewsAndEvents";
 import StaffDirectory from "./StaffDirectory";
 import JobRequests from "./JobRequests";
+import Footer from "./Footer";
+import { ProgressIndicator } from "../../components/ProgressIndicator";
 
 const Home = () => {
   const { USERS, loadingUSERS } = useOutletContext();
@@ -63,40 +65,56 @@ const Home = () => {
   };
   return (
     <>
-      <div className="relative flex flex-row overflow-clip h-[85vh]">
-        <div className="w-[60vw] flex ">
-          <img
-            onClick={scrollToElement}
-            src={Logo}
-            alt="logo"
-            className="flex-1 opacity-60 filter-blur "
-          />
-        </div>
-        <div className="z-10 w-[45vw]   absolute h-full right-0 bg-slate-800/5 flex flex-col justify-center -translate-x-[5vw]s ">
-          <p className="text-7xl font-bold font-">Welcome to</p>
-          <p className="text-5xl font-semibold">Vihiga County</p>
-          <Typed
-            className="text-primary/50 text-2xl font-semibold "
-            strings={["Here you can find anything", "He you", "Chat", "News And Events"]}
-            typeSpeed={40}
-            loop
-            backSpeed={50}
-          />
-        </div>
-      </div>
-
-      {!loadingUSERS && (
+      {!loadingUSERS ? (
         <>
+          <div className="relative flex flex-row overflow-clip h-[85vh]">
+            <div className="w-[60vw] flex ">
+              <img
+                onClick={scrollToElement}
+                src={Logo}
+                alt="logo"
+                className="flex-1 opacity-60 filter-blur "
+              />
+            </div>
+            <div className="z-10 w-[45vw]   absolute h-full right-0 bg-slate-800/5 flex flex-col justify-center -translate-x-[5vw]s ">
+              <p className="text-7xl font-bold font-">Welcome to</p>
+              <p className="text-5xl font-semibold">Vihiga County</p>
+              <Typed
+                className="text-primary text-2xl font-semibold "
+                strings={[
+                  "Here you can find anything",
+                  "He you",
+                  "Chat Chat Chat ",
+                  "News And Events",
+                ]}
+                typeSpeed={100}
+                loop
+                backSpeed={50}
+              />
+            </div>
+          </div>
+
           <Element name="NewsAndEvents">
             <NewsAndEvents />
           </Element>
-          <Element className="my-10 w-[100vw]d p-6 bg-white" name="StaffDirectory">
+          <Element
+            className="my-10 w-[100vw]d p-6 bg-white"
+            name="StaffDirectory"
+          >
             <StaffDirectory />
           </Element>
-          <Element className="my-4" name="JobRequests">
+          <Element
+            className="my-4 h-screen col-center items-center"
+            name="JobRequests"
+          >
             <JobRequests />
           </Element>
+          <Footer />
         </>
+      ) : (
+        <div className="h-[80vh] w-full">
+          <ProgressIndicator />
+        </div>
       )}
     </>
   );

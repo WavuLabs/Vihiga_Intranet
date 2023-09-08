@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Menu, MenuItem } from "@mui/material";
 
-const DropDown = ({ Title, ...props }) => {
+const DropDown = ({ Class, Title, ...props }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleButtonClick = (event) => {
@@ -14,7 +14,9 @@ const DropDown = ({ Title, ...props }) => {
 
   return (
     <>
-      <Button onClick={handleButtonClick}>{Title}</Button>
+      <Button className={Class} onClick={handleButtonClick}>
+        {Title}
+      </Button>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}

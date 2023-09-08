@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AiOutlineCaretRight } from "react-icons/ai";
 import {
-  Alert,
   Avatar,
   Button,
-  MenuItem,
-  Stack,
   TextField,
 } from "@mui/material";
 import {
@@ -14,8 +10,6 @@ import {
   query,
   serverTimestamp,
   addDoc,
-  setDoc,
-  doc,
   where,
   or,
 } from "firebase/firestore";
@@ -180,7 +174,7 @@ const Chat = (props) => {
         </div>
       </div>
       {/* message items */}
-      <div className="chatContainer ">
+      <div className="chatContainer mb-6 ">
         {!loading ? (
           <>
             {groupedMessagesState?.map((group, index) => (

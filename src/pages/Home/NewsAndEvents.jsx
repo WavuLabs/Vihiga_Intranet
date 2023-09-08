@@ -11,8 +11,8 @@ const NewsAndEvents = () => {
   return (
     <div className="my-5 mx-3 ">
       <p className="p-title my-3 p-3">News & Events</p>
-      <div className="grid grid-flow-col space-x-2">
-        <div className="col-span-2 grid grid-flow-row customs-border  ">
+      <div className="grid grid-flow-col space-x-2 px-2">
+        <div className="col-span-2 grid grid-flow-row customs-border m-1 ">
           <NewsEventItem />
           <NewsEventItem />
           <NewsEventItem />
