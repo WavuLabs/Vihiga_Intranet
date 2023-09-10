@@ -9,7 +9,7 @@ const ChatPage = ({ children }) => {
   const values = useOutletContext();
 
   return (
-    <div className="w-full h-[90vh] flex flex-row overflow-clip">
+    <div className="w-full h-[87vh] flex flex-row overflow-clip">
       {/* Main sidebar div */}
       {width > 640 && (
         <div className="flex flex-col bg-[#0A0E0F] w-1/3 ">
@@ -22,7 +22,7 @@ const ChatPage = ({ children }) => {
       )}
 
       {/* chat */}
-      <div className="bg-[#121616] flex-1 relative h-full ">
+      <div className="bg-[#121616] flex-1 relative  ">
         <Outlet context={values} />
       </div>
     </div>
