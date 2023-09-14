@@ -20,7 +20,7 @@ import { auth, db } from "../../APIs/firebase";
 import { MessageItem } from "./Components/MessageItem";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 
-const Chat = (props) => {
+const Chat = () => {
   const { USERS, getUserName } = useOutletContext();
   const navigate = useNavigate();
   const uid = auth.currentUser?.uid;

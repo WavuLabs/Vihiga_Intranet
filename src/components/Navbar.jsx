@@ -75,18 +75,16 @@ export default function Navbar(props) {
       >
         <List />
       </SwipeableDrawer>
-      <div className="sticky grid grid-cols-2 top-0 mb-3 h-[10vh] w-full ">
+      <div className="sticky grid grid-cols-2 top-0 mb- h-[10vh] w-full z-50 opacity-100 bg-bg">
         {/* Box with Logo */}
-        <div className=" bg-[#020202]/60 overflow-clip">
+        <div className="bg-[#020202]/60 overflow-hidden">
           <div className="sm:hidden">
             <Button onClick={toggleDrawer(true)}></Button>
           </div>
-          <img src={Logo} className="w-[10vw] h-[9vh] m-2" />
-
-          {/* <div className="flex-1"></div> */}
+          <img src={Logo} className="w-[9vw] h-[8vh] m-2" />
         </div>
 
-        <div className=" row-center ">
+        <div className="row-center ">
           <ol className="row-center justify-end items-center mx-4 flex-1 space-x-[1vw] text-primary">
             <Link className="links" to="/">
               HOME

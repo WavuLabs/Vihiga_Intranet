@@ -269,6 +269,12 @@ const Signup = () => {
           >
             Sign up
           </button>
+          <button
+            onClick={() => navigate("/", { replace: true })}
+            className="my-4 bg-gray-700/60 text-white rounded hover:bg-gray-800"
+          >
+            Already Have an account
+          </button>
         </form>
       </div>
     </>

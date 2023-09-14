@@ -78,16 +78,16 @@ const Home = () => {
             </div>
             <div className="z-10 w-[45vw]   absolute h-full right-0 bg-slate-800/5 flex flex-col justify-center -translate-x-[5vw]s ">
               <p className="text-7xl font-bold font-">Welcome to</p>
-              <p className="text-5xl font-semibold">Vihiga County</p>
+              <p className="text-5xl font-semibold">Vihiga County Intranet</p>
               <Typed
                 className="text-primary text-2xl font-semibold "
                 strings={[
                   "Here you can find anything",
-                  "He you",
-                  "Chat Chat Chat ",
-                  "News And Events",
+                  "Request Leave",
+                  "Easy Communication ",
+                  "Car Loans",
                 ]}
-                typeSpeed={100}
+                typeSpeed={60}
                 loop
                 backSpeed={50}
               />
@@ -98,16 +98,17 @@ const Home = () => {
             <NewsAndEvents />
           </Element>
           <Element
-            className="my-10 w-[100vw]d p-6 bg-white"
-            name="StaffDirectory"
-          >
-            <StaffDirectory />
-          </Element>
-          <Element
             className="my-4 h-screen col-center items-center"
             name="JobRequests"
           >
             <JobRequests />
+          </Element>
+          
+          <Element
+            className="mt-10 w-[100vw]d p-6 bg-white"
+            name="StaffDirectory"
+          >
+            <StaffDirectory />
           </Element>
           <Footer />
         </>
