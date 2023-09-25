@@ -7,6 +7,11 @@ import { auth, db } from "../APIs/firebase";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../constants/Constants";
 
+
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+
+
 function App() {
   const navigate = useNavigate();
   const { logout, setOnlineStatusTrue } = ContextData();

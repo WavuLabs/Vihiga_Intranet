@@ -60,3 +60,6 @@ Firebase Firestore database.
 
 By using this updated code snippet, you can sort messages from similar senders into separate arrays for further 
 processing or classification.
+
+
+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

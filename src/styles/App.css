@@ -63,7 +63,7 @@
 .row-center {
   @apply flex flex-row;
 }
-.col-center {
+.col {
   @apply flex flex-col;
 }
 .cols-center {
