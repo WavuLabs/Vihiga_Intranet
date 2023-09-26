@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
-import { addDays } from "date-fns";
 
 import { Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
-import RequestLeave from "./Components/JobRequests/RequestLeave";
-import CarLoans from "./Components/JobRequests/CarLoans";
-import PerformanceAppraisal from "./Components/JobRequests/PerformanceAppraisal";
-import CountyCommittee from "./Components/JobRequests/CountyCommittee";
-import StatutoryReport from "./Components/JobRequests/StatutoryReport";
-import TravelOut from "./Components/JobRequests/TravelOut";
+import RequestLeave from "./Components/RequestLeave";
+import CarLoans from "./Components/CarLoans";
+import PerformanceAppraisal from "./Components/PerformanceAppraisal";
+import CountyCommittee from "./Components/CountyCommittee";
+import StatutoryReport from "./Components/StatutoryReport";
+import TravelOut from "./Components/TravelOut";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -56,13 +54,13 @@ const JobRequests = () => {
       case "Car Loan":
         return <CarLoans handleClose={handleClose} />;
       case "Performance Appraisal":
-        return <PerformanceAppraisal />;
-      case "County Committe":
-        return <CountyCommittee />;
+        return <PerformanceAppraisal handleClose={handleClose} />;
+      case "County Committee":
+        return <CountyCommittee handleClose={handleClose} />;
       case "Statutory Report":
-        return <StatutoryReport />;
+        return <StatutoryReport handleClose={handleClose} />;
       case "Travel Out":
-        return <TravelOut />;
+        return <TravelOut handleClose={handleClose} />;
       default:
         return null;
     }

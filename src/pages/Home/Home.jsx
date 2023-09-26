@@ -13,7 +13,7 @@ import ChatIcon from "@mui/icons-material/Chat";
 import Logo from "/assets/VihigaLogo.png";
 import NewsAndEvents from "./NewsAndEvents";
 import StaffDirectory from "./StaffDirectory";
-import JobRequests from "./JobRequests";
+import JobRequests from "./JobRequests/JobRequests";
 import Footer from "./Footer";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 import Typewriter from "typewriter-effect";
