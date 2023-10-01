@@ -11,6 +11,31 @@ export const colors = {
 };
 
 export const theme = createTheme({
+  components: {
+    // Use `MuiDataGrid` on DataGrid, DataGridPro and DataGridPremium
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#f4433620",
+        },
+      },
+    },
+    // change default color of TableCell
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          color: "black",
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: "black",
+        },
+      },
+    },
+  },
   palette: {
     status: {
       danger: colors.primary,

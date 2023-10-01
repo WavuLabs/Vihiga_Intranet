@@ -1,10 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
+import { DateRangePicker } from "react-date-range";
+import { addDays } from "date-fns";
+import { TextField } from "@mui/material";
 
 const TravelOut = ({ handleClose }) => {
+  const [destinaion, setDestination] = useState("");
+  const [TravelOutDays, setTravelOutDays] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+      color: "#901106",
+    },
+  ]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(TravelOutDays, destinaion);
+    handleClose();
+  };
   return (
-    <div>
-      TravelOut
-      <button onClick={handleClose}>Close</button>
+    <div className="col p-4 items-center justify-center space-y-3 overflow-hidden w-[60vw]">
+      <p className="text-3xl">Select Travelling details</p>
+      <form
+        className="w-full h-fit items-center justify-center space-y-3 "
+        onSubmit={handleSubmit}
+      >
+        <TextField
+          label="Destination"
+          placeholder="Enter Travel Destinaion"
+          value={destinaion}
+          onChange={(e) => setDestination(e.target.value)}
+          margin="none"
+          className="w-full rounded-sm"
+          //   size="medium"
+          required
+          autoFocus={true}
+          autoComplete="off"
+        />
+        <br />
+        {destinaion && (
+          <DateRangePicker
+            className=" text-black w-fit h-fit "
+            onChange={(item) => setTravelOutDays([item.selection])}
+            showSelectionPreview={true}
+            moveRangeOnFirstSelection={false}
+            months={2}
+            ranges={TravelOutDays}
+            color="red"
+            direction="horizontal"
+          />
+        )}
+        <br />
+        <button className="w-[20vw] border">SUBMIT</button>
+      </form>
     </div>
   );
 };

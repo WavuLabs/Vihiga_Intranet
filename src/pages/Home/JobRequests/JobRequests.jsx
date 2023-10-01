@@ -73,7 +73,7 @@ const JobRequests = () => {
         <Item title={"Car Loan"}  handleClick={()=> setSelected("Car Loan")} />
         <Item title={"Performance Appraisal"} handleClick={()=> setSelected("Performance Appraisal")} />
         <Item title={"County Committee"}  handleClick={()=> setSelected("County Committee")}/>
-        <Item title={"Statutory Report"} handleClick={()=> setSelected("Statutory Report")}/>
+        <Item title="Statutory Report" handleClick={()=> setSelected("Statutory Report")}/>
         <Item title={"Travel Out"} handleClick={()=> setSelected("Travel Out")}/>
       </div>
       <Dialog

@@ -17,6 +17,7 @@ import JobRequests from "./JobRequests/JobRequests";
 import Footer from "./Footer";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 import Typewriter from "typewriter-effect";
+import PendingApprovals from "./PendingApprovals/PendingApprovals";
 
 const Home = () => {
   const { USERS, loadingUSERS } = useOutletContext();
@@ -111,6 +112,10 @@ const Home = () => {
 
           <Element name="NewsAndEvents">
             <NewsAndEvents />
+          </Element>
+
+          <Element name="Pending Approval">
+            <PendingApprovals />
           </Element>
           <Element
             className="my-4 h-screen col items-center"
