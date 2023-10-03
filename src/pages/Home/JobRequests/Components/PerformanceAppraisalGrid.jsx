@@ -45,7 +45,7 @@ const PerformanceAppraisalGrid = ({children, handleClose}) => {
             <TableBody>
               {performanceData.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell>{item.key}</TableCell>
+                  <TableCell sx={{color: "white"}}>{item.key}</TableCell>
                   <TableCell>
                     <Checkbox
                       checked={item.checked}

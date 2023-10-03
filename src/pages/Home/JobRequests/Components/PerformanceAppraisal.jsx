@@ -6,7 +6,7 @@ import { Button } from "@mui/material";
 const PerformanceAppraisal = ({ handleClose }) => {
   return (
     <div className=" m-2">
-      <div className="row-center justify-between p-3">
+      <div className="row justify-between p-3">
         <p>PerformanceAppraisal</p>
         <Button onClick={handleClose}>
           <CloseIcon />

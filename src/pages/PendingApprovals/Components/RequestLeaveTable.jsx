@@ -33,7 +33,7 @@ const RequestLeaveTable = ({props}) => {
               <TableCell>Name</TableCell>
               <TableCell>Leave Dates</TableCell>
               <TableCell>Leave Days</TableCell>
-              <TableCell>Approve</TableCell>
+              <TableCell >Approve</TableCell>
               <TableCell>Reject</TableCell>
             </TableRow>
           </TableHead>

@@ -17,7 +17,6 @@ import JobRequests from "./JobRequests/JobRequests";
 import Footer from "./Footer";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 import Typewriter from "typewriter-effect";
-import PendingApprovals from "./PendingApprovals/PendingApprovals";
 
 const Home = () => {
   const { USERS, loadingUSERS } = useOutletContext();
@@ -95,18 +94,6 @@ const Home = () => {
                   }}
                 />
               </div>
-              {/* <Typed
-                className="text-primary text-2xl font-semibold "
-                strings={[
-                  "Here you can find anything",
-                  "Request Leave",
-                  "Easy Communication ",
-                  "Car Loans",
-                ]}
-                typeSpeed={60}
-                loop
-                backSpeed={50}
-              /> */}
             </div>
           </div>
 
@@ -114,9 +101,6 @@ const Home = () => {
             <NewsAndEvents />
           </Element>
 
-          <Element name="Pending Approval">
-            <PendingApprovals />
-          </Element>
           <Element
             className="my-4 h-screen col items-center"
             name="JobRequests"

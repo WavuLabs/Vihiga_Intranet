@@ -10,6 +10,7 @@ import Home from "../pages/Home/Home";
 import App from "../pages/App";
 import ChatContext from "./contexts/ChatContext";
 import { auth } from "./firebase";
+import UserProfile from "../pages/UserProfile/UserProfile";
 
 export const Router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ export const Router = createBrowserRouter([
           {
             path: "/home",
             element: <Home />,
+          },
+          {
+            path: "/profile",
+            element: <UserProfile />,
           },
           {
             path: "chatpage",

@@ -11,6 +11,7 @@ import PerformanceAppraisal from "./Components/PerformanceAppraisal";
 import CountyCommittee from "./Components/CountyCommittee";
 import StatutoryReport from "./Components/StatutoryReport";
 import TravelOut from "./Components/TravelOut";
+import PendingApprovals from "../../PendingApprovals/PendingApprovals";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -41,6 +42,8 @@ const JobRequests = () => {
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("");
+  const [fullWidth, setFullWidth] = React.useState(true);
+  const [maxWidth, setMaxWidth] = React.useState('md');
 
   const handleClose = () => {
     setOpen(!open);
@@ -56,7 +59,7 @@ const JobRequests = () => {
       case "Performance Appraisal":
         return <PerformanceAppraisal handleClose={handleClose} />;
       case "County Committee":
-        return <CountyCommittee handleClose={handleClose} />;
+        return <PendingApprovals handleClose={handleClose} />;
       case "Statutory Report":
         return <StatutoryReport handleClose={handleClose} />;
       case "Travel Out":
@@ -77,11 +80,13 @@ const JobRequests = () => {
         <Item title={"Travel Out"} handleClick={()=> setSelected("Travel Out")}/>
       </div>
       <Dialog
-        fullScreen
+        // fullScreen={true}
+        fullWidth={true}
+        maxWidth='lg'
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
-        className="p-4 m-2 cols-center bg-inherit"
+        className="p-4 m-2"
       >
         {handleDisplay()}
       </Dialog>

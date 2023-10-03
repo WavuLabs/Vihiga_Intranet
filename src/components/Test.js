@@ -7,7 +7,7 @@ const InitialHomeDesign = () => {
       </p>
     </div>
   </div>
-  <div className=" m-4 p-4 border row-center justify-around  space-x-5">
+  <div className=" m-4 p-4 border row justify-around  space-x-5">
     {state.map((data, index) => (
       <LinkScroll
         activeClass="active"

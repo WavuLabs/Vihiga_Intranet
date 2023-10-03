@@ -13,6 +13,8 @@ import { addDays, format, differenceInDays } from "date-fns";
 import { faker } from "@faker-js/faker";
 import RequestLeaveTable from "./Components/RequestLeaveTable";
 import TravelOutTable from "./Components/TravelOutTable";
+import PerformanceAppraisalTable from "./Components/PerformanceAppraisalTable";
+import CarLoanTable from "./Components/CarLoanTable";
 
 const PendingApprovals = () => {
   const [data, setData] = useState([
@@ -54,6 +56,8 @@ const PendingApprovals = () => {
       component: () => <RequestLeaveTable props={{ data, setData }} />,
     },
     { title: "Travel Out Requests", component: () => <TravelOutTable /> },
+    { title: "Car Loan Requests", component: () => <CarLoanTable /> },
+    { title: "Performance Appraisal Requests", component: () => <PerformanceAppraisalTable /> },
   ]);
 
   return (

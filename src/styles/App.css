@@ -60,7 +60,7 @@
 .rows-center {
   @apply flex flex-row justify-center items-center;
 }
-.row-center {
+.row {
   @apply flex flex-row;
 }
 .col {

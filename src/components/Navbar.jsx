@@ -84,13 +84,13 @@ export default function Navbar(props) {
           <img src={Logo} className="w-[9vw] h-[8vh] m-2" />
         </div>
 
-        <div className="row-center ">
-          <ol className="row-center justify-end items-center mx-4 flex-1 space-x-[1vw] text-primary">
+        <div className="row ">
+          <ol className="row justify-end items-center mx-4 flex-1 space-x-[1vw] text-primary">
             <Link className="links" to="/">
               HOME
             </Link>
-            <Link className="links" to="/">
-              SIGNIN
+            <Link className="links" to="/profile">
+              PROFILE
             </Link>
             <Link className="links" to="/signup">
               SIGNUP
