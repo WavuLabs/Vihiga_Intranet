@@ -102,7 +102,7 @@ const Signup = () => {
 
             await addingUserToGroup(group, groupObject);
 
-            navigate("/signin", { replace: true });
+            navigate("/home", { replace: true });
 
             await updateProfile(auth.currentUser, {
               displayName: name,
@@ -112,7 +112,7 @@ const Signup = () => {
           .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+            alert(errorCode, errorMessage);
           });
       }
     } catch (error) {
