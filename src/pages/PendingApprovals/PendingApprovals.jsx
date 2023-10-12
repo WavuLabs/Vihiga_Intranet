@@ -61,7 +61,7 @@ const PendingApprovals = () => {
   ]);
 
   return (
-    <div className="bg-white/70 py-4 text-black">
+    <div className=" py-4 text-black">
       <p className="p-title my-3 p-3">Pending Approvals</p>
       {state.map((request, index) => (
         <div

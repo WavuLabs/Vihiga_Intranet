@@ -19,22 +19,22 @@ const RequestLeave = ({ handleClose }) => {
     handleClose();
   };
   return (
-    <form onSubmit={handleSubmit} className="col p-4 items-center justify-center space-y-3 w-fit h-fit">
-      <div className="row w-full">
-        <p className="text-3xl">Select Leave Dates</p>
-        <button className="right-5 absolute" onClick={() => handleClose()}>X</button>
-      </div>
+    <form
+      onSubmit={handleSubmit}
+      className="col p-4 items-center justify-center gap-4 "
+    >
+      <p className="text-3xl">Select Leave Dates</p>
       <TextField
-          label="Message"
-          placeholder="Reason for leave"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="w-full mx-10 rounded-sm m-1"
-          size="small"
-          required
-          autoFocus={true}
-          autoComplete="off"
-        />
+        label="Message"
+        placeholder="Reason for leave"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        className=" w-3/4 mx-10 rounded-sm m-1"
+        size="small"
+        required
+        autoFocus={true}
+        autoComplete="off"
+      />
       <DateRangePicker
         className=" text-black"
         onChange={(item) => setLeaveDates([item.selection])}
@@ -47,9 +47,7 @@ const RequestLeave = ({ handleClose }) => {
       />
       <br />
 
-      <button className="w-[20vw] border" >
-        SUBMIT
-      </button>
+      <button className="w-[20vw] border">SUBMIT</button>
     </form>
   );
 };

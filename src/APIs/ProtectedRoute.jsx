@@ -54,6 +54,7 @@ const ProtectedRoute = () => {
     GROUPS,
     loadingGROUPS,
     errorGROUPS,
+    uid,
   };
 
   useEffect(() => {

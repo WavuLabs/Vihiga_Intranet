@@ -92,9 +92,6 @@ export default function Navbar(props) {
             <Link className="links" to="/profile">
               PROFILE
             </Link>
-            <Link className="links" to="/signup">
-              SIGNUP
-            </Link>
             <Link className="links" to="/chatpage">
               CHAT
             </Link>

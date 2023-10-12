@@ -3,6 +3,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 import { Button } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
 import Slide from "@mui/material/Slide";
 import RequestLeave from "./Components/RequestLeave";
@@ -42,13 +43,10 @@ const JobRequests = () => {
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("");
-  const [fullWidth, setFullWidth] = React.useState(true);
-  const [maxWidth, setMaxWidth] = React.useState('md');
 
   const handleClose = () => {
     setOpen(!open);
   };
-
 
   const handleDisplay = () => {
     switch (selected) {
@@ -58,7 +56,7 @@ const JobRequests = () => {
         return <CarLoans handleClose={handleClose} />;
       case "Performance Appraisal":
         return <PerformanceAppraisal handleClose={handleClose} />;
-      case "County Committee":
+      case "Pending Approvals":
         return <PendingApprovals handleClose={handleClose} />;
       case "Statutory Report":
         return <StatutoryReport handleClose={handleClose} />;
@@ -69,26 +67,45 @@ const JobRequests = () => {
     }
   };
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full my-5">
       <p className="p-title m-2 p-3">JobRequests</p>
       <div className="grid grid-cols-3 place-items-center">
-        <Item title={"Request Leave"} handleClick={()=> setSelected("Request Leave")} />
-        <Item title={"Car Loan"}  handleClick={()=> setSelected("Car Loan")} />
-        <Item title={"Performance Appraisal"} handleClick={()=> setSelected("Performance Appraisal")} />
-        <Item title={"County Committee"}  handleClick={()=> setSelected("County Committee")}/>
-        <Item title="Statutory Report" handleClick={()=> setSelected("Statutory Report")}/>
-        <Item title={"Travel Out"} handleClick={()=> setSelected("Travel Out")}/>
+        <Item
+          title={"Request Leave"}
+          handleClick={() => setSelected("Request Leave")}
+        />
+        <Item title={"Car Loan & Mortgages"} handleClick={() => setSelected("Car Loan")} />
+        <Item
+          title={"Performance Appraisal"}
+          handleClick={() => setSelected("Performance Appraisal")}
+        />
+        <Item
+          title={"Pending Approvals"}
+          handleClick={() => setSelected("Pending Approvals")}
+        />
+        <Item
+          title="Statutory Report"
+          handleClick={() => setSelected("Statutory Report")}
+        />
+        <Item
+          title={"Travel Out"}
+          handleClick={() => setSelected("Travel Out")}
+        />
       </div>
       <Dialog
-        // fullScreen={true}
         fullWidth={true}
-        maxWidth='lg'
+        maxWidth="lg"
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
-        className="p-4 m-2"
+        className="p-4 m-2 relative"
       >
-        {handleDisplay()}
+        <div className="relative col ">
+          <button className="fixed bg-black/60 z-10 p-0 self-end rounded-none" onClick={handleClose}>
+            <CloseIcon />
+          </button>
+          {handleDisplay()}
+        </div>
       </Dialog>
     </div>
   );

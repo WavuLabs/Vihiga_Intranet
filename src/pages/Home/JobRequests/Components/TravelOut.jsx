@@ -19,12 +19,9 @@ const TravelOut = ({ handleClose }) => {
     handleClose();
   };
   return (
-    <div className="col p-4 items-center justify-center space-y-3 overflow-hidden w-[60vw]">
-      <p className="text-3xl">Select Travelling details</p>
-      <form
-        className="w-full h-fit items-center justify-center space-y-3 "
-        onSubmit={handleSubmit}
-      >
+    <div className="col p-4 items-center justify-center space-y-3 overflow-hidden">
+        <p className="text-3xl">Select Travelling details</p>
+      <form className="col s-center p-2 gap-1 " onSubmit={handleSubmit}>
         <TextField
           label="Destination"
           placeholder="Enter Travel Destinaion"
@@ -37,19 +34,17 @@ const TravelOut = ({ handleClose }) => {
           autoFocus={true}
           autoComplete="off"
         />
-        <br />
-        {destinaion && (
-          <DateRangePicker
-            className=" text-black w-fit h-fit "
-            onChange={(item) => setTravelOutDays([item.selection])}
-            showSelectionPreview={true}
-            moveRangeOnFirstSelection={false}
-            months={2}
-            ranges={TravelOutDays}
-            color="red"
-            direction="horizontal"
-          />
-        )}
+        <p className="text-xl text-left p-1">Select Travelling dates</p>
+        <DateRangePicker
+          className=" text-black w-fit h-fit "
+          onChange={(item) => setTravelOutDays([item.selection])}
+          showSelectionPreview={true}
+          moveRangeOnFirstSelection={false}
+          months={2}
+          ranges={TravelOutDays}
+          color="red"
+          direction="horizontal"
+        />
         <br />
         <button className="w-[20vw] border">SUBMIT</button>
       </form>

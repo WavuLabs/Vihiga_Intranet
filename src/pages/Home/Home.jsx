@@ -71,7 +71,7 @@ const Home = () => {
           <div className="relative flex flex-row overflow-clip h-[85vh]">
             <div className="w-[60vw] flex ">
               <img
-                onClick={scrollToElement}
+                // onClick={scrollToElement}
                 src={Logo}
                 alt="logo"
                 className="flex-1 opacity-60 filter-blur "
@@ -102,7 +102,7 @@ const Home = () => {
           </Element>
 
           <Element
-            className="my-4 h-screen col items-center"
+            className="my-5 col items-center"
             name="JobRequests"
           >
             <JobRequests />

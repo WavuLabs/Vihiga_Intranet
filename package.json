@@ -5,9 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host",
-    "build": "vite build",
     "push": "git add . && git commit && git push origin main",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "build": "vite build",    
     "preview": "vite preview"
   },
   "dependencies": {

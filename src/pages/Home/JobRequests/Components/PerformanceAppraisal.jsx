@@ -8,9 +8,6 @@ const PerformanceAppraisal = ({ handleClose }) => {
     <div className=" m-2">
       <div className="row justify-between p-3">
         <p>PerformanceAppraisal</p>
-        <Button onClick={handleClose}>
-          <CloseIcon />
-        </Button>
       </div>
       <PerformanceAppraisalGrid handleClose={handleClose}/>
     </div>
