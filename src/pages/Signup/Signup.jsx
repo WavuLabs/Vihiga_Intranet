@@ -23,28 +23,25 @@ import { auth, db, storage } from "../../APIs/firebase";
 import { updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { PhotoCamera } from "@mui/icons-material";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 
-const MyComponent = (props) => {
-  const { group, setGroup } = props.values;
-  const handleOptionChange = (event) => {
-    setGroup(event.target.value);
-    console.log(event.target.value);
-  };
+const groupLists = ["Exco", "Directors", "Chief Officers"];
+const departmentLists = ["Education", "Trade", "PSL"];
 
+const MyComponent = ({ state, setState, data }) => {
+  const handleOptionChange = (e) => setState(e.target.value);
   return (
-    <FormControl component="fieldset">
-      <RadioGroup value={group} onChange={handleOptionChange}>
-        <FormControlLabel value="Exco" control={<Radio />} label="Exco" />
-        <FormControlLabel
-          value="Directors"
-          control={<Radio />}
-          label="Directors"
-        />
-        <FormControlLabel
-          value="Chief Officers"
-          control={<Radio />}
-          label="Chief Officers"
-        />
+    <FormControl component="fieldset" >
+      <RadioGroup className="p-1 px-2" value={state} onChange={handleOptionChange}>
+        {data.map((item, index) => (
+          <FormControlLabel
+            key={index}
+            value={item}
+            control={<Radio />}
+            label={item}
+          />
+        ))}
       </RadioGroup>
     </FormControl>
   );
@@ -56,8 +53,10 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [group, setGroup] = useState("");
   const [number, setNumber] = useState("");
+  const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [department, setDepartment] = useState();
   const [showProgressIndicator, setShowProgressIndicator] = useState(false);
   const { addingNewUsers, createUser, addingUserToGroup } = ContextData();
   const navigate = useNavigate();
@@ -91,6 +90,7 @@ const Signup = () => {
               profile_picture: imageUrl,
               is_online: true,
               contacts: number,
+              title: title,
             };
 
             await addingNewUsers(uid, userObject, name);
@@ -205,6 +205,13 @@ const Signup = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
+          <TextInputComponents
+            id="Job Title"
+            type="text"
+            placeholder="Job Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
 
           <TextInputComponents
             id="number"
@@ -221,10 +228,35 @@ const Signup = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          <DropDown
+            Title={
+              <>
+                Select Department <ArrowDropDownIcon fontSize="large" />
+              </>
+            }
+          >
+            <MyComponent
+              state={department}
+              setState={setDepartment}
+              data={departmentLists}
+            />
+          </DropDown>
           <div className="rows-center">
-            <DropDown Title="Select Group">
-              <MyComponent values={{ group, setGroup }} />
+            <DropDown
+              Title={
+                <>
+                  Select Group <ArrowDropDownIcon fontSize="large" />
+                </>
+              }
+            >
+              <MyComponent
+                state={group}
+                setState={setGroup}
+                data={groupLists}
+              />
             </DropDown>
+
+            {/* Display Selected Group */}
             {group && (
               <p className="bg-blue-950 rows-center rounded-md p-1 gap-x-2">
                 {group}

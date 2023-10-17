@@ -73,25 +73,24 @@ const TabPanel = (props) => {
 
 const UserProfile = () => {
   // const uid = auth.currentUser?.uid;
-  const { USERS, uid } = useOutletContext();
-  const [user, setUser] = useState([]);
+  const { uid, currentUser } = useOutletContext();
+  const [user, setUser] = useState(currentUser);
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState();
-  const [name, setName] = useState();
-  const [contacts, setContacts] = useState();
-  const [id, setId] = useState();
-  const [nextOfKin, setNextOfKin] = useState();
+  const [email, setEmail] = useState(currentUser?.email);
+  const [name, setName] = useState(currentUser?.name);
+  const [contacts, setContacts] = useState(currentUser?.contacts);
+  const [id, setId] = useState(currentUser?.id);
+  const [nextOfKin, setNextOfKin] = useState(currentUser?.nextOfKin);
+  const [jobTitle, setJobTitle] = useState(currentUser?.title);
   const [image, setImage] = useState(null);
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState([currentUser?.groups.join(", ")]);
   const [data, setData] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
   const [showProgressIndicator, setShowProgressIndicator] = useState(false);
-
-  onSnapshot(doc(db, "users", uid), (doc) => {
-    setUser(doc.data());
-  });
+  const [initialDataFetched, setInitialDataFetched] = useState(false);
+  const userDocRef = doc(db, "users", uid);
 
   const handleClose = () => {
     setOpen(!open);
@@ -105,8 +104,9 @@ const UserProfile = () => {
       contacts: contacts,
       id: id,
       nextOfKin: nextOfKin,
+      title: jobTitle,
     };
-    await setDoc(doc(db, "users", uid), userObject, { merge: true });
+    await setDoc(userDocRef, userObject, { merge: true });
     alert("Your Profile successfully updated!");
   };
 
@@ -115,26 +115,6 @@ const UserProfile = () => {
     await addData();
     handleClose();
   };
-
-  useEffect(() => {
-    const dataArray = [];
-    const getUser = USERS?.find((user) => user.uid === uid);
-    dataArray.push(getUser);
-    const groupsArray = [];
-    getUser?.groups.map((group) => groupsArray.push(group));
-
-    if (uid) {
-      setData(dataArray);
-      setUser(getUser);
-      setName(user?.name);
-      setEmail(user?.email);
-      setContacts(user?.contacts);
-      setId(user?.id);
-      setNextOfKin(user?.nextOfKin);
-      setGroups(groupsArray);
-      console.log(data);
-    }
-  }, []);
 
   const uploadRestaurantImage = async () => {
     if (!image) return;
@@ -151,33 +131,16 @@ const UserProfile = () => {
       setImageUrl(downloadURL);
 
       if (!uid) return;
-      await setDoc(
-        doc(db, "users", uid),
-        { profile_picture: imageUrl },
-        { merge: true }
-      );
-      console.log("image succefully Updated")
+      await setDoc(userDocRef, { profile_picture: imageUrl }, { merge: true });
+      console.log("image succefully Updated");
 
-      return downloadURL;
-    } catch (error) {
-      console.log(error);
-
-      // TODO: handle errors using meaningful error message
-      switch (error.code) {
-        case "storage/unauthorized":
-          // User doesn't have permission to access the object
-          break;
-        case "storage/canceled":
-          // User canceled the upload
-          break;
-        case "storage/unknown":
-          // Unknown error occurred, inspect error.serverResponse
-          break;
-        default:
-        // unknown error
+      if (currentUser?.profile_picture == null) {
+        alert("Try to refresh the page to see the changes");
       }
 
-      throw error;
+      setInitialDataFetched(false);
+    } catch (error) {
+      console.error(error);
     } finally {
       setShowProgressIndicator(false);
     }
@@ -228,7 +191,7 @@ const UserProfile = () => {
             {/* <CameraAltIcon /> */}
           </button>
           <Avatar
-            src={user?.profile_picture}
+            src={currentUser?.profile_picture}
             alt="DP"
             className="custom-borders rounded-full"
             sx={{ width: "90%", height: "90%" }}
@@ -238,7 +201,7 @@ const UserProfile = () => {
         <div className="col justify-center m-2 custom-borders px-3 w-1/3">
           <p className="text-xl">{user?.name}</p>
           <div className="text-sm text-white/60 col ">
-            <p>{"Position Name"}</p>
+            <p>{currentUser?.title ? currentUser?.title : "Job Title"}</p>
             <div className="row">
               <p>Groups :</p>
               <div className="px-1">
@@ -250,18 +213,16 @@ const UserProfile = () => {
           </div>
         </div>
 
-        {data?.map((user, index) => (
-          <div key={index} className="grid grid-cols-2 mt-5 gap-1 p-3">
-            <p>Email</p>
-            <p>{user.email}</p>
-            <p>ID</p>
-            <p>{user.id ? user.id : "user?.name"}</p>
-            <p>Next of Kin</p>
-            <p>{user.nextOfKin}</p>
-            <p>Contacts</p>
-            <p>{user.contacts}</p>
-          </div>
-        ))}
+        <div className="grid grid-cols-2 mt-5 gap-1 p-3">
+          <p>Email</p>
+          <p>{currentUser?.email}</p>
+          <p>ID</p>
+          <p>{currentUser?.id ? currentUser?.id : "currentUser.name"}</p>
+          <p>Next of Kin</p>
+          <p>{currentUser?.nextOfKin}</p>
+          <p>Contacts</p>
+          <p>{currentUser?.contacts}</p>
+        </div>
       </div>
       <div className=" grid grid-flow-col w-[40vw] h-[10vh]">
         <Button onClick={() => navigate(`/chatpage/${uid}`)}>Chat</Button>
@@ -318,6 +279,11 @@ const UserProfile = () => {
               placeholder="Enter Next of kin"
               value={nextOfKin}
               onChange={(e) => setNextOfKin(e.target.value)}
+            />
+            <TextInputComponents
+              placeholder="Enter Job Title"
+              value={jobTitle}
+              onChange={(e) => setJobTitle(e.target.value)}
             />
             <Button type="submit">Submit</Button>
           </form>

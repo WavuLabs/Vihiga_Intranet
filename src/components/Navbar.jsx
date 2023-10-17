@@ -8,7 +8,7 @@ import {
   ListItemText,
   Icon,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { doc, onSnapshot } from "firebase/firestore";
 import { Image, Logout as LogoutIcon } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -22,24 +22,12 @@ import { ContextData } from "../APIs/contexts/Context";
 import UsersSideBar from "../pages/Chat/Components/UsersSideBar";
 import Logo from "/assets/VihigaLogo.png";
 
-export default function Navbar(props) {
+export default function Navbar({ props }) {
   const { logout } = ContextData();
+  const { currentUser, uid } = props;
   const navigate = useNavigate();
-  const uid = auth.currentUser?.uid;
 
   const [state, setState] = React.useState(false);
-  const [DP, setDP] = React.useState(null);
-  const [name, setName] = React.useState(null);
-
-  useEffect(() => {
-    const userRef = doc(db, "users", uid);
-    const getUserData = onSnapshot(userRef, (doc) => {
-      const result = doc.data();
-      setDP(result.profile_picture);
-      setName(result.name);
-    });
-    return () => uid && getUserData();
-  }, []);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -102,14 +90,14 @@ export default function Navbar(props) {
               Title={
                 <Avatar
                   className=" border-white/40 "
-                  src={DP}
-                  alt={name}
+                  src={currentUser?.profile_picture}
+                  alt="DP"
                   sx={{ width: "3vw", height: "3vw" }}
                 />
               }
             >
               <div className=" mx-1 cols-center">
-                <p> {name && "Hello " + name} </p>
+                <p> {currentUser?.name && "Hello " + currentUser?.name} </p>
                 <ListItemButton onClick={HandleSignOut}>
                   <ListItemIcon>
                     <LogoutIcon />

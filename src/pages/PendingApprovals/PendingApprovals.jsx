@@ -17,43 +17,10 @@ import PerformanceAppraisalTable from "./Components/PerformanceAppraisalTable";
 import CarLoanTable from "./Components/CarLoanTable";
 
 const PendingApprovals = () => {
-  const [data, setData] = useState([
-    {
-      key: faker.person.fullName(),
-      checked: false,
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-    },
-    {
-      key: faker.person.fullName(),
-      checked: false,
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-    },
-    {
-      key: faker.person.fullName(),
-      checked: false,
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-    },
-    {
-      key: faker.person.fullName(),
-      checked: false,
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-    },
-    {
-      key: faker.person.fullName(),
-      checked: false,
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-    },
-    // ... Add other key metrics here ...
-  ]);
   const [state, setState] = useState([
     {
       title: "Leave Requests",
-      component: () => <RequestLeaveTable props={{ data, setData }} />,
+      component: () => <RequestLeaveTable  />,
     },
     { title: "Travel Out Requests", component: () => <TravelOutTable /> },
     { title: "Car Loan Requests", component: () => <CarLoanTable /> },

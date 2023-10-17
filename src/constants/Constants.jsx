@@ -1,5 +1,22 @@
 import { createTheme } from "@mui/material/styles";
 
+export const styles = {
+  root: {
+    backgroundColor: "#f4433620",
+  },
+  col: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  mp: {
+    margin: '0px 0px',
+    padding: '0px 0px',
+  },
+  border : {
+    border: '1px solid black',
+  },
+};
+
 export const colors = {
   primary: "#f44336",
   primaryDark: "#f4433620",
@@ -25,6 +42,10 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           color: "black",
+          textAlign: 'center',
+        },
+        head: {
+          color: "black",
         },
       },
     },
@@ -33,6 +54,7 @@ export const theme = createTheme({
         root: {
           color: "black",
         },
+
       },
     },
   },

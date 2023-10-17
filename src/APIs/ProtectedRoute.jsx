@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { Outlet, useNavigate, useOutletContext } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { auth, db } from "./firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+} from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { ContextData } from "./contexts/Context";
 
@@ -11,7 +18,8 @@ const ProtectedRoute = () => {
   const values = useOutletContext();
   const { setOnlineStatusTrue } = ContextData();
   const [userState, setUserState] = useState([]);
-  const uid = auth.currentUser?.uid;
+  const [currentUser, setCurrentUser] = useState({});
+  const [uid, setUID] = useState();
 
   const usersRef = collection(db, `users`);
   const queryUsers = query(usersRef, orderBy("name", "asc"));
@@ -55,6 +63,7 @@ const ProtectedRoute = () => {
     loadingGROUPS,
     errorGROUPS,
     uid,
+    currentUser,
   };
 
   useEffect(() => {
@@ -62,6 +71,11 @@ const ProtectedRoute = () => {
       const uid = currentUser?.uid;
       if (uid) {
         setOnlineStatusTrue(uid);
+        setUID(uid);
+
+        onSnapshot(doc(db, "users", uid), (doc) => {
+          setCurrentUser(doc.data());
+        });
       } else {
         navigate("/", { replace: true });
       }
@@ -80,7 +94,7 @@ const ProtectedRoute = () => {
   return (
     <>
       {!loadingUSERS ? (
-        <Navbar />
+        <Navbar props={{ currentUser, uid }} />
       ) : (
         <div className=" bg-[#161B1C] h-[10vh] w-full" />
       )}
