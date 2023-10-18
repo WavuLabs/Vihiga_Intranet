@@ -13,6 +13,7 @@ import CountyCommittee from "./Components/CountyCommittee";
 import StatutoryReport from "./Components/StatutoryReport";
 import TravelOut from "./Components/TravelOut";
 import PendingApprovals from "../../PendingApprovals/PendingApprovals";
+import { useOutletContext } from "react-router-dom";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -40,9 +41,20 @@ const JobRequests = () => {
       {Component}
     </Button>
   );
-
+  const { uid, currentUser } = useOutletContext();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("");
+  const [head, setHead] = useState(false);
+
+  React.useEffect(() => {
+    if (!currentUser?.groups) return;
+    if (typeof currentUser?.groups === "string") return;
+    const groups = currentUser?.groups[0];
+    // console.log(groups);
+    if (groups === "Exco" || groups === "Chief Officer" || groups === "CECM") {
+      setHead(true);
+    }
+  }, [currentUser]);
 
   const handleClose = () => {
     setOpen(!open);
@@ -74,14 +86,13 @@ const JobRequests = () => {
           title={"Request Leave"}
           handleClick={() => setSelected("Request Leave")}
         />
-        <Item title={"Car Loan & Mortgages"} handleClick={() => setSelected("Car Loan")} />
+        <Item
+          title={"Car Loan & Mortgages"}
+          handleClick={() => setSelected("Car Loan")}
+        />
         <Item
           title={"Performance Appraisal"}
           handleClick={() => setSelected("Performance Appraisal")}
-        />
-        <Item
-          title={"Pending Approvals"}
-          handleClick={() => setSelected("Pending Approvals")}
         />
         <Item
           title="Statutory Report"
@@ -91,6 +102,12 @@ const JobRequests = () => {
           title={"Travel Out"}
           handleClick={() => setSelected("Travel Out")}
         />
+        {head && (
+          <Item
+            title={"Pending Approvals"}
+            handleClick={() => setSelected("Pending Approvals")}
+          />
+        )}
       </div>
       <Dialog
         fullWidth={true}
@@ -101,7 +118,10 @@ const JobRequests = () => {
         className="p-4 m-2 relative"
       >
         <div className="relative col ">
-          <button className="fixed bg-black/60 z-10 p-0 self-end rounded-none" onClick={handleClose}>
+          <button
+            className="fixed bg-black/60 z-10 p-0 self-end rounded-none"
+            onClick={handleClose}
+          >
             <CloseIcon />
           </button>
           {handleDisplay()}

@@ -75,6 +75,10 @@ const ProtectedRoute = () => {
 
         onSnapshot(doc(db, "users", uid), (doc) => {
           setCurrentUser(doc.data());
+
+          // const groupsArray = new Array(doc.data().groups);
+          // const data = {...doc.data(), groups: groupsArray}
+          // setCurrentUser(data);
         });
       } else {
         navigate("/", { replace: true });

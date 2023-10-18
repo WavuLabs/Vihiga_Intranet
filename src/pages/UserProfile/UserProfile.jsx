@@ -201,15 +201,15 @@ const UserProfile = () => {
         <div className="col justify-center m-2 custom-borders px-3 w-1/3">
           <p className="text-xl">{user?.name}</p>
           <div className="text-sm text-white/60 col ">
-            <p>{currentUser?.title ? currentUser?.title : "Job Title"}</p>
             <div className="row">
-              <p>Groups :</p>
+              <p>Department :</p>
               <div className="px-1">
                 {groups?.map((group) => (
                   <p key={group}>{group}</p>
                 ))}
               </div>
             </div>
+            <p>{currentUser?.title ? currentUser?.title : "Job Title"}</p>
           </div>
         </div>
 
@@ -252,14 +252,14 @@ const UserProfile = () => {
             <TextInputComponents
               id="name"
               type="text"
-              placeholder="Enter Phone Number"
+              placeholder="Enter Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
             <TextInputComponents
               id="email"
               type="email"
-              placeholder="Enter Phone Number"
+              placeholder="Enter Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />

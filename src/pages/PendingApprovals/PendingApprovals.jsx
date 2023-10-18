@@ -15,8 +15,10 @@ import RequestLeaveTable from "./Components/RequestLeaveTable";
 import TravelOutTable from "./Components/TravelOutTable";
 import PerformanceAppraisalTable from "./Components/PerformanceAppraisalTable";
 import CarLoanTable from "./Components/CarLoanTable";
+import { useOutletContext } from "react-router-dom";
 
 const PendingApprovals = () => {
+  const { uid, currentUser } = useOutletContext();
   const [state, setState] = useState([
     {
       title: "Leave Requests",
@@ -28,8 +30,9 @@ const PendingApprovals = () => {
   ]);
 
   return (
-    <div className=" py-4 text-black">
-      <p className="p-title my-3 p-3">Pending Approvals</p>
+    <div className=" px-2 py-4 text-black">
+      <p className="p-title my-3 py-3">Pending Approvals</p>
+      <p className="text-white/70">Groups: {currentUser?.groups.join(", ")}</p>
       {state.map((request, index) => (
         <div
           key={index}

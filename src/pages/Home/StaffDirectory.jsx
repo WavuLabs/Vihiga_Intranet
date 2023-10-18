@@ -11,7 +11,7 @@ const StaffDirectory = () => {
 
   useEffect(() => {
     setStaff(USERS);
-  }, []);
+  }, [USERS]);
 
   const toggleShowAll = () => {
     setShowAll(!showAll);

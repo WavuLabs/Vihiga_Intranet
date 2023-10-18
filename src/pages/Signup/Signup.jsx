@@ -26,14 +26,30 @@ import { PhotoCamera } from "@mui/icons-material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 
-const groupLists = ["Exco", "Directors", "Chief Officers"];
-const departmentLists = ["Education", "Trade", "PSL"];
+const JobTitles = ["Exco", "CECM", "Chief Officers", "Directors"];
+const departments = [
+  "Executive",
+  "Transport & Infrastructure",
+  "Finance & Economic Planning",
+  "Administration and Coordination of County Affairs",
+  "Physical Planning, Lands and Housing",
+  "Trade, Industry, Tourism and Entrepreneurship",
+  "Agriculture, Livestock, Fisheries & Cooperatives",
+  "Environment, Water, Energy and Natural Resources",
+  "Health Services",
+  "Youth, Gender, Sports, Culture and Social Services",
+  "Education, Science and Technical Vocational Training",
+];
 
 const MyComponent = ({ state, setState, data }) => {
   const handleOptionChange = (e) => setState(e.target.value);
   return (
-    <FormControl component="fieldset" >
-      <RadioGroup className="p-1 px-2" value={state} onChange={handleOptionChange}>
+    <FormControl component="fieldset">
+      <RadioGroup
+        className="p-1 px-2"
+        value={state}
+        onChange={handleOptionChange}
+      >
         {data.map((item, index) => (
           <FormControlLabel
             key={index}
@@ -97,7 +113,7 @@ const Signup = () => {
 
             //ADDING THE USER TO THE GROUP SELECTED, TAKE THE UID AND ADD IT TO THE GROUP
             const groupObject = {
-              members: arrayUnion({ uid: uid, name: name }),
+              members: arrayUnion({ uid: uid, name: name, jobTitle: title }),
             };
 
             await addingUserToGroup(group, groupObject);
@@ -199,18 +215,18 @@ const Signup = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <TextInputComponents
+            id="password"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextInputComponents
             id="name"
             type="text"
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-          />
-          <TextInputComponents
-            id="Job Title"
-            type="text"
-            placeholder="Job Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
           />
 
           <TextInputComponents
@@ -221,26 +237,28 @@ const Signup = () => {
             onChange={(e) => setNumber(e.target.value)}
           />
 
-          <TextInputComponents
-            id="password"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <DropDown
-            Title={
-              <>
-                Select Department <ArrowDropDownIcon fontSize="large" />
-              </>
-            }
-          >
-            <MyComponent
-              state={department}
-              setState={setDepartment}
-              data={departmentLists}
-            />
-          </DropDown>
+          <div className="rows-center">
+            <DropDown
+              Title={
+                <>
+                  Select Department <ArrowDropDownIcon fontSize="large" />
+                </>
+              }
+            >
+              <MyComponent
+                state={department}
+                setState={setDepartment}
+                data={departments}
+              />
+            </DropDown>
+            {/* Display Selected Group */}
+            {department && (
+              <p className="bg-blue-950 rows-center rounded-md p-1 gap-x-2">
+                {department}
+                <AiFillCloseCircle onClick={() => setDepartment(null)} />
+              </p>
+            )}
+          </div>
           <div className="rows-center">
             <DropDown
               Title={
@@ -249,11 +267,7 @@ const Signup = () => {
                 </>
               }
             >
-              <MyComponent
-                state={group}
-                setState={setGroup}
-                data={groupLists}
-              />
+              <MyComponent state={group} setState={setGroup} data={JobTitles} />
             </DropDown>
 
             {/* Display Selected Group */}
@@ -264,6 +278,15 @@ const Signup = () => {
               </p>
             )}
           </div>
+          {group && (
+            <TextInputComponents
+              id="Job Title"
+              type="text"
+              placeholder="Job Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          )}
           <div className="flex flex-col px-3 ">
             <p className="m-1"> Select profile picture</p>
             {imageUrl ? (

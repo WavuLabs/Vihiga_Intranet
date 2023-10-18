@@ -64,3 +64,8 @@ processing or classification.
 
 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
 git remote add origin https://github.com/WavuLabs/Vihiga_Intranet.git
+
+
+To do
+ Where to post news and events
+ 

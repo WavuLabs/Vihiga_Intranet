@@ -50,6 +50,15 @@ const RequestLeave = ({ handleClose }) => {
     leaveStatus();
   }, [leaveDates]);
 
+  const handleTest = () => {
+    const dataArray = new Array(
+      "NewsAndEvents",
+      "StaffDirectory",
+      "JobRequests"
+    );
+    console.log(dataArray);
+  };
+
   return (
     <>
       {approvalStatus === "Does not exist" ? (
@@ -94,7 +103,7 @@ const RequestLeave = ({ handleClose }) => {
             <div>
               <p className="text-3xl text-red">Rejected</p>
               <p className="text-3xl text-red">Reason: {message}</p>
-              <button>Apply Again</button>
+              <button onClick={()=>handleTest()}>Apply Again</button>
             </div>
           )}
           <button className="w-[20vw] border" onClick={handleClose}>
