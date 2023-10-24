@@ -61,7 +61,7 @@ const TravelOut = ({ handleClose }) => {
           onSubmit={handleSubmit}
           className="col p-4 items-center justify-center gap-4 "
         >
-          <p className="text-3xl">Select Leave Dates</p>
+          <p className="text-3xl">Travelling Out</p>
           <TextField
             label="Destination"
             placeholder="Enter Travel Destinaion"

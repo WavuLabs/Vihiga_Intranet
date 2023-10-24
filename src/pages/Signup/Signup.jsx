@@ -158,23 +158,6 @@ const Signup = () => {
       return downloadURL;
     } catch (error) {
       console.log(error);
-
-      // TODO: handle errors using meaningful error message
-      switch (error.code) {
-        case "storage/unauthorized":
-          // User doesn't have permission to access the object
-          break;
-        case "storage/canceled":
-          // User canceled the upload
-          break;
-        case "storage/unknown":
-          // Unknown error occurred, inspect error.serverResponse
-          break;
-        default:
-        // unknown error
-      }
-
-      throw error;
     } finally {
       setShowProgressIndicator(false);
     }

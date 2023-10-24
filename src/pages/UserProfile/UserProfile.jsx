@@ -212,7 +212,7 @@ const UserProfile = () => {
           <p>Email</p>
           <p>{currentUser?.email}</p>
           <p>ID</p>
-          <p>{currentUser?.id ? currentUser?.id : "Null"}</p>
+          <p>{currentUser?.id}</p>
           <p>Next of Kin</p>
           <p>{currentUser?.nextOfKin}</p>
           <p>Contacts</p>
