@@ -22,7 +22,13 @@ import { auth, db, storage } from "../../APIs/firebase";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { TextInputComponents } from "../../components/TextInputComponents";
 import { set } from "date-fns";
-import { addDoc, doc, setDoc, onSnapshot } from "firebase/firestore";
+import {
+  addDoc,
+  doc,
+  setDoc,
+  onSnapshot,
+  arrayUnion,
+} from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { PhotoCamera } from "@mui/icons-material";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
@@ -72,11 +78,8 @@ const TabPanel = (props) => {
 };
 
 const UserProfile = () => {
-  // const uid = auth.currentUser?.uid;
-  const { uid, currentUser } = useOutletContext();
-  const [user, setUser] = useState(currentUser);
   const navigate = useNavigate();
-
+  const { uid, currentUser } = useOutletContext();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState(currentUser?.email);
   const [name, setName] = useState(currentUser?.name);
@@ -84,12 +87,15 @@ const UserProfile = () => {
   const [id, setId] = useState(currentUser?.id);
   const [nextOfKin, setNextOfKin] = useState(currentUser?.nextOfKin);
   const [jobTitle, setJobTitle] = useState(currentUser?.title);
+  const [department, setDepartment] = useState(currentUser?.department);
+  const [jobDescription, setJobDescription] = useState(
+    currentUser?.jobDescription
+  );
   const [image, setImage] = useState(null);
-  const [groups, setGroups] = useState([currentUser?.groups.join(", ")]);
-  const [data, setData] = useState([]);
   const [imageUrl, setImageUrl] = useState(null);
   const [showProgressIndicator, setShowProgressIndicator] = useState(false);
   const [initialDataFetched, setInitialDataFetched] = useState(false);
+
   const userDocRef = doc(db, "users", uid);
 
   const handleClose = () => {
@@ -104,7 +110,9 @@ const UserProfile = () => {
       contacts: contacts,
       id: id,
       nextOfKin: nextOfKin,
-      title: jobTitle,
+      department: arrayUnion(department),
+      jobTitle: jobTitle,
+      jobDescription: jobDescription,
     };
     await setDoc(userDocRef, userObject, { merge: true });
     alert("Your Profile successfully updated!");
@@ -155,11 +163,6 @@ const UserProfile = () => {
     image ? uploadRestaurantImage() : console.log("No Image");
   }, [image]);
 
-  const handleFileBlur = () => {
-    // handleUpLoadImage();
-    console.log("File Uploaded", image);
-  };
-
   return (
     <div className="cols-center relative">
       <div className="bg-black/70 px-4 m-5 h-[30vh] w-full row  ">
@@ -184,7 +187,6 @@ const UserProfile = () => {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setImage(e.target.files[0])}
-                onBlur={handleFileBlur}
               />
               <CameraAltIcon className="text-white" fontSize="small" />
             </Button>
@@ -199,17 +201,10 @@ const UserProfile = () => {
         </div>
         {/* USER details */}
         <div className="col justify-center m-2 custom-borders px-3 w-1/3">
-          <p className="text-xl">{user?.name}</p>
+          <p className="text-xl">{currentUser?.name}</p>
           <div className="text-sm text-white/60 col ">
-            <div className="row">
-              <p>Department :</p>
-              <div className="px-1">
-                {groups?.map((group) => (
-                  <p key={group}>{group}</p>
-                ))}
-              </div>
-            </div>
-            <p>{currentUser?.title ? currentUser?.title : "Job Title"}</p>
+            <p>Department : {currentUser?.department}</p>
+            <p>{currentUser?.jobDescription}</p>
           </div>
         </div>
 
@@ -217,7 +212,7 @@ const UserProfile = () => {
           <p>Email</p>
           <p>{currentUser?.email}</p>
           <p>ID</p>
-          <p>{currentUser?.id ? currentUser?.id : "currentUser.name"}</p>
+          <p>{currentUser?.id ? currentUser?.id : "Null"}</p>
           <p>Next of Kin</p>
           <p>{currentUser?.nextOfKin}</p>
           <p>Contacts</p>
@@ -250,6 +245,21 @@ const UserProfile = () => {
             className="h-[80vh] m-3 p-1 col mx-[10vw]"
           >
             <TextInputComponents
+              placeholder="Enter Job Title"
+              value={jobTitle}
+              onChange={(e) => setJobTitle(e.target.value)}
+            />
+            <TextInputComponents
+              placeholder="Enter Department"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+            />
+            <TextInputComponents
+              placeholder="Enter Job Description"
+              value={jobDescription}
+              onChange={(e) => setJobDescription(e.target.value)}
+            />
+            <TextInputComponents
               id="name"
               type="text"
               placeholder="Enter Name"
@@ -280,11 +290,7 @@ const UserProfile = () => {
               value={nextOfKin}
               onChange={(e) => setNextOfKin(e.target.value)}
             />
-            <TextInputComponents
-              placeholder="Enter Job Title"
-              value={jobTitle}
-              onChange={(e) => setJobTitle(e.target.value)}
-            />
+            <div className="h-[1vh]" />
             <Button type="submit">Submit</Button>
           </form>
         </div>

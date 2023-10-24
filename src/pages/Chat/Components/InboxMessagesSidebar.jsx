@@ -53,7 +53,11 @@ const InboxMessagesSidebar = (props) => {
   };
 
   useEffect(() => {
-    if (loading === false) sortedMessages();
+    if (loading === false) {
+      const messagesByAReceiver = sortedMessages();
+      // console.log(Object.keys(messagesByAReceiver).length);
+      sortedMessages();
+    }
     error && alert(error.message);
   }, [messagesOfThisUser]);
 

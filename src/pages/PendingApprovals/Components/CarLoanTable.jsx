@@ -18,9 +18,7 @@ import {
   query,
   setDoc,
 } from "firebase/firestore";
-import {
-  useCollectionData,
-} from "react-firebase-hooks/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useOutletContext } from "react-router-dom";
 import { db } from "../../../APIs/firebase";
 import { styles } from "../../../constants/Constants";
@@ -29,14 +27,14 @@ const CarLoanTable = () => {
   const [data, setData] = useState([]);
   const { uid, currentUser } = useOutletContext();
 
-  const path = `groups/${currentUser?.groups[0]}/loanRequests`;
+  const path = `departments/${currentUser?.department[0]}/loanRequests`;
   const q = query(collection(db, path), orderBy("name", "desc"));
   const [loanRequests, loading, error, snapshot] = useCollectionData(q);
 
   useEffect(() => {
     // Handle loading state
     if (loading) return;
-    
+
     const filteredData = loanRequests?.filter((item) => {
       return !(item.status === "rejected" || item.status === "approved");
     });
@@ -60,6 +58,7 @@ const CarLoanTable = () => {
               <TableRow className="bg-slate-200">
                 <TableCell>Name</TableCell>
                 <TableCell>Amount</TableCell>
+                <TableCell>Loan Type</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -67,7 +66,13 @@ const CarLoanTable = () => {
               {data.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.amount}</TableCell>
+                  <TableCell>
+                    {Intl.NumberFormat("en-KE", {
+                      style: "currency",
+                      currency: "KES",
+                    }).format(item.amount)}
+                  </TableCell>
+                  <TableCell>{item.type}</TableCell>
                   <TableCell>
                     <button
                       className="m-2 bg-green"

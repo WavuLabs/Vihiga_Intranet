@@ -32,7 +32,7 @@ const RequestLeaveTable = ({ props }) => {
   const [data, setData] = useState([]);
   const { uid, currentUser } = useOutletContext();
 
-  const path = `groups/${currentUser?.groups[0]}/leaveRequests`;
+  const path = `departments/${currentUser?.department[0]}/leaveRequests`;
   const q = query(collection(db, path), orderBy("startDate", "desc"));
   const [leaveRequests, loading, error, snapshot] = useCollectionData(q);
 

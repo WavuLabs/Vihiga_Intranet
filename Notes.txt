@@ -1,67 +1,3 @@
-To sort messages from similar senders into one array, you can modify the previous example and create an array to store the messages for each sender. Here's an updated version:
-
-```javascript
-const db = firebase.firestore();
-
-// Assume you have a collection called "messages" with a "sender" field.
-
-// Create an empty object to store messages by sender.
-const messagesBySender = {};
-
-// Create a query to retrieve all messages.
-const query = db.collection("messages");
-
-// Execute the query.
-query.get().then((querySnapshot) => {
-  querySnapshot.forEach((doc) => {
-    // Access each message document.
-    const messageData = doc.data();
-    
-    // Get the sender ID of the current message.
-    const senderId = messageData.sender;
-    
-    // Check if the sender already has an array of messages.
-    if (!messagesBySender[senderId]) {
-      // If not, create an empty array for the sender.
-      messagesBySender[senderId] = [];
-    }
-    
-    // Add the message to the array of messages for the sender.
-    messagesBySender[senderId].push(messageData);
-  });
-
-  // Access the messages for each sender.
-  for (const senderId in messagesBySender) {
-    const messages = messagesBySender[senderId];
-    // Perform any further processing or classification with the messages array for each sender.
-    console.log(`Messages from sender ${senderId}:`, messages);
-  }
-}).catch((error) => {
-  // Handle any errors that occur during the query.
-  console.error("Error getting messages: ", error);
-});
-```
-
-In this updated code, we create an empty object `messagesBySender` to store messages grouped by sender. 
-As we iterate through each message document, we extract the sender ID and check if an array of messages for 
-that sender exists in `messagesBySender`. If it doesn't exist, we create an empty array for that sender. 
-We then push the current message into the array of messages for that sender.
-
-Once all messages have been processed, we can access the messages for each 
-sender by iterating over `messagesBySender` and perform further processing 
-or classification with the messages array.
-
-In the provided example, we simply log the messages array for each sender to the console using `console.log()`. 
-You can modify this part to suit your specific needs and perform additional actions or classifications with the messages 
-array.
-
-Remember to replace "messages" and "sender" with the appropriate collection name and field name in your 
-Firebase Firestore database.
-
-By using this updated code snippet, you can sort messages from similar senders into separate arrays for further 
-processing or classification.
-
-
 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
 git remote add origin https://github.com/WavuLabs/Vihiga_Intranet.git
 
@@ -69,3 +5,18 @@ git remote add origin https://github.com/WavuLabs/Vihiga_Intranet.git
 To do
  Where to post news and events
  
+
+
+const departments = [
+  "Executive", Governor, Deputy Governor, County Secretary & Head of Public Service
+  "Transport & Infrastructure", Chief Officer
+  "Finance & Economic Planning", Chief Officer - Planning, Budget, Mornitoring and evaluation ,Chief Officer - Accounting, Revenue and Supply Chain Management
+  "Administration and Coordination of County Affairs", Chief Officer - Public Service Administration and Coordination of County Affairs, ICT and E-Governance, Chief Officer - Office of the Governor
+  "Physical Planning, Lands and Housing", Chief Officer - Public Health
+  "Trade, Industry, Tourism and Entrepreneurship", Chief OfficeR - Trade, Industry, Tourism and Entrepreneurship
+  "Agriculture, Livestock, Fisheries & Cooperatives", Chief Officer
+  "Environment, Water, Energy and Natural Resources", Chief Office - Environment Chief Office - Water
+  "Health Services", Chief Officer - Health Services
+  "Youth, Gender, Sports, Culture and Social Services", Chief Officer - Gender, Chief Officer - Youth and Sports
+  "Education, Science and Technical Vocational Training", Chief Officer - Education, Science and Technical Vocational Training
+];

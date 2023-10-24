@@ -52,7 +52,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="relative sm:mx-[2vw]">
+      <div className="relative px-[1vw] sm:mx-[2vw]">
         <Outlet context={values} />
       </div>
     </ThemeProvider>

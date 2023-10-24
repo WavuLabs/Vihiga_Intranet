@@ -20,8 +20,8 @@ const TravelOut = ({ handleClose }) => {
   ]);
   const Ref = doc(
     db,
-    "groups",
-    currentUser?.groups[0],
+    "departments",
+    currentUser?.department[0],
     "travelOutRequests",
     uid
   );

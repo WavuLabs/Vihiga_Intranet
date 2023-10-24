@@ -26,7 +26,7 @@ import { PhotoCamera } from "@mui/icons-material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 
-const JobTitles = ["Exco", "CECM", "Chief Officers", "Directors"];
+const JobTitles = ["Exco", "CECM", "Chief Officer", "Director"];
 const departments = [
   "Executive",
   "Transport & Infrastructure",
@@ -67,14 +67,14 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [group, setGroup] = useState("");
   const [number, setNumber] = useState("");
-  const [title, setTitle] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [jobDescription, setJobDescription] = useState("");
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [department, setDepartment] = useState();
   const [showProgressIndicator, setShowProgressIndicator] = useState(false);
-  const { addingNewUsers, createUser, addingUserToGroup } = ContextData();
+  const { addingNewUsers, createUser, addingUserToDepartment } = ContextData();
   const navigate = useNavigate();
 
   const HandleSignup = async (e) => {
@@ -90,8 +90,8 @@ const Signup = () => {
         alert("Invalid Image");
       } else if (!name) {
         alert("Invalid Name");
-      } else if (!group) {
-        alert("Invalid Group");
+      } else if (!department) {
+        alert("Invalid Department");
       } else {
         await createUser(email, password)
           .then(async (userCredential) => {
@@ -102,28 +102,29 @@ const Signup = () => {
               name: name,
               email: email,
               uid: uid,
-              groups: arrayUnion(group),
               profile_picture: imageUrl,
               is_online: true,
               contacts: number,
-              title: title,
+              department: arrayUnion(department),
+              jobTitle: jobTitle,
+              jobDescription: jobDescription,
             };
 
             await addingNewUsers(uid, userObject, name);
 
             //ADDING THE USER TO THE GROUP SELECTED, TAKE THE UID AND ADD IT TO THE GROUP
-            const groupObject = {
-              members: arrayUnion({ uid: uid, name: name, jobTitle: title }),
+            const DepartmentObject = {
+              members: arrayUnion({ uid: uid, name: name, jobTitle: jobTitle, jobDescription: jobDescription }),
             };
 
-            await addingUserToGroup(group, groupObject);
-
-            navigate("/home", { replace: true });
+            await addingUserToDepartment(department, DepartmentObject);
 
             await updateProfile(auth.currentUser, {
               displayName: name,
               photoURL: imageUrl,
             });
+
+            navigate("/home", { replace: true });
           })
           .catch((error) => {
             const errorCode = error.code;
@@ -263,28 +264,32 @@ const Signup = () => {
             <DropDown
               Title={
                 <>
-                  Select Group <ArrowDropDownIcon fontSize="large" />
+                  Select Job Title <ArrowDropDownIcon fontSize="large" />
                 </>
               }
             >
-              <MyComponent state={group} setState={setGroup} data={JobTitles} />
+              <MyComponent
+                state={jobTitle}
+                setState={setJobTitle}
+                data={JobTitles}
+              />
             </DropDown>
 
             {/* Display Selected Group */}
-            {group && (
+            {jobTitle && (
               <p className="bg-blue-950 rows-center rounded-md p-1 gap-x-2">
-                {group}
-                <AiFillCloseCircle onClick={() => setGroup(null)} />
+                {jobTitle}
+                <AiFillCloseCircle onClick={() => setJobTitle(null)} />
               </p>
             )}
           </div>
-          {group && (
+          {jobTitle && department && (
             <TextInputComponents
-              id="Job Title"
+              id="Job Description"
               type="text"
-              placeholder="Job Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Job Description i.e Chief Officer - Environment"
+              value={jobDescription}
+              onChange={(e) => setJobDescription(jobTitle + " " + department)}
             />
           )}
           <div className="flex flex-col px-3 ">

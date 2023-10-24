@@ -1,6 +1,3 @@
-import dayjs from "dayjs";
-import React, { useState } from "react";
-
 const EventDates = (props) => {
   const { FormattedDate } = props;
   return (

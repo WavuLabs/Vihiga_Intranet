@@ -55,35 +55,3 @@ export const Router = createBrowserRouter([
     ],
   },
 ]);
-
-const RouteStates = () => {
-  return (
-    <Routes>
-      <Route path="" element={<Home />} />
-      <Route path="*" element={<ErrorPage />} />
-      <Route path="signin" element={<Signin />} />
-      <Route path="signup" element={<Signup />} />
-      <Route element={<ChatContext />}>
-        <Route
-          path="chatpage/:receiverID"
-          element={
-            <ProtectedRoute>
-              <ChatPage>
-                <Chat />
-              </ChatPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="chatpage"
-          element={
-            <ProtectedRoute>
-              <ChatPage />
-            </ProtectedRoute>
-          }
-        />
-      </Route>
-    </Routes>
-  );
-};
-export default RouteStates;

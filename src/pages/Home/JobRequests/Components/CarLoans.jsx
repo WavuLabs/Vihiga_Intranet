@@ -16,7 +16,13 @@ const CarLoans = ({ handleClose }) => {
   const [approvalStatus, setApprovalStatus] = useState(null);
   const { uid, currentUser } = useOutletContext();
   const [loanType, setLoanType] = useState("");
-  const Ref = doc(db, "groups", currentUser?.groups[0], "loanRequests", uid);
+  const Ref = doc(
+    db,
+    "departments",
+    currentUser?.department[0],
+    "loanRequests",
+    uid
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,7 +35,7 @@ const CarLoans = ({ handleClose }) => {
     const groupObject = {
       uid: uid,
       name: currentUser?.name,
-      amount: amount,
+      amount: Number(amount),
       type: loanType,
       status: "pending",
     };
@@ -83,6 +89,7 @@ const CarLoans = ({ handleClose }) => {
           <div className="h-[1vh]" />
           <TextField
             label="Amount"
+            type="number"
             placeholder="Enter Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}

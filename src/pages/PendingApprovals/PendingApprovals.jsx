@@ -26,13 +26,13 @@ const PendingApprovals = () => {
     },
     { title: "Travel Out Requests", component: () => <TravelOutTable /> },
     { title: "Car Loan Requests", component: () => <CarLoanTable /> },
-    { title: "Performance Appraisal Requests", component: () => <PerformanceAppraisalTable /> },
+    // { title: "Performance Appraisal Requests", component: () => <PerformanceAppraisalTable /> },
   ]);
 
   return (
     <div className=" px-2 py-4 text-black">
       <p className="p-title my-3 py-3">Pending Approvals</p>
-      <p className="text-white/70">Groups: {currentUser?.groups.join(", ")}</p>
+      <p className="text-white/70">Department: {currentUser?.department}</p>
       {state.map((request, index) => (
         <div
           key={index}

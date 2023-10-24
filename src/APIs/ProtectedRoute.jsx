@@ -38,9 +38,9 @@ const ProtectedRoute = () => {
     setUserState(dataArray);
   };
 
-  const groupsRef = collection(db, `groups`);
-  const queryGROUPS = query(groupsRef, orderBy("groupName", "asc"));
-  const [GROUPS, loadingGROUPS, errorGROUPS] = useCollectionData(queryGROUPS);
+  const departmentRef = collection(db, `departments`);
+  const queryDepartment = query(departmentRef, orderBy("members", "asc"));
+  const [DEPARTMENTS, loadingDEPARTMENTS, errorDEPARTMENTS] = useCollectionData(queryDepartment);
 
   //querying the Users
   const getUserName = (uid, setName, setProfilePic) => {
@@ -59,9 +59,9 @@ const ProtectedRoute = () => {
     loadingUSERS,
     errorUSERS,
     getUserName,
-    GROUPS,
-    loadingGROUPS,
-    errorGROUPS,
+    DEPARTMENTS,
+    loadingDEPARTMENTS,
+    errorDEPARTMENTS,
     uid,
     currentUser,
   };
@@ -75,10 +75,6 @@ const ProtectedRoute = () => {
 
         onSnapshot(doc(db, "users", uid), (doc) => {
           setCurrentUser(doc.data());
-
-          // const groupsArray = new Array(doc.data().groups);
-          // const data = {...doc.data(), groups: groupsArray}
-          // setCurrentUser(data);
         });
       } else {
         navigate("/", { replace: true });

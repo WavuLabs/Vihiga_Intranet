@@ -53,8 +53,8 @@ export const ContextProvider = ({ children }) => {
     console.log("Message successfully written!");
   };
 
-  const addingUserToGroup = async (groupName, groupObject) => {
-    await setDoc(doc(db, "groups", groupName), groupObject, { merge: true });
+  const addingUserToDepartment = async (departmentName, departmentObject) => {
+    await setDoc(doc(db, "departments", departmentName), departmentObject, { merge: true });
     console.log("Document successfully written!");
   };
 
@@ -88,7 +88,7 @@ export const ContextProvider = ({ children }) => {
     createUser,
     signIn,
     logout,
-    addingUserToGroup,
+    addingUserToDepartment,
     setOnlineStatusTrue,
     setOnlineStatusFalse,
   };

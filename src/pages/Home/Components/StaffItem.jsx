@@ -9,11 +9,11 @@ import PhoneIcon from "@mui/icons-material/Phone";
 const StaffItem = (props) => {
   const navigate = useNavigate();
   const { staff } = props;
-  const { name, groups, email, contacts, profile_picture, uid } = staff;
+  const { name, department, email, contacts, profile_picture, uid } = staff;
   const details = [
     {
       title: "Department",
-      content: groups.join(", "),
+      content: department,
       value: () => <WorkOutlineIcon fontSize="large" />,
     },
     {

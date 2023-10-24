@@ -47,13 +47,14 @@ const JobRequests = () => {
   const [head, setHead] = useState(false);
 
   React.useEffect(() => {
-    if (!currentUser?.groups) return;
-    if (typeof currentUser?.groups === "string") return;
-    const groups = currentUser?.groups[0];
-    // console.log(groups);
-    if (groups === "Exco" || groups === "Chief Officer" || groups === "CECM") {
-      setHead(true);
-    }
+    if (!currentUser?.jobTitle) return;
+    const jobTitle = currentUser.jobTitle;
+    const conditions =
+      jobTitle === "Exco" ||
+      jobTitle === "Chief Officer" ||
+      jobTitle === "CECM";
+      
+    if (conditions) setHead(true);
   }, [currentUser]);
 
   const handleClose = () => {

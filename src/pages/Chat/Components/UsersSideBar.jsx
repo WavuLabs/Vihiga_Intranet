@@ -8,16 +8,16 @@ import { ProgressIndicator } from "../../../components/ProgressIndicator";
 import SearchIcon from "@mui/icons-material/Search";
 
 const UsersSideBar = () => {
+  const { USERS, loadingUSERS } = useOutletContext();
   const navigate = useNavigate();
   const uid = auth.currentUser?.uid;
   const [userGroups, setUserGroups] = useState([]);
-  const { USERS, loadingUSERS } = useOutletContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredResults, setFilteredResults] = useState([]);
 
   const getGroups = async () => {
     const user = USERS?.find((user) => user.uid === uid);
-    setUserGroups(user?.groups);
+    setUserGroups(user?.department);
   };
 
   const handleSearchChange = (event) => {
