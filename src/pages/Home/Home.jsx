@@ -87,7 +87,7 @@ const Home = () => {
                       "Here you can find anything",
                       "Request Leave",
                       "Easy Communication ",
-                      "Car Loans",
+                      "Car Loans & Mortgages",
                     ],
                     autoStart: true,
                     loop: true,

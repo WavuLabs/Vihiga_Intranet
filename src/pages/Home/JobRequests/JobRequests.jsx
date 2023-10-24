@@ -91,16 +91,16 @@ const JobRequests = () => {
           handleClick={() => setSelected("Car Loan")}
         />
         <Item
+          title={"Travel Out"}
+          handleClick={() => setSelected("Travel Out")}
+        />
+        <Item
           title={"Performance Appraisal"}
           handleClick={() => setSelected("Performance Appraisal")}
         />
         <Item
           title="Statutory Report"
           handleClick={() => setSelected("Statutory Report")}
-        />
-        <Item
-          title={"Travel Out"}
-          handleClick={() => setSelected("Travel Out")}
         />
         {head && (
           <Item

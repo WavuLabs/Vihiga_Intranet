@@ -1,13 +1,21 @@
-import { TextField } from "@mui/material";
+import {
+  TextField,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from "@mui/material";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { db } from "../../../../APIs/firebase";
 
 const CarLoans = ({ handleClose }) => {
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(null);
   const [approvalStatus, setApprovalStatus] = useState(null);
   const { uid, currentUser } = useOutletContext();
+  const [loanType, setLoanType] = useState("");
   const Ref = doc(db, "groups", currentUser?.groups[0], "loanRequests", uid);
 
   const handleSubmit = async (e) => {
@@ -22,6 +30,7 @@ const CarLoans = ({ handleClose }) => {
       uid: uid,
       name: currentUser?.name,
       amount: amount,
+      type: loanType,
       status: "pending",
     };
     await setDoc(Ref, groupObject, { merge: true });
@@ -32,11 +41,15 @@ const CarLoans = ({ handleClose }) => {
     const docSnap = await getDoc(Ref);
     !docSnap.exists() && setApprovalStatus("Does not exist");
     docSnap.exists() && setApprovalStatus(docSnap.data().status);
-  }
+  };
 
   React.useEffect(() => {
     loanStatus();
   }, []);
+
+  const handleOptionChange = (event) => {
+    setLoanType(event.target.value);
+  };
 
   return (
     <div className="col p-4 items-center justify-center space-y-3 w-full h-fit">
@@ -46,18 +59,36 @@ const CarLoans = ({ handleClose }) => {
           onSubmit={handleSubmit}
         >
           <p className="text-3xl">Set Loan Amount</p>
-          <div className="h-[5vh]" />
+          <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">
+              Select type of Loan
+            </FormLabel>
+            <RadioGroup
+              className="p-1 px-2"
+              value={loanType}
+              onChange={handleOptionChange}
+            >
+              <FormControlLabel
+                value="Car Loan"
+                control={<Radio />}
+                label="Car Loan"
+              />
+              <FormControlLabel
+                value="Mortgage"
+                control={<Radio />}
+                label="Mortgage"
+              />
+            </RadioGroup>
+          </FormControl>
+          <div className="h-[1vh]" />
           <TextField
             label="Amount"
             placeholder="Enter Amount"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            margin="none"
             className="w-1/2 rounded-sm"
             //   size="medium"
             required
-            autoFocus={true}
-            autoComplete="off"
           />
 
           <br />
@@ -71,11 +102,7 @@ const CarLoans = ({ handleClose }) => {
           ) : approvalStatus === "pending" ? (
             <p className="text-3xl text-primary">Pending</p>
           ) : (
-            <div>
-              <p className="text-3xl text-red">Rejected</p>
-              <p className="text-3xl text-red">Reason: </p>
-              <button>Apply Again</button>
-            </div>
+            <p className="text-3xl text-primary">Rejected</p>
           )}
           <button className="w-[20vw] border" onClick={handleClose}>
             CLOSE

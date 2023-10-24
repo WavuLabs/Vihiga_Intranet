@@ -97,9 +97,7 @@ const TravelOut = ({ handleClose }) => {
             <p className="text-3xl text-primary">Pending</p>
           ) : (
             <div>
-              <p className="text-3xl text-red">Rejected</p>
-              <p className="text-3xl text-red">Reason: </p>
-              <button>Apply Again</button>
+              <p className="text-3xl text-primary">Rejected</p>
             </div>
           )}
           <button className="w-[20vw] border" onClick={handleClose}>
