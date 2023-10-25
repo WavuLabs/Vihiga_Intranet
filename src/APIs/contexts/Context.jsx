@@ -21,6 +21,7 @@ const UserContext = createContext();
 
 export const ContextProvider = ({ children }) => {
   const userID = auth.currentUser?.uid;
+  const serverTime = serverTimestamp();
 
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -54,7 +55,9 @@ export const ContextProvider = ({ children }) => {
   };
 
   const addingUserToDepartment = async (departmentName, departmentObject) => {
-    await setDoc(doc(db, "departments", departmentName), departmentObject, { merge: true });
+    await setDoc(doc(db, "departments", departmentName), departmentObject, {
+      merge: true,
+    });
     console.log("Document successfully written!");
   };
 
@@ -91,6 +94,7 @@ export const ContextProvider = ({ children }) => {
     addingUserToDepartment,
     setOnlineStatusTrue,
     setOnlineStatusFalse,
+    serverTime,
   };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

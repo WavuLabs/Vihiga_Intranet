@@ -6,14 +6,20 @@ import {
   FormControl,
   FormLabel,
 } from "@mui/material";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { db } from "../../../../APIs/firebase";
+import { ContextData } from "../../../../APIs/contexts/Context";
+import { differenceInDays, set } from "date-fns";
+import { ProgressIndicator } from "../../../../components/ProgressIndicator";
 
 const CarLoans = ({ handleClose }) => {
+  const { serverTime } = ContextData();
   const [amount, setAmount] = useState(null);
   const [approvalStatus, setApprovalStatus] = useState(null);
+  const [applicationData, setApplicationData] = useState(null);
+  const [dateBetweenApplication, setDateBetweenApplication] = useState(null);
   const { uid, currentUser } = useOutletContext();
   const [loanType, setLoanType] = useState("");
   const Ref = doc(
@@ -23,6 +29,15 @@ const CarLoans = ({ handleClose }) => {
     "loanRequests",
     uid
   );
+  const handleDateRange = (item) => {
+    const startDate = new Date(item.applicationDate.seconds * 1000);
+    const todaysDate = new Date();
+    const dateBetween = differenceInDays(todaysDate, startDate);
+    setDateBetweenApplication(dateBetween);
+    if (dateBetween > 14) {
+      setApprovalStatus("Can apply for loan again");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +53,7 @@ const CarLoans = ({ handleClose }) => {
       amount: Number(amount),
       type: loanType,
       status: "pending",
+      applicationDate: serverTime,
     };
     await setDoc(Ref, groupObject, { merge: true });
     alert("Request successfully sent!");
@@ -45,8 +61,12 @@ const CarLoans = ({ handleClose }) => {
 
   const loanStatus = async () => {
     const docSnap = await getDoc(Ref);
-    !docSnap.exists() && setApprovalStatus("Does not exist");
-    docSnap.exists() && setApprovalStatus(docSnap.data().status);
+
+    if (docSnap.exists()) {
+      setApprovalStatus(docSnap.data().status);
+      setApplicationData(docSnap.data());
+      handleDateRange(docSnap.data());
+    }
   };
 
   React.useEffect(() => {
@@ -59,7 +79,8 @@ const CarLoans = ({ handleClose }) => {
 
   return (
     <div className="col p-4 items-center justify-center space-y-3 w-full h-fit">
-      {approvalStatus === "Does not exist" ? (
+      {console.log(applicationData)}
+      {!applicationData ? (
         <form
           className="w-full h-fit col items-center justify-center space-y-3 "
           onSubmit={handleSubmit}
@@ -108,8 +129,12 @@ const CarLoans = ({ handleClose }) => {
             <p className="text-3xl text-green">Approved</p>
           ) : approvalStatus === "pending" ? (
             <p className="text-3xl text-primary">Pending</p>
-          ) : (
+          ) : approvalStatus === "rejected" ? (
             <p className="text-3xl text-primary">Rejected</p>
+          ) : (
+            approvalStatus === null && (
+              <p>Null</p>
+            )
           )}
           <button className="w-[20vw] border" onClick={handleClose}>
             CLOSE

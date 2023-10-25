@@ -41,11 +41,11 @@ const StaffItem = (props) => {
       </div>
 
       {details.map((detail, index) => (
-        <div key={index} className="flex flex-row ml-3 my-1">
+        <div key={index} className="flex flex-row ml-3 my-1 overflow-hidden">
           {detail.value()}
           <div className="flex flex-col">
             <p className="m-2">{detail.title}</p>
-            <p className="m-2">{detail.content}</p>
+            <p className="m-2 line-clamp-2">{detail.content}</p>
           </div>
         </div>
       ))}

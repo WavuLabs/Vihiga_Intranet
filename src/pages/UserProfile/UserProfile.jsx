@@ -217,6 +217,10 @@ const UserProfile = () => {
           <p>{currentUser?.nextOfKin}</p>
           <p>Contacts</p>
           <p>{currentUser?.contacts}</p>
+          <p>Physical Address</p>
+          <p>Emergency Contacts</p>
+          <p>Alternative Email</p>
+          <p>{currentUser?.contacts}</p>
         </div>
       </div>
       <div className=" grid grid-flow-col w-[40vw] h-[10vh]">
