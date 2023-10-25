@@ -80,65 +80,74 @@ const CarLoans = ({ handleClose }) => {
   return (
     <div className="col p-4 items-center justify-center space-y-3 w-full h-fit">
       {console.log(applicationData)}
-      {!applicationData ? (
-        <form
-          className="w-full h-fit col items-center justify-center space-y-3 "
-          onSubmit={handleSubmit}
-        >
-          <p className="text-3xl">Set Loan Amount</p>
-          <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">
-              Select type of Loan
-            </FormLabel>
-            <RadioGroup
-              className="p-1 px-2"
-              value={loanType}
-              onChange={handleOptionChange}
-            >
-              <FormControlLabel
-                value="Car Loan"
-                control={<Radio />}
-                label="Car Loan"
-              />
-              <FormControlLabel
-                value="Mortgage"
-                control={<Radio />}
-                label="Mortgage"
-              />
-            </RadioGroup>
-          </FormControl>
-          <div className="h-[1vh]" />
-          <TextField
-            label="Amount"
-            type="number"
-            placeholder="Enter Amount"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-            className="w-1/2 rounded-sm"
-            //   size="medium"
-            required
-          />
-
-          <br />
-          <button className="w-[20vw] border">SUBMIT</button>
-        </form>
+      {!approvalStatus ? (
+        <ProgressIndicator />
       ) : (
         <div className="flex flex-col items-center justify-center gap-4">
           <p className="text-3xl">Leave Request Status</p>
           {approvalStatus === "approved" ? (
-            <p className="text-3xl text-green">Approved</p>
+            <p className="text-3xl text-green">Aproved</p>
           ) : approvalStatus === "pending" ? (
             <p className="text-3xl text-primary">Pending</p>
           ) : approvalStatus === "rejected" ? (
-            <p className="text-3xl text-primary">Rejected</p>
+            <div className="flex flex-col items-center justify-center gap-4">
+              <p className="text-3xl text-primary">Rejected</p>
+              {dateBetweenApplication > 14 ? (
+                <p className="text-3xl text-primary">
+                  Can apply for loan again
+                </p>
+              ) : (
+                <p className="text-3xl text-primary">
+                  Can apply for loan after {14 - dateBetweenApplication} days
+                </p>
+              )}
+            </div>
           ) : (
-            approvalStatus === null && (
-              <p>Null</p>
-            )
+            <form
+              className="w-full h-fit col items-center justify-center space-y-3 "
+              onSubmit={handleSubmit}
+            >
+              <p className="text-3xl">Set Loan Amount</p>
+              <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">
+                  Select type of Loan
+                </FormLabel>
+                <RadioGroup
+                  className="p-1 px-2"
+                  value={loanType}
+                  onChange={handleOptionChange}
+                >
+                  <FormControlLabel
+                    value="Car Loan"
+                    control={<Radio />}
+                    label="Car Loan"
+                  />
+                  <FormControlLabel
+                    value="Mortgage"
+                    control={<Radio />}
+                    label="Mortgage"
+                  />
+                </RadioGroup>
+              </FormControl>
+              <div className="h-[1vh]" />
+              <TextField
+                label="Amount"
+                type="number"
+                placeholder="Enter Amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-1/2 rounded-sm"
+                //   size="medium"
+                required
+              />
+
+              <br />
+              <button className="w-[20vw] border">SUBMIT</button>
+            </form>
           )}
-          <button className="w-[20vw] border" onClick={handleClose}>
+          {/* <button className="w-[20vw] border" onClick={handleClose}>
             CLOSE
-          </button>
+          </button> */}
         </div>
       )}
     </div>
