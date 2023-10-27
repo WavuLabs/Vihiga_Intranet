@@ -5,7 +5,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
-import Slide from "@mui/material/Slide";
 import RequestLeave from "./Components/RequestLeave";
 import CarLoans from "./Components/CarLoans";
 import PerformanceAppraisal from "./Components/PerformanceAppraisal";
@@ -14,10 +13,7 @@ import StatutoryReport from "./Components/StatutoryReport";
 import TravelOut from "./Components/TravelOut";
 import PendingApprovals from "../../PendingApprovals/PendingApprovals";
 import { useOutletContext } from "react-router-dom";
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import { Transition } from "../../../constants/Constants";
 
 const JobRequests = () => {
   const Item = ({ title, color, Component, handleClick }) => (

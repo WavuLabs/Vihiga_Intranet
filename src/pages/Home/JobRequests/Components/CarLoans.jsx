@@ -6,17 +6,16 @@ import {
   FormControl,
   FormLabel,
 } from "@mui/material";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { db } from "../../../../APIs/firebase";
 import { ContextData } from "../../../../APIs/contexts/Context";
 import { differenceInDays, set } from "date-fns";
-import { ProgressIndicator } from "../../../../components/ProgressIndicator";
 
 const CarLoans = ({ handleClose }) => {
   const { serverTime } = ContextData();
-  const [amount, setAmount] = useState(null);
+  const [amount, setAmount] = useState();
   const [approvalStatus, setApprovalStatus] = useState(null);
   const [applicationData, setApplicationData] = useState(null);
   const [dateBetweenApplication, setDateBetweenApplication] = useState(null);
@@ -29,14 +28,12 @@ const CarLoans = ({ handleClose }) => {
     "loanRequests",
     uid
   );
+
   const handleDateRange = (item) => {
     const startDate = new Date(item.applicationDate.seconds * 1000);
     const todaysDate = new Date();
     const dateBetween = differenceInDays(todaysDate, startDate);
     setDateBetweenApplication(dateBetween);
-    if (dateBetween > 14) {
-      setApprovalStatus("Can apply for loan again");
-    }
   };
 
   const handleSubmit = async (e) => {
@@ -77,77 +74,91 @@ const CarLoans = ({ handleClose }) => {
     setLoanType(event.target.value);
   };
 
+  const handleDisplay = () => {
+    switch (approvalStatus) {
+      case "approved":
+        return <p className="text-3xl text-green">Aproved</p>;
+      case "pending":
+        return <p className="text-3xl text-primary">Pending</p>;
+      case "rejected":
+        return (
+          <div className="flex flex-col items-center justify-center gap-4">
+            <p className="text-3xl text-primary/80">Rejected</p>
+            {dateBetweenApplication > 14 ? (
+              <div className="cols-center">
+                <p className="text-2xl">You can apply again</p>
+                <button
+                  onClick={() => setApplicationData(null)}
+                  className="w-[20vw] border"
+                >
+                  APPLY
+                </button>
+              </div>
+            ) : (
+              <div>
+                <p className="text-2xl">
+                  You can apply after 14 days of first application
+                </p>
+                <p className="text-white/50 text-center">
+                  Days left : {14 - dateBetweenApplication}
+                </p>
+              </div>
+            )}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="col p-4 items-center justify-center space-y-3 w-full h-fit">
-      {console.log(applicationData)}
-      {!approvalStatus ? (
-        <ProgressIndicator />
-      ) : (
-        <div className="flex flex-col items-center justify-center gap-4">
-          <p className="text-3xl">Leave Request Status</p>
-          {approvalStatus === "approved" ? (
-            <p className="text-3xl text-green">Aproved</p>
-          ) : approvalStatus === "pending" ? (
-            <p className="text-3xl text-primary">Pending</p>
-          ) : approvalStatus === "rejected" ? (
-            <div className="flex flex-col items-center justify-center gap-4">
-              <p className="text-3xl text-primary">Rejected</p>
-              {dateBetweenApplication > 14 ? (
-                <p className="text-3xl text-primary">
-                  Can apply for loan again
-                </p>
-              ) : (
-                <p className="text-3xl text-primary">
-                  Can apply for loan after {14 - dateBetweenApplication} days
-                </p>
-              )}
-            </div>
-          ) : (
-            <form
-              className="w-full h-fit col items-center justify-center space-y-3 "
-              onSubmit={handleSubmit}
+      {applicationData === null ? (
+        <form
+          className="w-full h-fit col items-center justify-center space-y-3 "
+          onSubmit={handleSubmit}
+        >
+          <p className="text-3xl">Set Loan Amount</p>
+          <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">
+              Select type of Loan
+            </FormLabel>
+            <RadioGroup
+              className="p-1 px-2"
+              value={loanType}
+              onChange={handleOptionChange}
             >
-              <p className="text-3xl">Set Loan Amount</p>
-              <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">
-                  Select type of Loan
-                </FormLabel>
-                <RadioGroup
-                  className="p-1 px-2"
-                  value={loanType}
-                  onChange={handleOptionChange}
-                >
-                  <FormControlLabel
-                    value="Car Loan"
-                    control={<Radio />}
-                    label="Car Loan"
-                  />
-                  <FormControlLabel
-                    value="Mortgage"
-                    control={<Radio />}
-                    label="Mortgage"
-                  />
-                </RadioGroup>
-              </FormControl>
-              <div className="h-[1vh]" />
-              <TextField
-                label="Amount"
-                type="number"
-                placeholder="Enter Amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-1/2 rounded-sm"
-                //   size="medium"
-                required
+              <FormControlLabel
+                value="Car Loan"
+                control={<Radio />}
+                label="Car Loan"
               />
+              <FormControlLabel
+                value="Mortgage"
+                control={<Radio />}
+                label="Mortgage"
+              />
+            </RadioGroup>
+          </FormControl>
+          <div className="h-[1vh]" />
+          <TextField
+            label="Amount"
+            type="number"
+            placeholder="Enter Amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            className="w-1/2 rounded-sm"
+            //   size="medium"
+            required
+          />
 
-              <br />
-              <button className="w-[20vw] border">SUBMIT</button>
-            </form>
-          )}
-          {/* <button className="w-[20vw] border" onClick={handleClose}>
-            CLOSE
-          </button> */}
+          <br />
+          <button className="w-[20vw] border">SUBMIT</button>
+        </form>
+      ) : (
+        <div className="cols-center">
+          <p className="text-xl p-3">Application Status</p>
+          {handleDisplay()}
         </div>
       )}
     </div>

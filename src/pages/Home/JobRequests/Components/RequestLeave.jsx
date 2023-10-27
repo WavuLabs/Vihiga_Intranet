@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { DateRangePicker } from "react-date-range";
-import { addDays } from "date-fns";
+import { addDays, differenceInDays } from "date-fns";
 import { Button, TextField } from "@mui/material";
 import { arrayUnion, doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../../../../APIs/firebase";
 import { useOutletContext } from "react-router-dom";
+import { ContextData } from "../../../../APIs/contexts/Context";
 
 const RequestLeave = ({ handleClose }) => {
+  const { serverTime } = ContextData();
   const { uid, currentUser } = useOutletContext();
   const [message, setMessage] = useState("");
   const [approvalStatus, setApprovalStatus] = useState(null);
+  const [applicationData, setApplicationData] = useState(null);
+  const [dateBetweenApplication, setDateBetweenApplication] = useState(null);
   const [leaveDates, setLeaveDates] = useState([
     {
       startDate: new Date(),
@@ -35,33 +39,71 @@ const RequestLeave = ({ handleClose }) => {
       startDate: leaveDates[0].startDate,
       endDate: leaveDates[0].endDate,
       status: "pending",
+      applicationDate: serverTime,
     };
     await setDoc(Ref, groupObject, { merge: true });
     alert("Request successfully sent!");
   };
+  const handleDateRange = (item) => {
+    const startDate = new Date(item.applicationDate.seconds * 1000);
+    const todaysDate = new Date();
+    const dateBetween = differenceInDays(todaysDate, startDate);
+    setDateBetweenApplication(dateBetween);
+  };
 
   const leaveStatus = async () => {
     const docSnap = await getDoc(Ref);
-    !docSnap.exists() && setApprovalStatus("Does not exist");
-    docSnap.exists() && setApprovalStatus(docSnap.data().status);
+    if (docSnap.exists()) {
+      setApprovalStatus(docSnap.data().status);
+      setApplicationData(docSnap.data());
+      handleDateRange(docSnap.data());
+    }
   };
 
   useEffect(() => {
     leaveStatus();
-  }, [leaveDates]);
+  }, []);
 
-  const handleTest = () => {
-    const dataArray = new Array(
-      "NewsAndEvents",
-      "StaffDirectory",
-      "JobRequests"
-    );
-    console.log(dataArray);
+  const handleDisplay = () => {
+    switch (approvalStatus) {
+      case "approved":
+        return <p className="text-3xl text-green">Aproved</p>;
+      case "pending":
+        return <p className="text-3xl text-primary">Pending</p>;
+      case "rejected":
+        return (
+          <div className="flex flex-col items-center justify-center gap-4">
+            <p className="text-3xl text-primary/80">Rejected</p>
+            {dateBetweenApplication > 14 ? (
+              <div className="cols-center">
+                <p className="text-2xl">You can apply again</p>
+                <button
+                  onClick={() => setApplicationData(null)}
+                  className="w-[20vw] border"
+                >
+                  APPLY
+                </button>
+              </div>
+            ) : (
+              <div>
+                <p className="text-2xl">
+                  You can apply after 14 days of first application
+                </p>
+                <p className="text-white/50 text-center">
+                  Days left : {14 - dateBetweenApplication}
+                </p>
+              </div>
+            )}
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
-    <>
-      {approvalStatus === "Does not exist" ? (
+    <div className="col p-4 items-center justify-center space-y-3 w-full h-fit">
+      {applicationData === null ? (
         <form
           onSubmit={handleSubmit}
           className="col p-4 items-center justify-center gap-4 "
@@ -93,23 +135,12 @@ const RequestLeave = ({ handleClose }) => {
           <button className="w-[20vw] border">SUBMIT</button>
         </form>
       ) : (
-        <div className="flex flex-col items-center justify-center gap-4">
-          <p className="text-3xl">Leave Request Status</p>
-          {approvalStatus === "approved" ? (
-            <p className="text-3xl text-green">Approved</p>
-          ) : approvalStatus === "pending" ? (
-            <p className="text-3xl text-primary">Pending</p>
-          ) : (
-            <div>
-              <p className="text-3xl text-primary">Rejected</p>
-            </div>
-          )}
-          <button className="w-[20vw] border" onClick={handleClose}>
-            CLOSE
-          </button>
+        <div className="cols-center">
+          <p className="text-xl p-3">Application Status</p>
+          {handleDisplay()}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

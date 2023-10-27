@@ -1,4 +1,6 @@
+import { Slide } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
+import React from "react";
 
 export const styles = {
   root: {
@@ -77,3 +79,21 @@ export const theme = createTheme({
   },
 });
 export const { width, height } = window.screen;
+
+export const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+export const departments = [
+  "Executive",
+  "Transport & Infrastructure",
+  "Finance & Economic Planning",
+  "Administration and Coordination of County Affairs",
+  "Physical Planning, Lands and Housing",
+  "Trade, Industry, Tourism and Entrepreneurship",
+  "Agriculture, Livestock, Fisheries & Cooperatives",
+  "Environment, Water, Energy and Natural Resources",
+  "Health Services",
+  "Youth, Gender, Sports, Culture and Social Services",
+  "Education, Science and Technical Vocational Training",
+];
+

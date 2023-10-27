@@ -25,43 +25,10 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { PhotoCamera } from "@mui/icons-material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
+import RadioGroupComponent from "../../components/RadioGroupComponent";
+import { departments } from "../../constants/Constants";
 
 const JobTitles = ["Exco", "CECM", "Chief Officer", "Director"];
-const departments = [
-  "Executive",
-  "Transport & Infrastructure",
-  "Finance & Economic Planning",
-  "Administration and Coordination of County Affairs",
-  "Physical Planning, Lands and Housing",
-  "Trade, Industry, Tourism and Entrepreneurship",
-  "Agriculture, Livestock, Fisheries & Cooperatives",
-  "Environment, Water, Energy and Natural Resources",
-  "Health Services",
-  "Youth, Gender, Sports, Culture and Social Services",
-  "Education, Science and Technical Vocational Training",
-];
-
-const MyComponent = ({ state, setState, data }) => {
-  const handleOptionChange = (e) => setState(e.target.value);
-  return (
-    <FormControl component="fieldset">
-      <RadioGroup
-        className="p-1 px-2"
-        value={state}
-        onChange={handleOptionChange}
-      >
-        {data.map((item, index) => (
-          <FormControlLabel
-            key={index}
-            value={item}
-            control={<Radio />}
-            label={item}
-          />
-        ))}
-      </RadioGroup>
-    </FormControl>
-  );
-};
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -229,7 +196,7 @@ const Signup = () => {
                 </>
               }
             >
-              <MyComponent
+              <RadioGroupComponent
                 state={department}
                 setState={setDepartment}
                 data={departments}
@@ -251,7 +218,7 @@ const Signup = () => {
                 </>
               }
             >
-              <MyComponent
+              <RadioGroupComponent
                 state={jobTitle}
                 setState={setJobTitle}
                 data={JobTitles}

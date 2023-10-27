@@ -17,6 +17,8 @@ import JobRequests from "./JobRequests/JobRequests";
 import Footer from "./Footer";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
 import Typewriter from "typewriter-effect";
+import FormsAndTemplates from "./FormsAndTemplates";
+import QuickLinks from "./QuickLinks";
 
 const Home = () => {
   const { USERS, loadingUSERS } = useOutletContext();
@@ -97,14 +99,15 @@ const Home = () => {
             </div>
           </div>
 
+          <Element name="FormsAndTemplates">
+            <FormsAndTemplates />
+          </Element>
+          <QuickLinks />
           <Element name="NewsAndEvents">
             <NewsAndEvents />
           </Element>
 
-          <Element
-            className="my-5 col items-center"
-            name="JobRequests"
-          >
+          <Element className="my-5 col items-center" name="JobRequests">
             <JobRequests />
           </Element>
 

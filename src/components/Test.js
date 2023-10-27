@@ -35,3 +35,5 @@ const InitialHomeDesign = () => {
 {
   "0700270707", "105781537M000269", "357777960425280";
 }
+// Networks and Internet
+// Mobile Plan
