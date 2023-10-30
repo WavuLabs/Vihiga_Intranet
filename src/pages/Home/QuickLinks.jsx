@@ -1,4 +1,5 @@
 import { Close, CloudUpload } from "@mui/icons-material";
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import ApprovalIcon from '@mui/icons-material/Approval';
 import React, { useState } from "react";
 import UpLoadForms from "./Components/UpLoadForms";
@@ -6,6 +7,7 @@ import { Dialog } from "@mui/material";
 import { Transition } from "../../constants/Constants";
 import PendingApprovals from "../PendingApprovals/PendingApprovals";
 import { set } from "date-fns";
+import AddNewsAndEvents from "./NewsAndEvents/Components/AddNewsAndEvents";
 
 const QuickLinks = () => {
   const [open, setOpen] = useState(false);
@@ -14,10 +16,7 @@ const QuickLinks = () => {
   const data = [
     { name: "UpLoadForms", icon: () => <CloudUpload fontSize="large" /> },
     { name: "Pending Approvals", icon: () => <ApprovalIcon fontSize="large"/> },
-    { name: "Cancel", icon: () => <Close /> },
-    { name: "Cancel", icon: () => <Close /> },
-    { name: "Cancel", icon: () => <Close /> },
-    { name: "Cancel", icon: () => <Close /> },
+    { name: "Add Notice", icon: () => <NewspaperIcon /> },
   ];
   const handleOpenDialog = (name) => {
     setSelected(name);
@@ -32,6 +31,8 @@ const QuickLinks = () => {
         return <UpLoadForms />;
       case "Pending Approvals":
         return <PendingApprovals />;
+      case "Add Notice":
+        return <AddNewsAndEvents />;
       default:
         return null;
     }

@@ -21,7 +21,6 @@ const FormsAndTemplates = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
   };
 
   const getForms = async (name, department) => {
