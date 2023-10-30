@@ -11,7 +11,7 @@ import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import PhonelinkIcon from "@mui/icons-material/Phonelink";
 import ChatIcon from "@mui/icons-material/Chat";
 import Logo from "/assets/VihigaLogo.png";
-import NewsAndEvents from "./NewsAndEvents";
+import NewsAndEvents from "./NewsAndEvents/NewsAndEvents";
 import StaffDirectory from "./StaffDirectory";
 import JobRequests from "./JobRequests/JobRequests";
 import Footer from "./Footer";

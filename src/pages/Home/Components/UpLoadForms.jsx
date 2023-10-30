@@ -17,9 +17,9 @@ import { useOutletContext } from "react-router-dom";
 import { ProgressIndicator } from "../../../components/ProgressIndicator";
 import { TextField } from "@mui/material";
 
-const UpLoadData = () => {
+const UpLoadForms = () => {
   const [file, setFile] = React.useState(null);
-  const [department, setDepartment] = React.useState();
+  const [department, setDepartment] = React.useState(null);
   const [fileName, setFileName] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const { currentUser } = useOutletContext();
@@ -31,10 +31,10 @@ const UpLoadData = () => {
       return;
     }
 
-    // Create a reference to the file in Firebase Storage
-    const storageRef = ref(storage, `forms/${file.name}`);
     try {
       setLoading(true);
+      // Create a reference to the file in Firebase Storage
+      const storageRef = ref(storage, `forms/${department}/${file.name}`);
       // Upload the file to Firebase Storage
       const uploadResult = await uploadBytes(storageRef, file);
       console.log("Restaurant file uploaded successfully!!!");
@@ -64,12 +64,13 @@ const UpLoadData = () => {
   };
 
   return (
-    <div className="bg-slate-900 p-2 h-[50vh] w-[80vw] rounded-xl col justify-evenly ">
+    <div className="bg-slate-900 p-2 h-[50vh] w-full rounded-xl col justify-evenly ">
       <form onSubmit={handleSubmit} className="col">
         <TextField
           type="text"
           placeholder="Enter File Name"
           onChange={(e) => setFileName(e.target.value)}
+          required
         />
         <div className="row">
           <DropDown
@@ -98,7 +99,7 @@ const UpLoadData = () => {
           type="file"
           onChange={(e) => setFile(e.target.files[0])}
         />
-        <button className="m-2 w-1/4" type="submit">
+        <button className="my-4 w-1/4 border border-primary" type="submit">
           Upload
         </button>
       </form>
@@ -112,4 +113,4 @@ const UpLoadData = () => {
   );
 };
 
-export default UpLoadData;
+export default UpLoadForms;

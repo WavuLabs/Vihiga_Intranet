@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import TuneIcon from "@mui/icons-material/Tune";
 import { TextField } from "@mui/material";
@@ -9,12 +9,10 @@ import { departments } from "../../constants/Constants";
 import { AiFillCloseCircle } from "react-icons/ai";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../APIs/firebase";
-import { set } from "date-fns";
-import { data } from "autoprefixer";
 
 const FormsAndTemplates = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [department, setDepartment] = useState(false);
+  const [department, setDepartment] = useState("Executive");
   const [loading, setLoading] = useState(false);
   const [selectDepartment, setSelectDepartment] = useState(false);
   const [searchIntatiated, setSearchIntatiated] = useState(false);
@@ -23,36 +21,53 @@ const FormsAndTemplates = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    inputRef.current.blur();
   };
 
   const getForms = async (name, department) => {
-    setSearchIntatiated(true);
-    const dataArray = [];
     setLoading(true);
+    setSearchIntatiated(true);
+    const Ref = collection(db, `departments/${department}/files`);
+    const dataArray = [];
     try {
-      const Ref = collection(db, `departments/${department}/files`);
-      const q = query(Ref, where("name", "==", name));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
+      // const q = query(Ref, where("name", "==", name));
+      // const querySnapshot = await getDocs(q);
+      // querySnapshot.forEach((doc) => {
+      //   dataArray.push(doc.data());
+      // });
+
+      const snapshotData = await getDocs(Ref);
+      snapshotData.forEach((doc) => {
         dataArray.push(doc.data());
+        console.log(doc.data(), "all data");
       });
-      setForms(dataArray);
+
+      if (name === "") return setForms(dataArray);
+
+      const filteredData = dataArray.filter((item) =>
+        item.name.toLowerCase().includes(name.toLowerCase())
+      );
+      console.log(filteredData, "filtered data");
+
+      setForms(filteredData);
     } catch (error) {
       console.log(error);
     } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
+      // setTimeout(() => {
+      setLoading(false);
+      // }, 2000);
     }
   };
 
   const handleSearchItemClick = (file) => {
     window.open(file);
   };
+  useEffect(() => {
+    getForms(searchQuery, department);
+  }, [department]);
 
   return (
     <div className="w-full my-[7vh]">
+      <p className="text-white/60 text-center">Forms and Templates</p>
       {/* Create a Search Box */}
       <SkeletonTheme baseColor="#FFFFFF" highlightColor="#444">
         <form onSubmit={handleSubmit} className="cols-center w-full m-4">
@@ -62,17 +77,20 @@ const FormsAndTemplates = () => {
             placeholder="Search Forms and Templates"
             className="w-[90vw] border border-white/40 rounded-md p-2 px-3 focus:outline-none focus:ring-blue-500"
             value={searchQuery}
-            onChange={(event) => setSearchQuery(event.target.value)}
-            InputProps={{
-              endAdornment: (
-                <button>
-                  <TuneIcon
-                    onClick={() => setSelectDepartment(!selectDepartment)}
-                    className="text-white/60"
-                  />
-                </button>
-              ),
+            onChange={(event) => {
+              setSearchQuery(event.target.value);
+              getForms(event.target.value, department);
             }}
+            // InputProps={{
+            //   endAdornment: (
+            //     <button>
+            //       <TuneIcon
+            //         onClick={() => setSelectDepartment(!selectDepartment)}
+            //         className="text-white/60"
+            //       />
+            //     </button>
+            //   ),
+            // }}
           />
           {
             <div className="rows-center">
@@ -109,23 +127,31 @@ const FormsAndTemplates = () => {
                 className="m-2"
               />
             ) : (
-              <div className="grid grid-cols-3 w-full m-4">
-                {forms.length > 0 &&
-                  forms.map((item, index) => (
-                    <button
-                      className="bg-slate-900 p-2 h-[15vh] w-[10vw] rounded-xl col justify-evenly items-center"
-                      key={index}
-                      onClick={() => handleSearchItemClick(item.file)}
-                    >
-                      {item.name}
-                    </button>
-                  ))}
+              <div className=" w-full m-4">
+                {forms.length > 0 ? (
+                  <div className="grid grid-cols-3 w-full m-4 mx-[2vw]">
+                    {forms.map((item, index) => (
+                      <button
+                        className="bg-slate-900 p-2 h-[15vh] w-[10vw] rounded-xl col justify-evenly items-center"
+                        key={index}
+                        onClick={() => handleSearchItemClick(item.file)}
+                      >
+                        {item.name}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="cols-center w-full">
+                    {department === null ? (
+                      <p className="text-white/60">No Department selected</p>
+                    ) : (
+                      <p className="text-white/60">No results found</p>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
         </form>
-        <button onClick={() => getForms(searchQuery, department)}>
-          Search
-        </button>
       </SkeletonTheme>
     </div>
   );

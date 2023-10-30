@@ -1,8 +1,10 @@
-import { Close } from "@mui/icons-material";
+import { Close, CloudUpload } from "@mui/icons-material";
+import ApprovalIcon from '@mui/icons-material/Approval';
 import React, { useState } from "react";
-import UpLoadData from "./Components/UpLoadData";
+import UpLoadForms from "./Components/UpLoadForms";
 import { Dialog } from "@mui/material";
 import { Transition } from "../../constants/Constants";
+import PendingApprovals from "../PendingApprovals/PendingApprovals";
 import { set } from "date-fns";
 
 const QuickLinks = () => {
@@ -10,12 +12,12 @@ const QuickLinks = () => {
   const [selected, setSelected] = useState("");
 
   const data = [
+    { name: "UpLoadForms", icon: () => <CloudUpload fontSize="large" /> },
+    { name: "Pending Approvals", icon: () => <ApprovalIcon fontSize="large"/> },
     { name: "Cancel", icon: () => <Close /> },
     { name: "Cancel", icon: () => <Close /> },
     { name: "Cancel", icon: () => <Close /> },
     { name: "Cancel", icon: () => <Close /> },
-    { name: "Cancel", icon: () => <Close /> },
-    { name: "UpLoadData", icon: () => <Close /> },
   ];
   const handleOpenDialog = (name) => {
     setSelected(name);
@@ -26,20 +28,22 @@ const QuickLinks = () => {
   };
   const handleDisplay = () => {
     switch (selected) {
-      case "UpLoadData":
-        return <UpLoadData />;
+      case "UpLoadForms":
+        return <UpLoadForms />;
+      case "Pending Approvals":
+        return <PendingApprovals />;
       default:
         return null;
     }
   };
   return (
     <div className="">
-      <p className="text-white/60 text-2xl">Quick Links</p>
+      <p className="text-white/60 text-2xl ml-2">Quick Links</p>
       <div className="grid grid-cols-4 items-center justify-evenly gap-2 m-5">
         {data?.map((item, index) => (
           <button
             key={index}
-            className="bg-slate-900 p-2 h-[15vh] w-[10vw] rounded-xl col justify-evenly items-center"
+            className="bg-slate-900 p-2 h-[18vh] w-[15vw] rounded-xl col justify-evenly items-center"
             onClick={() => handleOpenDialog(item.name)}
           >
             {item.icon()}

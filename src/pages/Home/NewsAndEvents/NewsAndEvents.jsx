@@ -1,8 +1,8 @@
-import NewsEventItem from "./Components/NewsEventItem";
+import { useState } from "react";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
 import dayjs from "dayjs";
-import { useState } from "react";
 import EventDates from "./Components/EventDates";
+import NewsEventItem from "./Components/NewsEventItem";
 
 const NewsAndEvents = () => {
   const [date, setDate] = useState(dayjs());
