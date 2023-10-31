@@ -21,28 +21,42 @@ const NewsAndEvents = () => {
 
   const eventsRef = collection(db, `departments/${userDepartment[0]}/events`);
   const queryEvents = query(eventsRef, orderBy("time", "asc"));
-  const [eventsData, loadingEvents, errorEvents] = useCollectionData(queryEvents);
+  const [eventsData, loadingEvents, errorEvents] =
+    useCollectionData(queryEvents);
 
+  const filterNews = newsData?.filter((item) => {
+    const date = dayjs(item.time?.toDate()).format("DD MMM");
+    return date === FormattedDate;
+  });
   return (
     <div className="my-5 mx-3 ">
       <p className="p-title my-3 p-3">News & Events</p>
       <div className="grid grid-cols-3 space-x-2 px-2">
-        <div className="col-span-2 grid grid-flow-row customs-border m-1 ">
-          {newsData?.map((item, index) => (
-            <div className="customs-border m-1" key={index}>
-              <NewsEventItem item={item} />
+        <div className="col-span-2">
+          {filterNews ? (
+            <div className=" grid grid-flow-row customs-border m-1 ">
+              {filterNews?.map((item, index) => (
+                <div className="customs-border m-1" key={index}>
+                  <NewsEventItem item={item} />
+                </div>
+              ))}
             </div>
-          ))}
+          ) : (
+            <p className="text-center self-center">No News</p>
+          )}
         </div>
-
         <div className="">
           <StaticDatePicker
             onChange={(date) => setDate(date)}
             defaultValue={dayjs()}
           />
-          <EventDates FormattedDate={FormattedDate} />
-          <EventDates FormattedDate={FormattedDate} />
-          <EventDates FormattedDate={FormattedDate} />
+          {eventsData ? (
+            eventsData?.map((item, index) => (
+              <EventDates key={index} item={item} />
+            ))
+          ) : (
+            <p className="text-center self-center">No Events</p>
+          )}
         </div>
       </div>
     </div>
