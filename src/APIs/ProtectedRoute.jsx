@@ -18,7 +18,7 @@ const ProtectedRoute = () => {
   const values = useOutletContext();
   const { setOnlineStatusTrue } = ContextData();
   const [userState, setUserState] = useState([]);
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
   const [uid, setUID] = useState();
 
   const usersRef = collection(db, `users`);

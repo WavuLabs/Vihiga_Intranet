@@ -1,24 +1,35 @@
 import React, { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
 import { serverTimestamp } from "firebase/firestore";
 import SelectDepartment from "../../../../components/SelectDepartment";
 import { ContextData } from "../../../../APIs/contexts/Context";
 import { ProgressIndicator } from "../../../../components/ProgressIndicator";
+import { set } from "date-fns";
 
 const AddNewsAndEvents = () => {
+  const { currentUser } = useOutletContext();
   const [news, setNews] = useState("");
   const [newsHeadline, setNewsHeadline] = useState("");
   const [file, setFile] = useState(null);
   const [department, setDepartment] = useState(null);
   const [loading, setLoading] = useState(false);
   const { uploadFileToStorageAndFirestore } = ContextData();
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    if (!department) {
+      alert("Please select a file and department");
+      setLoading(false);
+      return;
+    }
     const newsData = {
       newsHeadline: newsHeadline,
       news: news,
       time: serverTimestamp(),
+      uploadedBy: { uid: currentUser.uid, name: currentUser.name, department: currentUser.department[0] },
     };
     const firestorePath = `departments/${department}/news/${newsHeadline}`;
     const storagePath = `forms/${department}/${file}`;

@@ -68,24 +68,32 @@ export const ContextProvider = ({ children }) => {
     console.log("File uploaded to FireBase");
   };
 
-  const uploadFileToStorageAndFirestore = async (file, storagePath, data,firestorePath) => {
+  const uploadFileToStorageAndFirestore = async (
+    file,
+    storagePath,
+    data,
+    firestorePath
+  ) => {
     try {
+      if (file) {
+        const storageRef = ref(storage, storagePath);
+
+        // Upload the file to Firebase Storage
+        const uploadResult = await uploadBytes(storageRef, file);
+        console.log("File uploaded successfully!!!");
+
+        // Upload completed successfully, now we can get the download URL
+        const downloadURL = await getDownloadURL(uploadResult.ref);
+        console.log("File available at", downloadURL);
+
+        const dataWithDownloadURL = { ...data, file: downloadURL };
+
+        //   Upload to FireBase
+        await uploadFileToFireBase(dataWithDownloadURL, firestorePath);
+      } else {
+        await uploadFileToFireBase(data, firestorePath);
+      }
       // Create a reference to the file in Firebase Storage
-      const storageRef = ref(storage, storagePath);
-
-      // Upload the file to Firebase Storage
-      const uploadResult = await uploadBytes(storageRef, file);
-      console.log("File uploaded successfully!!!");
-
-      // Upload completed successfully, now we can get the download URL
-      const downloadURL = await getDownloadURL(uploadResult.ref);
-      console.log("File available at", downloadURL);
-
-      const dataWithDownloadURL = { ...data, file: downloadURL };
-
-      //   Upload to FireBase
-      await uploadFileToFireBase( dataWithDownloadURL, firestorePath);
-
     } catch (error) {
       console.log(error);
     }
