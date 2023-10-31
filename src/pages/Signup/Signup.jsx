@@ -75,6 +75,8 @@ const Signup = () => {
               department: arrayUnion(department),
               jobTitle: jobTitle,
               jobDescription: jobDescription,
+              physicalAddress: "",
+              alternateEmail: "",
             };
 
             await addingNewUsers(uid, userObject, name);

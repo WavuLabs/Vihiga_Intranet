@@ -14,8 +14,9 @@ import {
   serverTimestamp,
   getDocs,
 } from "firebase/firestore";
-import { auth, db } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const UserContext = createContext();
 
@@ -61,6 +62,35 @@ export const ContextProvider = ({ children }) => {
     console.log("Document successfully written!");
   };
 
+  const uploadFileToFireBase = async (data, path) => {
+    const Ref = doc(db, path);
+    await setDoc(Ref, data);
+    console.log("File uploaded to FireBase");
+  };
+
+  const uploadFileToStorageAndFirestore = async (file, storagePath, data,firestorePath) => {
+    try {
+      // Create a reference to the file in Firebase Storage
+      const storageRef = ref(storage, storagePath);
+
+      // Upload the file to Firebase Storage
+      const uploadResult = await uploadBytes(storageRef, file);
+      console.log("File uploaded successfully!!!");
+
+      // Upload completed successfully, now we can get the download URL
+      const downloadURL = await getDownloadURL(uploadResult.ref);
+      console.log("File available at", downloadURL);
+
+      const dataWithDownloadURL = { ...data, file: downloadURL };
+
+      //   Upload to FireBase
+      await uploadFileToFireBase( dataWithDownloadURL, firestorePath);
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const setOnlineStatusTrue = async (uid) => {
     try {
       uid &&
@@ -94,6 +124,8 @@ export const ContextProvider = ({ children }) => {
     addingUserToDepartment,
     setOnlineStatusTrue,
     setOnlineStatusFalse,
+    uploadFileToFireBase,
+    uploadFileToStorageAndFirestore,
     serverTime,
   };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

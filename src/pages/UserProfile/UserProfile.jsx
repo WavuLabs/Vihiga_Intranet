@@ -250,20 +250,25 @@ const UserProfile = () => {
           >
             <TextInputComponents
               placeholder="Enter Job Title"
+              label="Job Title"
               value={jobTitle}
+              helperText="Please Enter your Job Title"
               onChange={(e) => setJobTitle(e.target.value)}
             />
             <TextInputComponents
               placeholder="Enter Department"
+              label="Department"
               value={department}
               onChange={(e) => setDepartment(e.target.value)}
             />
             <TextInputComponents
+              label="Job Description"
               placeholder="Enter Job Description"
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
             />
             <TextInputComponents
+              label="Name"
               id="name"
               type="text"
               placeholder="Enter Name"
@@ -278,6 +283,7 @@ const UserProfile = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <TextInputComponents
+              label="Contacts"
               id="number"
               type="number"
               placeholder="Enter Phone Number"
@@ -285,11 +291,13 @@ const UserProfile = () => {
               onChange={(e) => setContacts(e.target.value)}
             />
             <TextInputComponents
+              label="ID"
               placeholder="Enter id number"
               value={id}
               onChange={(e) => setId(e.target.value)}
             />
             <TextInputComponents
+              label="Next of Kin"
               placeholder="Enter Next of kin"
               value={nextOfKin}
               onChange={(e) => setNextOfKin(e.target.value)}
