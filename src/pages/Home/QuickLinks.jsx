@@ -21,7 +21,7 @@ const QuickLinks = () => {
       name: "Pending Approvals",
       icon: () => <ApprovalIcon fontSize="large" />,
     },
-    { name: "Add Notice", icon: () => <NewspaperIcon /> },
+    { name: "Add News/Notice", icon: () => <NewspaperIcon /> },
     { name: "Add Events", icon: () => <EventIcon /> },
   ];
   const handleOpenDialog = (name) => {
