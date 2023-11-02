@@ -2,12 +2,15 @@ import React from "react";
 import { Avatar } from "@mui/material";
 import { faker } from "@faker-js/faker";
 
-const NewsItem = ({ item }) => {
+const NewsItem = ({ props }) => {
+  const { item, handleDialog, setNewsItem } = props;
   const { news, newsHeadline, uploadedBy, file } = item;
   const image = file ? file : faker.image.url();
+
   const handleClick = (e) => {
     e.preventDefault();
-    console.log("Clicked");
+    setNewsItem(item);
+    handleDialog();
   };
   return (
     <div
@@ -26,7 +29,7 @@ const NewsItem = ({ item }) => {
         <div className="flex-1 col ">
           <h2 className="first-letter:uppercase">{newsHeadline}</h2>
           <p className="text-sm text-white/40 text-ellipsis overflow-hidden">
-            {news?.length > 100 ? news.slice(0, 400) + "..." : news}
+            {news?.length > 100 ? news.slice(0, 300) + "..." : news}
           </p>
         </div>
         <div className="flex flex-row m-2 space-x-3">

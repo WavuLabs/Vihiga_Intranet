@@ -14,7 +14,7 @@ const EventItem = (props) => {
   );
 
   return (
-    <div className="grid grid-cols-4 items-center  w-full p-2">
+    <div className="grid grid-cols-4 items-center  w-full p-2 cursor-pointer">
       <p className="font-mono text-sm">{format(eventDay, "dd MMMM")}</p>
       <div className="col-span-2 mx-2 px-2 ">
         <p className="text-blue-600 text-xl">{eventName}</p>

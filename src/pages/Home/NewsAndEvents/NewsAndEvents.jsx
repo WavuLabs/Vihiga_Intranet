@@ -6,10 +6,15 @@ import { useOutletContext } from "react-router-dom";
 import EventItem from "./Components/EventItem";
 import NewsItem from "./Components/NewsItem";
 import { DateRangePicker } from "react-date-range";
-import { addDays } from "date-fns";
+import { addDays, set } from "date-fns";
+import DialogComponent from "../../../components/DialogComponent";
+import NewsDialogItem from "./Components/NewsDialogItem";
 const all = -1000;
+
 const NewsAndEvents = () => {
   const { currentUser } = useOutletContext();
+  const [open, setOpen] = useState(false);
+  const [newsItem, setNewsItem] = useState(null);
   const [showAll, setShowAll] = useState(false);
   const [filterNews, setFilterNews] = useState(null);
   const [eventsInRange, setEventsInRange] = useState(null);
@@ -59,6 +64,7 @@ const NewsAndEvents = () => {
   const toggleShowAll = () => setShowAll(!showAll);
   const displayedEvents = showAll ? eventsInRange : eventsData?.slice(0, 3);
   const displayedNews = showAll ? filterNews : filterNews?.slice(0, 3);
+  const handleDialog = () => setOpen(!open);
 
   return (
     <div className="my-5 mx-3 w-full h-h-[90vh] overflow-clip">
@@ -72,7 +78,7 @@ const NewsAndEvents = () => {
             <div className=" grid grid-flow-row gap-5 m-1 ">
               {displayedNews?.map((item, index) => (
                 <div className="m-1" key={index}>
-                  <NewsItem item={item} />
+                  <NewsItem props={{ item, handleDialog, setNewsItem }} />
                 </div>
               ))}
             </div>
@@ -101,6 +107,9 @@ const NewsAndEvents = () => {
           )}
         </div>
       </div>
+      <DialogComponent props={{ open, setOpen }}>
+        <NewsDialogItem props={{ newsItem }} />
+      </DialogComponent>
     </div>
   );
 };

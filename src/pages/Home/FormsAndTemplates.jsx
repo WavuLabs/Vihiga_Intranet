@@ -2,19 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import TuneIcon from "@mui/icons-material/Tune";
 import { TextField } from "@mui/material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import DropDown from "../../components/DropDown";
-import RadioGroupComponent from "../../components/RadioGroupComponent";
-import { departments } from "../../constants/Constants";
-import { AiFillCloseCircle } from "react-icons/ai";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../APIs/firebase";
+import SelectDepartment from "../../components/SelectDepartment";
+import { useOutletContext } from "react-router-dom";
 
 const FormsAndTemplates = () => {
+  const { currentUser } = useOutletContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [department, setDepartment] = useState("Executive");
   const [loading, setLoading] = useState(false);
-  const [selectDepartment, setSelectDepartment] = useState(false);
   const [searchIntatiated, setSearchIntatiated] = useState(false);
   const [forms, setForms] = useState([]);
   const inputRef = useRef();
@@ -29,12 +26,6 @@ const FormsAndTemplates = () => {
     const Ref = collection(db, `departments/${department}/files`);
     const dataArray = [];
     try {
-      // const q = query(Ref, where("name", "==", name));
-      // const querySnapshot = await getDocs(q);
-      // querySnapshot.forEach((doc) => {
-      //   dataArray.push(doc.data());
-      // });
-
       const snapshotData = await getDocs(Ref);
       snapshotData.forEach((doc) => {
         dataArray.push(doc.data());
@@ -52,18 +43,21 @@ const FormsAndTemplates = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      // setTimeout(() => {
       setLoading(false);
-      // }, 2000);
     }
   };
 
   const handleSearchItemClick = (file) => {
     window.open(file);
   };
+
   useEffect(() => {
     getForms(searchQuery, department);
   }, [department]);
+
+  useEffect(() => {
+    setDepartment(currentUser?.department);
+  }, [currentUser]);
 
   return (
     <div className="w-full my-[7vh]">
@@ -92,30 +86,8 @@ const FormsAndTemplates = () => {
             //   ),
             // }}
           />
-          {
-            <div className="rows-center">
-              <DropDown
-                Title={
-                  <>
-                    Select Department <ArrowDropDownIcon fontSize="large" />
-                  </>
-                }
-              >
-                <RadioGroupComponent
-                  state={department}
-                  setState={setDepartment}
-                  data={departments}
-                />
-              </DropDown>
-              {/* Display Selected Group */}
-              {department && (
-                <p className="bg-blue-950 rows-center rounded-md p-1 gap-x-2">
-                  {department}
-                  <AiFillCloseCircle onClick={() => setDepartment(null)} />
-                </p>
-              )}
-            </div>
-          }
+          <SelectDepartment state={department} setState={setDepartment} />
+
           {searchIntatiated &&
             (loading === true ? (
               <Skeleton
@@ -129,10 +101,10 @@ const FormsAndTemplates = () => {
             ) : (
               <div className=" w-full m-4">
                 {forms.length > 0 ? (
-                  <div className="grid grid-cols-3 w-full m-4 mx-[2vw]">
+                  <div className="grid grid-cols-5 w-full m-4 mx-[2vw]">
                     {forms.map((item, index) => (
                       <button
-                        className="bg-slate-900 p-2 h-[15vh] w-[10vw] rounded-xl col justify-evenly items-center"
+                        className="bg-slate-900 p-2 h-[20vh] w-[15vw] rounded-xl col justify-evenly items-center"
                         key={index}
                         onClick={() => handleSearchItemClick(item.file)}
                       >

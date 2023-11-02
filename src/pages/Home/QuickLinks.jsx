@@ -37,12 +37,12 @@ const QuickLinks = () => {
         return <UpLoadForms handleClose={handleClose} />;
       case "Pending Approvals":
         return <PendingApprovals handleClose={handleClose} />;
-      case "Add Notice":
+      case "Add News/Notice":
         return <AddNews handleClose={handleClose} />;
       case "Add Events":
         return <AddEvents handleClose={handleClose} />;
       default:
-        return null;
+        return <p>Not Found</p>;
     }
   };
   return (

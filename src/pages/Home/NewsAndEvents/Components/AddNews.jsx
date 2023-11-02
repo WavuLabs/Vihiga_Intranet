@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
-import { serverTimestamp } from "firebase/firestore";
+import { limit, serverTimestamp } from "firebase/firestore";
 import SelectDepartment from "../../../../components/SelectDepartment";
 import { ContextData } from "../../../../APIs/contexts/Context";
 import { ProgressIndicator } from "../../../../components/ProgressIndicator";
@@ -62,14 +62,23 @@ const AddNews = ({ handleClose }) => {
         <TextField
           label="News Headline"
           value={newsHeadline}
-          onChange={(e) => setNewsHeadline(e.target.value)}
-          multiline
-          className="w-[50vw] m-28 "
+          onChange={(e) => {
+            if (e.target.value.length <= 100) {
+              setNewsHeadline(e.target.value);
+            }
+          }}
+          error={newsHeadline.length > 100}
+          helperText={
+            newsHeadline.length > 100
+              ? "Limit 100 characters"
+              : `${newsHeadline.length}/100 characters`
+          }
+          className="w-[50vw]"
           margin="normal"
           variant="outlined"
           placeholder="Enter News"
           required
-          // size="small"
+          maxLength={10}
         />
         <p className="text-sm text-gray-500 m-2">News</p>
         <TextField
