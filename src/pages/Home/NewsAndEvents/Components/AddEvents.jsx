@@ -5,16 +5,19 @@ import { serverTimestamp } from "firebase/firestore";
 import SelectDepartment from "../../../../components/SelectDepartment";
 import { ContextData } from "../../../../APIs/contexts/Context";
 import { ProgressIndicator } from "../../../../components/ProgressIndicator";
+import { DateTimePicker, TimePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const AddEvents = () => {
   const { currentUser } = useOutletContext();
-  const [event, setEvent] = useState("");
+  const [eventDetails, setEventDetails] = useState("");
   const [eventName, setEventName] = useState("");
+  const [eventStartTime, setEventStartTime] = useState("");
+  const [eventEndTime, setEventEndTime] = useState("");
   const [file, setFile] = useState(null);
   const [department, setDepartment] = useState(null);
   const [loading, setLoading] = useState(false);
   const { uploadFileToStorageAndFirestore } = ContextData();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,12 +29,17 @@ const AddEvents = () => {
     }
     const eventData = {
       eventName: eventName,
-      event: event,
-      time: serverTimestamp(),
-      uploadedBy: { uid: currentUser.uid, name: currentUser.name, department: currentUser.department[0] },
+      eventDetails: eventDetails,
+      uploadTime: serverTimestamp(),
+      eventTime: { eventStartTime: eventStartTime, eventEndTime: eventEndTime },
+      uploadedBy: {
+        uid: currentUser.uid,
+        name: currentUser.name,
+        department: currentUser.department[0],
+      },
     };
-    const firestorePath = `departments/${department}/news/${eventName}`;
-    const storagePath = `forms/${department}/${file}`;
+    const firestorePath = `departments/${department}/events/${eventName}`;
+    const storagePath = `forms/${department}/events/${file?.name}`;
 
     await uploadFileToStorageAndFirestore(
       file,
@@ -39,6 +47,7 @@ const AddEvents = () => {
       eventData,
       firestorePath
     );
+    console.log("Event Added");
     setLoading(false);
   };
 
@@ -65,16 +74,31 @@ const AddEvents = () => {
           required
           // size="small"
         />
-        <p className="text-sm text-gray-500 m-2">News</p>
+        <div className="flex flex-row space-x-2">
+          <DateTimePicker
+            label="Event Start Time"
+            defaultValue={dayjs()}
+            onChange={(e) => {
+              setEventStartTime(new Date(e));
+              console.log(new Date(e));
+            }}
+          />
+          <DateTimePicker
+            label="Event End Time"
+            defaultValue={dayjs()}
+            onChange={(e) => setEventEndTime(new Date(e))}
+          />
+        </div>
+        <p className="text-sm text-gray-500 m-2">Event</p>
         <TextField
           label="Event Details"
-          value={event}
-          onChange={(e) => setEvent(e.target.value)}
+          value={eventDetails}
+          onChange={(e) => setEventDetails(e.target.value)}
           multiline
           className="flex-grow flex-1"
           variant="outlined"
           rows={10}
-          placeholder="News Details"
+          placeholder="Event Details"
           fullWidth
           required
         />

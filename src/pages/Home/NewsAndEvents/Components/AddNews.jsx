@@ -7,7 +7,7 @@ import { ContextData } from "../../../../APIs/contexts/Context";
 import { ProgressIndicator } from "../../../../components/ProgressIndicator";
 import { set } from "date-fns";
 
-const AddNewsAndEvents = () => {
+const AddNews = ({ handleClose }) => {
   const { currentUser } = useOutletContext();
   const [news, setNews] = useState("");
   const [newsHeadline, setNewsHeadline] = useState("");
@@ -15,7 +15,6 @@ const AddNewsAndEvents = () => {
   const [department, setDepartment] = useState(null);
   const [loading, setLoading] = useState(false);
   const { uploadFileToStorageAndFirestore } = ContextData();
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,11 +27,15 @@ const AddNewsAndEvents = () => {
     const newsData = {
       newsHeadline: newsHeadline,
       news: news,
-      time: serverTimestamp(),
-      uploadedBy: { uid: currentUser.uid, name: currentUser.name, department: currentUser.department[0] },
+      uploadTime: serverTimestamp(),
+      uploadedBy: {
+        uid: currentUser.uid,
+        name: currentUser.name,
+        department: currentUser.department[0],
+      },
     };
     const firestorePath = `departments/${department}/news/${newsHeadline}`;
-    const storagePath = `forms/${department}/${file}`;
+    const storagePath = `forms/${department}/news/${file.name}`;
 
     await uploadFileToStorageAndFirestore(
       file,
@@ -41,6 +44,8 @@ const AddNewsAndEvents = () => {
       firestorePath
     );
     setLoading(false);
+    alert("News Added");
+    handleClose();
   };
 
   return (
@@ -101,4 +106,4 @@ const AddNewsAndEvents = () => {
   );
 };
 
-export default AddNewsAndEvents;
+export default AddNews;
