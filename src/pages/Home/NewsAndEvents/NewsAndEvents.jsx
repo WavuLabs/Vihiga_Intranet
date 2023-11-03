@@ -67,12 +67,12 @@ const NewsAndEvents = () => {
   const handleDialog = () => setOpen(!open);
 
   return (
-    <div className="my-5 mx-3 w-full h-h-[90vh] overflow-clip">
+    <div className="my-5 mx-3 w-90vw h-h-[90vh] overflow-clip border border-white/60">
       <div className="row justify-between">
         <p className="p-title my-3 p-3">News & Events</p>
         <button onClick={() => toggleShowAll()}>Show All</button>
       </div>
-      <div className="grid grid-cols-3 space-x-2 px-2 h-[70vh] ">
+      <div className="grid sm:grid-cols-3 space-x-2 px-2 sm:h-[70vh] ">
         <div className="col-span-2 overflow-y-scroll">
           {filterNews ? (
             <div className=" grid grid-flow-row gap-5 m-1 ">
@@ -86,9 +86,9 @@ const NewsAndEvents = () => {
             <p className="text-center self-center">No News</p>
           )}
         </div>
-        <div className="col overflow-y-scroll">
+        <div className="col overflow-y-scroll w-full">
           <DateRangePicker
-            className=" text-black w-[30vw]"
+            className=" text-black sm:w-[30vw] w-full"
             onChange={(item) => setCustomRange([item.selection])}
             showSelectionPreview={true}
             moveRangeOnFirstSelection={false}

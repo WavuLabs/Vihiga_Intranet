@@ -21,7 +21,7 @@ const SelectDepartment = ({ state, setState }) => {
           data={departments}
         />
       </DropDown>
-      {/* Display Selected Group */}
+      
       {state && (
         <p className="bg-blue-950 rows-center rounded-md p-1 gap-x-2">
           {state}

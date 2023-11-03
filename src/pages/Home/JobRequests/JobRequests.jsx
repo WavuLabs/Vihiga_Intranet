@@ -14,14 +14,15 @@ import TravelOut from "./Components/TravelOut";
 import PendingApprovals from "../../PendingApprovals/PendingApprovals";
 import { useOutletContext } from "react-router-dom";
 import { Transition } from "../../../constants/Constants";
+import DialogComponent from "../../../components/DialogComponent";
 
 const JobRequests = () => {
   const Item = ({ title, color, Component, handleClick }) => (
     <Button
       sx={{
         backgroundColor: "rgb(15 23 42 )",
-        margin: "10px",
-        borderRadius: "20px",
+        margin: "2vw",
+        borderRadius: "2vw",
         transition: "background-color 0.3s",
         "&:hover": {
           backgroundColor: "rgb(15 23 42 20)",
@@ -31,7 +32,7 @@ const JobRequests = () => {
         handleClose();
         handleClick && handleClick();
       }}
-      className={`rounded-3xl m-2 p-4 w-[20vw] h-[15vw] cols-center`}
+      className={` m-2 p-4 sm:w-[20vw] w-4/5 h-[15vw] cols-center`}
     >
       <p>{title}</p>
       {Component}
@@ -49,7 +50,7 @@ const JobRequests = () => {
       jobTitle === "Exco" ||
       jobTitle === "Chief Officer" ||
       jobTitle === "CECM";
-      
+
     if (conditions) setHead(true);
   }, [currentUser]);
 
@@ -78,7 +79,7 @@ const JobRequests = () => {
   return (
     <div className="w-full h-full my-5">
       <p className="p-title m-2 p-3">JobRequests</p>
-      <div className="grid grid-cols-3 place-items-center">
+      <div className="grid sm:grid-cols-3 grid-cols-2 place-items-center">
         <Item
           title={"Request Leave"}
           handleClick={() => setSelected("Request Leave")}
@@ -106,24 +107,9 @@ const JobRequests = () => {
           />
         )}
       </div>
-      <Dialog
-        fullWidth={true}
-        maxWidth="lg"
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-        className="p-4 m-2 relative"
-      >
-        <div className="relative col ">
-          <button
-            className="fixed bg-black/60 z-10 p-0 self-end rounded-none"
-            onClick={handleClose}
-          >
-            <CloseIcon />
-          </button>
-          {handleDisplay()}
-        </div>
-      </Dialog>
+      <DialogComponent props={{ open, setOpen }}>
+        {handleDisplay()}
+      </DialogComponent>
     </div>
   );
 };

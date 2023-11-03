@@ -64,7 +64,7 @@ const FormsAndTemplates = () => {
       <p className="text-white/60 text-center">Forms and Templates</p>
       {/* Create a Search Box */}
       <SkeletonTheme baseColor="#FFFFFF" highlightColor="#444">
-        <form onSubmit={handleSubmit} className="cols-center w-full m-4">
+        <form onSubmit={handleSubmit} className="cols-center w-full sm:m-4">
           <TextField
             ref={inputRef}
             type="search"
@@ -75,16 +75,6 @@ const FormsAndTemplates = () => {
               setSearchQuery(event.target.value);
               getForms(event.target.value, department);
             }}
-            // InputProps={{
-            //   endAdornment: (
-            //     <button>
-            //       <TuneIcon
-            //         onClick={() => setSelectDepartment(!selectDepartment)}
-            //         className="text-white/60"
-            //       />
-            //     </button>
-            //   ),
-            // }}
           />
           <SelectDepartment state={department} setState={setDepartment} />
 
@@ -101,11 +91,11 @@ const FormsAndTemplates = () => {
             ) : (
               <div className=" w-full m-4">
                 {forms.length > 0 ? (
-                  <div className="grid grid-cols-5 w-full m-4 mx-[2vw]">
+                  <div className="grid sm:grid-cols-5 grid-flow-col w-full m-4 mx-[2vw]">
                     {forms.map((item, index) => (
                       <button
-                        className="bg-slate-900 p-2 h-[20vh] w-[15vw] rounded-xl col justify-evenly items-center"
                         key={index}
+                        className="bg-slate-900 m-2 p-2 h-[20vh] sm:w-[15vw] rounded-xl col justify-evenly items-center"
                         onClick={() => handleSearchItemClick(item.file)}
                       >
                         {item.name}

@@ -70,19 +70,18 @@ const Home = () => {
     <>
       {!loadingUSERS ? (
         <>
-          <div className="relative flex flex-row overflow-clip h-[85vh]">
-            <div className="w-[60vw] flex ">
+          <div className="relative row overflow-clip h-[85vh]">
+            <div className="sm:w-[60vw] w-4/5 col ">
               <img
-                // onClick={scrollToElement}
                 src={Logo}
                 alt="logo"
                 className="flex-1 opacity-60 filter-blur "
               />
             </div>
             <div className="z-10 w-[45vw]   absolute h-full right-0 bg-slate-800/5 flex flex-col justify-center -translate-x-[5vw]s ">
-              <p className="text-7xl font-bold font-">Welcome to</p>
-              <p className="text-5xl font-semibold">Vihiga County Intranet</p>
-              <div className="text-primary text-2xl font-semibold ">
+              <p className="sm:text-7xl font-bold font-">Welcome to</p>
+              <p className="sm:text-5xl font-semibold">Vihiga County Intranet</p>
+              <div className="text-primary sm:text-2xl font-semibold ">
                 <Typewriter
                   options={{
                     strings: [
