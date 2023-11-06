@@ -40,7 +40,7 @@ const QuickLinks = () => {
 
   useEffect(() => {
     checkForHeadOfDepartment();
-  }, []);
+  }, [currentUser]);
 
   const handleDisplay = () => {
     switch (selected) {

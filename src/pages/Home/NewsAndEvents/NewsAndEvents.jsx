@@ -9,12 +9,15 @@ import { DateRangePicker } from "react-date-range";
 import { addDays, set } from "date-fns";
 import DialogComponent from "../../../components/DialogComponent";
 import NewsDialogItem from "./Components/NewsDialogItem";
+import EventDialogItem from "./Components/EventDialogItem";
 const all = -1000;
 
 const NewsAndEvents = () => {
   const { currentUser } = useOutletContext();
   const [open, setOpen] = useState(false);
+  const [news, setNews] = useState(true);
   const [newsItem, setNewsItem] = useState(null);
+  const [eventsItem, setEventsItem] = useState(null);
   const [showAll, setShowAll] = useState(false);
   const [filterNews, setFilterNews] = useState(null);
   const [eventsInRange, setEventsInRange] = useState(null);
@@ -77,9 +80,10 @@ const NewsAndEvents = () => {
           {filterNews ? (
             <div className=" grid grid-flow-row gap-5 m-1 ">
               {displayedNews?.map((item, index) => (
-                <div className="m-1" key={index}>
-                  <NewsItem props={{ item, handleDialog, setNewsItem }} />
-                </div>
+                <NewsItem
+                  key={index}
+                  props={{ item, handleDialog, setNewsItem, setNews }}
+                />
               ))}
             </div>
           ) : (
@@ -100,7 +104,12 @@ const NewsAndEvents = () => {
           <h1>Events</h1>
           {eventsData ? (
             displayedEvents?.map((event, index) => {
-              return <EventItem key={index} event={event} />;
+              return (
+                <EventItem
+                  key={index}
+                  props={{ event, handleDialog, setEventsItem, setNews }}
+                />
+              );
             })
           ) : (
             <p className="text-center self-center">No Events</p>
@@ -108,7 +117,11 @@ const NewsAndEvents = () => {
         </div>
       </div>
       <DialogComponent props={{ open, setOpen }}>
-        <NewsDialogItem props={{ newsItem }} />
+        {news ? (
+          <NewsDialogItem props={{ newsItem }} />
+        ) : (
+          <EventDialogItem props={{ eventsItem }} />
+        )}
       </DialogComponent>
     </div>
   );

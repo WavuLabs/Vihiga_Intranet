@@ -3,7 +3,7 @@ import { Avatar } from "@mui/material";
 import { faker } from "@faker-js/faker";
 
 const NewsItem = ({ props }) => {
-  const { item, handleDialog, setNewsItem } = props;
+  const { item, handleDialog, setNewsItem, setNews } = props;
   const { news, newsHeadline, uploadedBy, file } = item;
   const image = file ? file : faker.image.url();
 
@@ -11,6 +11,7 @@ const NewsItem = ({ props }) => {
     e.preventDefault();
     setNewsItem(item);
     handleDialog();
+    setNews(true)
   };
   return (
     <div
