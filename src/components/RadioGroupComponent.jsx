@@ -12,7 +12,7 @@ const RadioGroupComponent = ({ state, setState, data }) => {
     <FormControl component="fieldset">
       <RadioGroup
         className="p-1 px-2"
-        value={state}
+        value={state ? state : "Executive"}
         onChange={handleOptionChange}
       >
         {data.map((item, index) => (

@@ -1,125 +1,69 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Dialog,
-  Slide,
-  Tab,
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-} from "@mui/material";
+import { Avatar, Button, Select } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import CloseIcon from "@mui/icons-material/Close";
-import GroupsIcon from "@mui/icons-material/Groups";
-import MapsHomeWorkIcon from "@mui/icons-material/MapsHomeWork";
-import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 import { auth, db, storage } from "../../APIs/firebase";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { TextInputComponents } from "../../components/TextInputComponents";
-import { set } from "date-fns";
-import {
-  addDoc,
-  doc,
-  setDoc,
-  onSnapshot,
-  arrayUnion,
-} from "firebase/firestore";
+import { doc, setDoc, arrayUnion } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { PhotoCamera } from "@mui/icons-material";
 import { ProgressIndicator } from "../../components/ProgressIndicator";
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
-const TabPanel = (props) => {
-  const { children, data, index, ...other } = props;
-  return (
-    <TableContainer
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#FFFFFF",
-      }}
-    >
-      <Table className="m-2 p-2 border col-center text-black">
-        <TableHead>
-          <TableRow className="bg-slate-200">
-            <TableCell>Name</TableCell>
-            <TableCell>Amount</TableCell>
-            <TableCell>Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {/* {data.map((item, index) => ( */}
-          <TableRow key={index}>
-            <TableCell>Car Loan</TableCell>
-            <TableCell>2000</TableCell>
-            <TableCell>Yes</TableCell>
-          </TableRow>
-          {/* ))} */}
-        </TableBody>
-      </Table>
-      <Button
-        variant="contained"
-        color="primary"
-        // onClick={handleSubmit}
-        className="m-4 self-end"
-      >
-        Submit
-      </Button>
-    </TableContainer>
-  );
-};
+import DialogComponent from "../../components/DialogComponent";
+import SelectDepartment from "../../components/SelectDepartment";
+import { set } from "date-fns";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const { uid, currentUser } = useOutletContext();
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState(currentUser?.email);
-  const [name, setName] = useState(currentUser?.name);
-  const [contacts, setContacts] = useState(currentUser?.contacts);
-  const [id, setId] = useState(currentUser?.id);
-  const [nextOfKin, setNextOfKin] = useState(currentUser?.nextOfKin);
-  const [jobTitle, setJobTitle] = useState(currentUser?.title);
   const [department, setDepartment] = useState(currentUser?.department);
-  const [jobDescription, setJobDescription] = useState(
-    currentUser?.jobDescription
-  );
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [showProgressIndicator, setShowProgressIndicator] = useState(false);
-  const [initialDataFetched, setInitialDataFetched] = useState(false);
-
+  const [updatedUserValues, setUpdatedUserValues] = useState();
+  const handleClose = () => setOpen(!open);
   const userDocRef = doc(db, "users", uid);
 
-  const handleClose = () => {
-    setOpen(!open);
+  useEffect(() => {
+    if (!currentUser) return;
+    setDepartment(currentUser?.department);
+    setUpdatedUserValues(currentUser);
+    console.log("Current user Count");
+  }, []);
+
+  useEffect(() => {
+    if (updatedUserValues?.department !== department) {
+      if (!department) {
+        console.log("No Department");
+        return;
+      }
+      handleFieldChange("department", department);
+    }
+  }, [department]);
+
+  const handleFieldChange = (field, value) => {
+    //check if the updatedUserValues is set
+    if (!updatedUserValues) setUpdatedUserValues(currentUser);
+
+    //set the updatedUserValues
+    setUpdatedUserValues((prevValues) => ({
+      ...prevValues,
+      [field]: value,
+    }));
+    console.log(field, value);
   };
 
   const addData = async () => {
-    if (!uid) return;
-    const userObject = {
-      name: name,
-      email: email,
-      contacts: contacts,
-      id: id,
-      nextOfKin: nextOfKin,
-      department: arrayUnion(department),
-      jobTitle: jobTitle,
-      jobDescription: jobDescription,
-    };
-    await setDoc(userDocRef, userObject, { merge: true });
+    console.log(updatedUserValues);
+    await setDoc(userDocRef, updatedUserValues, { merge: true });
     alert("Your Profile successfully updated!");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!department) {
+      alert("Please Select a Department");
+      return;
+    }
     await addData();
     handleClose();
   };
@@ -145,18 +89,11 @@ const UserProfile = () => {
       if (currentUser?.profile_picture == null) {
         alert("Try to refresh the page to see the changes");
       }
-
-      setInitialDataFetched(false);
     } catch (error) {
       console.error(error);
     } finally {
       setShowProgressIndicator(false);
     }
-  };
-
-  const handleUpLoadImage = (e) => {
-    e.preventDefault();
-    uploadRestaurantImage();
   };
 
   useEffect(() => {
@@ -221,6 +158,7 @@ const UserProfile = () => {
           <p>Emergency Contacts</p>
           <p>Alternative Email</p>
           <p>{currentUser?.contacts}</p>
+          <p>{updatedUserValues?.contacts}</p>
         </div>
       </div>
       <div className=" grid grid-flow-col w-[40vw] h-[10vh]">
@@ -229,84 +167,69 @@ const UserProfile = () => {
           Edit Profile
         </Button>
       </div>
-      <Dialog
-        fullWidth={true}
-        maxWidth="lg"
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-        className="p-4 m-2 relative"
-      >
-        <div className="relative col ">
-          <button
-            className="fixed bg-black/60 z-10 p-0 self-end rounded-none"
-            onClick={handleClose}
-          >
-            <CloseIcon />
-          </button>
-          <form
-            onSubmit={handleSubmit}
-            className="h-[80vh] m-3 p-1 col mx-[10vw]"
-          >
-            <TextInputComponents
-              placeholder="Enter Job Title"
-              label="Job Title"
-              value={jobTitle}
-              helperText="Please Enter your Job Title"
-              onChange={(e) => setJobTitle(e.target.value)}
-            />
-            <TextInputComponents
-              placeholder="Enter Department"
-              label="Department"
-              value={department}
-              onChange={(e) => setDepartment(e.target.value)}
-            />
-            <TextInputComponents
-              label="Job Description"
-              placeholder="Enter Job Description"
-              value={jobDescription}
-              onChange={(e) => setJobDescription(e.target.value)}
-            />
-            <TextInputComponents
-              label="Name"
-              id="name"
-              type="text"
-              placeholder="Enter Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <TextInputComponents
-              id="email"
-              type="email"
-              placeholder="Enter Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextInputComponents
-              label="Contacts"
-              id="number"
-              type="number"
-              placeholder="Enter Phone Number"
-              value={contacts}
-              onChange={(e) => setContacts(e.target.value)}
-            />
-            <TextInputComponents
-              label="ID"
-              placeholder="Enter id number"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-            />
-            <TextInputComponents
-              label="Next of Kin"
-              placeholder="Enter Next of kin"
-              value={nextOfKin}
-              onChange={(e) => setNextOfKin(e.target.value)}
-            />
-            <div className="h-[1vh]" />
-            <Button type="submit">Submit</Button>
-          </form>
-        </div>
-      </Dialog>
+      <DialogComponent props={{ open, setOpen }}>
+        <form
+          onSubmit={handleSubmit}
+          className="h-[80vh] m-3 p-1 col mx-[10vw]"
+        >
+          <TextInputComponents
+            placeholder="Enter Job Title"
+            label="Job Title"
+            defaultValue={currentUser?.jobTitle}
+            helperText="Please Enter your Job Title"
+            onChange={(e) => handleFieldChange("jobTitle", e.target.value)}
+          />
+
+          <SelectDepartment state={department} setState={setDepartment} />
+
+          <TextInputComponents
+            label="Job Description"
+            placeholder="Enter Job Description"
+            defaultValue={currentUser?.jobDescription}
+            onChange={(e) =>
+              handleFieldChange("jobDescription", e.target.value)
+            }
+          />
+          <TextInputComponents
+            label="Name"
+            id="name"
+            type="text"
+            placeholder="Enter Name"
+            defaultValue={currentUser?.name}
+            onChange={(e) => handleFieldChange("name", e.target.value)}
+          />
+          <TextInputComponents
+            id="email"
+            type="email"
+            placeholder="Enter Email"
+            defaultValue={currentUser?.email}
+            onChange={(e) => handleFieldChange("email", e.target.value)}
+          />
+          <TextInputComponents
+            label="Contacts"
+            id="number"
+            type="number"
+            maxLength="10"
+            placeholder="Enter Phone Number"
+            defaultValue={currentUser?.contacts}
+            onChange={(e) => handleFieldChange("contacts", e.target.value)}
+          />
+          <TextInputComponents
+            label="ID"
+            placeholder="Enter id number"
+            defaultValue={currentUser?.id}
+            onChange={(e) => handleFieldChange("id", e.target.value)}
+          />
+          <TextInputComponents
+            label="Next of Kin"
+            placeholder="Enter Next of kin"
+            defaultValue={currentUser?.nextOfKin}
+            onChange={(e) => handleFieldChange("nextOfKin", e.target.value)}
+          />
+          <div className="h-[3vh]" />
+          <Button type="submit">Submit</Button>
+        </form>
+      </DialogComponent>
       {showProgressIndicator && (
         <div className="z-50 top-[5vh] cols-center h-[80vh] w-[80vw] absolute backdrop-blur-sm bg-white/30">
           <ProgressIndicator />

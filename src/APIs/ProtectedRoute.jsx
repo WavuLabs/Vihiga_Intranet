@@ -9,15 +9,15 @@ import {
   onSnapshot,
   orderBy,
   query,
+  where,
 } from "firebase/firestore";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useCollectionData, useDocument } from "react-firebase-hooks/firestore";
 import { ContextData } from "./contexts/Context";
 
 const ProtectedRoute = () => {
   const navigate = useNavigate();
   const values = useOutletContext();
   const { setOnlineStatusTrue } = ContextData();
-  const [userState, setUserState] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
   const [uid, setUID] = useState();
 
@@ -25,22 +25,10 @@ const ProtectedRoute = () => {
   const queryUsers = query(usersRef, orderBy("name", "asc"));
   const [USERS, loadingUSERS, errorUSERS] = useCollectionData(queryUsers);
 
-  const handleGetUsers = async () => {
-    const dataArray = [];
-    const querySnapshot = await getDocs(queryUsers);
-
-    querySnapshot.forEach((doc) => {
-      const docData = doc.data();
-      const snapshotData = { ...docData, documentID: doc.id };
-      dataArray.push(snapshotData);
-    });
-
-    setUserState(dataArray);
-  };
-
   const departmentRef = collection(db, `departments`);
   const queryDepartment = query(departmentRef, orderBy("members", "asc"));
-  const [DEPARTMENTS, loadingDEPARTMENTS, errorDEPARTMENTS] = useCollectionData(queryDepartment);
+  const [DEPARTMENTS, loadingDEPARTMENTS, errorDEPARTMENTS] =
+    useCollectionData(queryDepartment);
 
   //querying the Users
   const getUserName = (uid, setName, setProfilePic) => {
@@ -52,6 +40,24 @@ const ProtectedRoute = () => {
     setName(user.name);
     setProfilePic(user.profile_picture);
   };
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      const uid = currentUser?.uid;
+      if (uid) {
+        setOnlineStatusTrue(uid);
+        setUID(uid);
+
+        onSnapshot(doc(db, "users", uid), (doc) => {
+          setCurrentUser(doc.data());
+          console.log(currentUser, "User Data");
+        });
+      } else {
+        navigate("/", { replace: true });
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   const data = {
     ...values,
@@ -65,32 +71,6 @@ const ProtectedRoute = () => {
     uid,
     currentUser,
   };
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
-      const uid = currentUser?.uid;
-      if (uid) {
-        setOnlineStatusTrue(uid);
-        setUID(uid);
-
-        onSnapshot(doc(db, "users", uid), (doc) => {
-          setCurrentUser(doc.data());
-        });
-      } else {
-        navigate("/", { replace: true });
-      }
-    });
-    return unsubscribe;
-  }, []);
-
-  useEffect(() => {
-    if (loadingUSERS == false) {
-      setUserState(USERS);
-    }
-
-    errorUSERS && alert(errorUSERS, "error loading users");
-  }, [loadingUSERS]);
-
   return (
     <>
       {!loadingUSERS ? (

@@ -66,8 +66,6 @@ const JobRequests = () => {
         return <CarLoans handleClose={handleClose} />;
       case "Performance Appraisal":
         return <PerformanceAppraisal handleClose={handleClose} />;
-      case "Pending Approvals":
-        return <PendingApprovals handleClose={handleClose} />;
       case "Statutory Report":
         return <StatutoryReport handleClose={handleClose} />;
       case "Travel Out":
@@ -100,12 +98,6 @@ const JobRequests = () => {
           title="Statutory Report"
           handleClick={() => setSelected("Statutory Report")}
         />
-        {head && (
-          <Item
-            title={"Pending Approvals"}
-            handleClick={() => setSelected("Pending Approvals")}
-          />
-        )}
       </div>
       <DialogComponent props={{ open, setOpen }}>
         {handleDisplay()}

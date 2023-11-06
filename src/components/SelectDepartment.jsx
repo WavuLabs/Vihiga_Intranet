@@ -25,7 +25,7 @@ const SelectDepartment = ({ state, setState }) => {
       {state && (
         <p className="bg-blue-950 rows-center rounded-md p-1 gap-x-2">
           {state}
-          <AiFillCloseCircle onClick={() => setState(null)} />
+          <AiFillCloseCircle onClick={() => setState()} />
         </p>
       )}
     </div>

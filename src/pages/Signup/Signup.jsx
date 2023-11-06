@@ -26,9 +26,8 @@ import { PhotoCamera } from "@mui/icons-material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import RadioGroupComponent from "../../components/RadioGroupComponent";
-import { departments } from "../../constants/Constants";
-
-const JobTitles = ["Exco", "CECM", "Chief Officer", "Director"];
+import { JobTitles } from "../../constants/Constants";
+import SelectDepartment from "../../components/SelectDepartment";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -83,7 +82,12 @@ const Signup = () => {
 
             //ADDING THE USER TO THE GROUP SELECTED, TAKE THE UID AND ADD IT TO THE GROUP
             const DepartmentObject = {
-              members: arrayUnion({ uid: uid, name: name, jobTitle: jobTitle, jobDescription: jobDescription }),
+              members: arrayUnion({
+                uid: uid,
+                name: name,
+                jobTitle: jobTitle,
+                jobDescription: jobDescription,
+              }),
             };
 
             await addingUserToDepartment(department, DepartmentObject);
@@ -161,21 +165,21 @@ const Signup = () => {
           <p className="text-gray-200">Create account</p>
 
           <TextInputComponents
-            id="email"
+            label="email"
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <TextInputComponents
-            id="password"
+            label="password"
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <TextInputComponents
-            id="name"
+            label="name"
             type="text"
             placeholder="Name"
             value={name}
@@ -183,34 +187,14 @@ const Signup = () => {
           />
 
           <TextInputComponents
-            id="number"
+            label="number"
             type="number"
             placeholder="Enter Phone Number"
             value={number}
             onChange={(e) => setNumber(e.target.value)}
           />
-
           <div className="rows-center">
-            <DropDown
-              Title={
-                <>
-                  Select Department <ArrowDropDownIcon fontSize="large" />
-                </>
-              }
-            >
-              <RadioGroupComponent
-                state={department}
-                setState={setDepartment}
-                data={departments}
-              />
-            </DropDown>
-            {/* Display Selected Group */}
-            {department && (
-              <p className="bg-blue-950 rows-center rounded-md p-1 gap-x-2">
-                {department}
-                <AiFillCloseCircle onClick={() => setDepartment(null)} />
-              </p>
-            )}
+            <SelectDepartment state={department} setState={setDepartment} />
           </div>
           <div className="rows-center">
             <DropDown

@@ -8,6 +8,7 @@ import PendingApprovals from "../PendingApprovals/PendingApprovals";
 import AddNews from "./NewsAndEvents/Components/AddNews";
 import AddEvents from "./NewsAndEvents/Components/AddEvents";
 import DialogComponent from "../../components/DialogComponent";
+import { useOutletContext } from "react-router-dom";
 
 const data = [
   { name: "UpLoadForms", icon: () => <CloudUpload fontSize="large" /> },
@@ -17,8 +18,10 @@ const data = [
 ];
 
 const QuickLinks = () => {
+  const { uid, currentUser } = useOutletContext();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("");
+  const userJobTitle = currentUser?.JobTitle;
 
   const handleClose = () => setOpen(!open);
 
@@ -45,16 +48,20 @@ const QuickLinks = () => {
     <div className="">
       <p className="text-white/60 text-2xl ml-2">Quick Links</p>
       <div className="grid sm:grid-cols-4 grid-cols-2 items-center justify-evenly gap-2 m-5">
-        {data?.map((item, index) => (
-          <button
-            key={index}
-            className="bg-slate-900 p-2 h-[18vh] sm:w-[15vw] rounded-xl col justify-evenly items-center"
-            onClick={() => handleOpenDialog(item.name)}
-          >
-            {item.icon()}
-            <p>{item.name}</p>
-          </button>
-        ))}
+        {data?.map((item, index) => {
+          if (item.name === "Approvals" && userJobTitle !== "CECM" && userJobTitle !== "Chief Officer") return null;
+          console.log(userJobTitle, "userJobTitle");
+          return (
+            <button
+              key={index}
+              className="bg-slate-900 p-2 h-[18vh] sm:w-[15vw] rounded-xl col justify-evenly items-center"
+              onClick={() => handleOpenDialog(item.name)}
+            >
+              {item.icon()}
+              <p>{item.name}</p>
+            </button>
+          );
+        })}
       </div>
       <DialogComponent props={{ open, setOpen }}>
         {handleDisplay()}

@@ -24,7 +24,6 @@ const DialogComponent = ({ props, children }) => {
         >
           <Close />
         </button>
-        {console.log(open, "open")}
         {children}
       </div>
     </Dialog>

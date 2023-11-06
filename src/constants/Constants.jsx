@@ -2,7 +2,7 @@ import { Slide } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import React from "react";
 
-export const styles = {
+const styles = {
   root: {
     backgroundColor: "#f4433620",
   },
@@ -11,15 +11,15 @@ export const styles = {
     flexDirection: "column",
   },
   mp: {
-    margin: '0px 0px',
-    padding: '0px 0px',
+    margin: "0px 0px",
+    padding: "0px 0px",
   },
-  border : {
-    border: '1px solid black',
+  border: {
+    border: "1px solid black",
   },
 };
 
-export const colors = {
+const colors = {
   primary: "#f44336",
   primaryDark: "#f4433620",
   secondary: "#311B92",
@@ -29,7 +29,7 @@ export const colors = {
   green: "#11cb5f",
 };
 
-export const theme = createTheme({
+const theme = createTheme({
   components: {
     // Use `MuiDataGrid` on DataGrid, DataGridPro and DataGridPremium
     MuiDataGrid: {
@@ -44,7 +44,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           color: "black",
-          textAlign: 'center',
+          textAlign: "center",
         },
         head: {
           color: "black",
@@ -56,7 +56,6 @@ export const theme = createTheme({
         root: {
           color: "black",
         },
-
       },
     },
   },
@@ -78,12 +77,12 @@ export const theme = createTheme({
     mode: "dark",
   },
 });
-export const { width, height } = window.screen;
+const { width, height } = window.screen;
 
 export const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-export const departments = [
+const departments = [
   "Executive",
   "Transport & Infrastructure",
   "Finance & Economic Planning",
@@ -96,4 +95,6 @@ export const departments = [
   "Youth, Gender, Sports, Culture and Social Services",
   "Education, Science and Technical Vocational Training",
 ];
+const JobTitles = ["Exco", "CECM", "Chief Officer", "Director"];
 
+export { JobTitles, departments, styles, theme, colors, width, height };

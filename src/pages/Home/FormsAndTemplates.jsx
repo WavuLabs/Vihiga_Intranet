@@ -29,7 +29,7 @@ const FormsAndTemplates = () => {
       const snapshotData = await getDocs(Ref);
       snapshotData.forEach((doc) => {
         dataArray.push(doc.data());
-        console.log(doc.data(), "all data");
+        // console.log(doc.data(), "all data");
       });
 
       if (name === "") return setForms(dataArray);
@@ -37,7 +37,7 @@ const FormsAndTemplates = () => {
       const filteredData = dataArray.filter((item) =>
         item.name.toLowerCase().includes(name.toLowerCase())
       );
-      console.log(filteredData, "filtered data");
+      // console.log(filteredData, "filtered data");
 
       setForms(filteredData);
     } catch (error) {
