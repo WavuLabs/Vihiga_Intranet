@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Close, CloudUpload } from "@mui/icons-material";
 import NewspaperIcon from "@mui/icons-material/Newspaper";
 import EventIcon from "@mui/icons-material/Event";
@@ -9,6 +9,7 @@ import AddNews from "./NewsAndEvents/Components/AddNews";
 import AddEvents from "./NewsAndEvents/Components/AddEvents";
 import DialogComponent from "../../components/DialogComponent";
 import { useOutletContext } from "react-router-dom";
+import { tr } from "date-fns/locale";
 
 const data = [
   { name: "UpLoadForms", icon: () => <CloudUpload fontSize="large" /> },
@@ -21,7 +22,14 @@ const QuickLinks = () => {
   const { uid, currentUser } = useOutletContext();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState("");
-  const userJobTitle = currentUser?.JobTitle;
+  const [head, setHead] = useState();
+  const userJobTitle = currentUser?.jobTitle;
+  const titles = ["CECM", "Chief Officer", "Executive"];
+
+  const checkForHeadOfDepartment = () => {
+    setHead(titles.includes(userJobTitle));
+    console.log(head);
+  };
 
   const handleClose = () => setOpen(!open);
 
@@ -29,6 +37,10 @@ const QuickLinks = () => {
     setSelected(name);
     setOpen(!open);
   };
+
+  useEffect(() => {
+    checkForHeadOfDepartment();
+  }, []);
 
   const handleDisplay = () => {
     switch (selected) {
@@ -49,8 +61,8 @@ const QuickLinks = () => {
       <p className="text-white/60 text-2xl ml-2">Quick Links</p>
       <div className="grid sm:grid-cols-4 grid-cols-2 items-center justify-evenly gap-2 m-5">
         {data?.map((item, index) => {
-          if (item.name === "Approvals" && userJobTitle !== "CECM" && userJobTitle !== "Chief Officer") return null;
-          console.log(userJobTitle, "userJobTitle");
+          if (item.name === "Approvals" && !head) return;
+
           return (
             <button
               key={index}

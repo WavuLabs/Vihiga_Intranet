@@ -17,7 +17,7 @@ const UsersSideBar = () => {
 
   const getGroups = async () => {
     const user = USERS?.find((user) => user.uid === uid);
-    setUserGroups(user?.department);
+    setUserGroups([user?.department]);
   };
 
   const handleSearchChange = (event) => {
