@@ -125,7 +125,7 @@ const CarLoans = ({ handleClose }) => {
             </FormLabel>
             <RadioGroup
               className="p-1 px-2"
-              value={loanType}
+              value={loanType} 
               onChange={handleOptionChange}
             >
               <FormControlLabel
