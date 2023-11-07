@@ -22,7 +22,7 @@ const RequestLeave = ({ handleClose }) => {
       color: "#901106",
     },
   ]);
-  const Ref = doc(db, "departments", currentUser?.department[0], "leaveRequests", uid);
+  const Ref = doc(db, "departments", currentUser?.department, "leaveRequests", uid);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

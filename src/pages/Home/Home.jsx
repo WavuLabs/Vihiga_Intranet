@@ -70,15 +70,15 @@ const Home = () => {
     <>
       {!loadingUSERS ? (
         <>
-          <div className="relative row overflow-clip h-[85vh]">
-            <div className="sm:w-[60vw] w-4/5 col ">
+          <div className="relative row overflow-clip h-[90vh]">
+            <div className="sm:w-[60vw] w-full col ">
               <img
                 src={Logo}
                 alt="logo"
                 className="flex-1 opacity-60 filter-blur "
               />
             </div>
-            <div className="z-10 w-[45vw]   absolute h-full right-0 bg-slate-800/5 flex flex-col justify-center -translate-x-[5vw]s ">
+            <div className="z-10 sm:w-[45vw] absolute h-full w-3/4 right-0 bg-slate-800/5 col justify-center -translate-x-[5vw] ">
               <p className="sm:text-7xl font-bold font-">Welcome to</p>
               <p className="sm:text-5xl font-semibold">Vihiga County Intranet</p>
               <div className="text-primary sm:text-2xl font-semibold ">

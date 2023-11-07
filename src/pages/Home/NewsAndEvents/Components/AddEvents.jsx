@@ -35,7 +35,7 @@ const AddEvents = () => {
       uploadedBy: {
         uid: currentUser.uid,
         name: currentUser.name,
-        department: currentUser.department[0],
+        department: currentUser.department,
       },
     };
     const firestorePath = `departments/${department}/events/${eventName}`;

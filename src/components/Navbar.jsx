@@ -48,6 +48,7 @@ export default function Navbar({ props }) {
       </div>
     </Box>
   );
+
   const HandleSignOut = async () => {
     await logout();
     navigate("/", { replace: true });
@@ -63,13 +64,15 @@ export default function Navbar({ props }) {
       >
         <List />
       </SwipeableDrawer>
-      <div className="sticky grid grid-cols-2 top-0 mb- h-[10vh] w-full z-50 opacity-100 bg-bg">
+      <div className="sticky grid grid-flow-col sm:grid-cols-2 top-0 mb- h-[10vh] w-full z-50 opacity-100 bg-bg">
         {/* Box with Logo */}
-        <div className="bg-[#020202]/60 overflow-hidden">
-          <div className="sm:hidden">
-            <Button onClick={toggleDrawer(true)}></Button>
+        <div className="bg-[#020202]/60 overflow-hidden row items-center">
+          <div className="sm:hidden block">
+            <Button onClick={toggleDrawer(true)} className="cols-center">
+              <MenuIcon />
+            </Button>
           </div>
-          <img src={Logo} className="w-[9vw] h-[8vh] m-2" />
+          <img src={Logo} className="w-[9vw] h-[8vh] m-2 hidden sm:block"/>
         </div>
 
         <div className="row ">
@@ -84,7 +87,7 @@ export default function Navbar({ props }) {
               CHAT
             </Link>
           </ol>
-          <div className="bg-[#3a1107] w-[10vw] h-full flex rows-center">
+          <div className="bg-[#3a1107] w-[10vw] h-full rows-center">
             <DropDown
               Class="w-full h-full"
               Title={

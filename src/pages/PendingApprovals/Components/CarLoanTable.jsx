@@ -27,7 +27,7 @@ const CarLoanTable = () => {
   const [data, setData] = useState([]);
   const { uid, currentUser } = useOutletContext();
 
-  const path = `departments/${currentUser?.department[0]}/loanRequests`;
+  const path = `departments/${currentUser?.department}/loanRequests`;
   const q = query(collection(db, path), orderBy("name", "desc"));
   const [loanRequests, loading, error, snapshot] = useCollectionData(q);
 

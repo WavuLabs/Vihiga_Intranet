@@ -18,12 +18,12 @@ const StaffDirectory = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full text-black">
+    <div className="col w-full h-full text-black">
       <p className=" text-3xl font-bold ">Staff Directory</p>
       <Button className="self-end" onClick={toggleShowAll}>
         {showAll ? "Hide" : "Show All"}
       </Button>
-      <div className="grid grid-cols-3">
+      <div className="grid sm:grid-cols-3  ">
         {displayedUsers?.map((staff, index) => (
           <StaffItem key={index} staff={staff} />
         ))}

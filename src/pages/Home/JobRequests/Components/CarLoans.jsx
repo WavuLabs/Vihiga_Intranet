@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import { db } from "../../../../APIs/firebase";
 import { ContextData } from "../../../../APIs/contexts/Context";
-import { differenceInDays, set } from "date-fns";
+import { differenceInDays } from "date-fns";
 
 const CarLoans = ({ handleClose }) => {
   const { serverTime } = ContextData();
@@ -24,7 +24,7 @@ const CarLoans = ({ handleClose }) => {
   const Ref = doc(
     db,
     "departments",
-    currentUser?.department[0],
+    currentUser?.department,
     "loanRequests",
     uid
   );

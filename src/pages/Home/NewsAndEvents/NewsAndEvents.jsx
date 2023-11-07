@@ -75,8 +75,8 @@ const NewsAndEvents = () => {
         <p className="p-title my-3 p-3">News & Events</p>
         <button onClick={() => toggleShowAll()}>Show All</button>
       </div>
-      <div className="grid sm:grid-cols-3 space-x-2 px-2 sm:h-[70vh] ">
-        <div className="col-span-2 overflow-y-scroll">
+      <div className="grid sm:grid-cols-3 space-x-2 gap-4 px-2 sm:h-[90vh] ">
+        <div className="sm:col-span-2 overflow-y-scroll">
           {filterNews ? (
             <div className=" grid grid-flow-row gap-5 m-1 ">
               {displayedNews?.map((item, index) => (

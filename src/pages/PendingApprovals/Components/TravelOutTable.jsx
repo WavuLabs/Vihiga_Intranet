@@ -30,7 +30,7 @@ const TravelOutTable = () => {
   const [data, setData] = useState([]);
   const { uid, currentUser } = useOutletContext();
 
-  const path = `departments/${currentUser?.department[0]}/travelOutRequests`;
+  const path = `departments/${currentUser?.department}/travelOutRequests`;
   const q = query(collection(db, path), orderBy("startDate", "desc"));
   const [travelOutRequests, loading, error, snapshot] = useCollectionData(q);
 
