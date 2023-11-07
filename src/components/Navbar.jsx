@@ -5,23 +5,20 @@ import {
   Button,
   ListItemButton,
   ListItemIcon,
-  ListItemText,
-  Icon,
+  ListItemText,Avatar
 } from "@mui/material";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import { doc, onSnapshot } from "firebase/firestore";
-import { Image, Logout as LogoutIcon } from "@mui/icons-material";
+import { Logout as LogoutIcon } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Avatar } from "@mui/material";
-
-import { db } from "../APIs/firebase";
 import DropDown from "./DropDown";
-import { auth } from "../APIs/firebase";
-import InboxMessagesSidebar from "../pages/Chat/Components/InboxMessagesSidebar";
 import { ContextData } from "../APIs/contexts/Context";
-import UsersSideBar from "../pages/Chat/Components/UsersSideBar";
 import Logo from "/assets/VihigaLogo.png";
 
+const List = () => (
+  <Box className="w-[70vw] h-[100vh] m-2 overflow-clip" role="presentation">
+    
+  </Box>
+);
 export default function Navbar({ props }) {
   const { logout } = ContextData();
   const { currentUser, uid } = props;
@@ -40,14 +37,6 @@ export default function Navbar({ props }) {
     setState(open);
   };
 
-  const List = () => (
-    <Box className="w-[70vw] h-[100vh] m-2 overflow-clip" role="presentation">
-      <UsersSideBar />
-      <div onClick={toggleDrawer(false)} className="flex flex-col h-[70vh]  ">
-        <InboxMessagesSidebar />
-      </div>
-    </Box>
-  );
 
   const HandleSignOut = async () => {
     await logout();

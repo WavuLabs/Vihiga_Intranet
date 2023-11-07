@@ -79,9 +79,9 @@ const Home = () => {
               />
             </div>
             <div className="z-10 sm:w-[45vw] absolute h-full w-3/4 right-0 bg-slate-800/5 col justify-center -translate-x-[5vw] ">
-              <p className="sm:text-7xl font-bold font-">Welcome to</p>
-              <p className="sm:text-5xl font-semibold">Vihiga County Intranet</p>
-              <div className="text-primary sm:text-2xl font-semibold ">
+              <p className="sm:text-7xl text-3xl font-bold font-">Welcome to</p>
+              <p className="sm:text-5xl text-2xl font-semibold">Vihiga County Intranet</p>
+              <div className="text-primary sm:text-2xl text-3xl font-semibold ">
                 <Typewriter
                   options={{
                     strings: [

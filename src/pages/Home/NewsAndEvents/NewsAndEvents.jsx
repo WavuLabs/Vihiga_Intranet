@@ -90,9 +90,9 @@ const NewsAndEvents = () => {
             <p className="text-center self-center">No News</p>
           )}
         </div>
-        <div className="col overflow-y-scroll w-full">
+        <div className="col overflow-y-scroll w-full overflow-x-clip">
           <DateRangePicker
-            className=" text-black sm:w-[30vw] w-full"
+            className=" text-black sm:w-[30vw] w-[90vw] "
             onChange={(item) => setCustomRange([item.selection])}
             showSelectionPreview={true}
             moveRangeOnFirstSelection={false}
