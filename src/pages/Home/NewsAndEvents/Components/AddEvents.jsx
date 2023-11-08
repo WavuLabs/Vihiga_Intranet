@@ -8,7 +8,7 @@ import { ProgressIndicator } from "../../../../components/ProgressIndicator";
 import { DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
-const AddEvents = () => {
+const AddEvents =({ handleClose }) => {
   const { currentUser } = useOutletContext();
   const [eventDetails, setEventDetails] = useState("");
   const [eventName, setEventName] = useState("");
@@ -38,7 +38,7 @@ const AddEvents = () => {
         department: currentUser.department,
       },
     };
-    const firestorePath = `departments/${department}/events/${eventName}`;
+    const firestorePath = `events/${eventName}`;
     const storagePath = `forms/${department}/events/${file?.name}`;
 
     await uploadFileToStorageAndFirestore(
@@ -47,8 +47,9 @@ const AddEvents = () => {
       eventData,
       firestorePath
     );
-    console.log("Event Added");
+    alert("Event Added");
     setLoading(false);
+    handleClose();
   };
 
   return (

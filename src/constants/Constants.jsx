@@ -94,6 +94,7 @@ const departments = [
   "Health Services",
   "Youth, Gender, Sports, Culture and Social Services",
   "Education, Science and Technical Vocational Training",
+  "All Departments",
 ];
 const JobTitles = ["Exco", "CECM", "Chief Officer", "Director"];
 

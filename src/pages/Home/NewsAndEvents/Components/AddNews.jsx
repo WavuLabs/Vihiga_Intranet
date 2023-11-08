@@ -27,6 +27,7 @@ const AddNews = ({ handleClose }) => {
     const newsData = {
       newsHeadline: newsHeadline,
       news: news,
+      department: department,
       uploadTime: serverTimestamp(),
       uploadedBy: {
         uid: currentUser.uid,
@@ -34,7 +35,7 @@ const AddNews = ({ handleClose }) => {
         department: currentUser.department,
       },
     };
-    const firestorePath = `departments/${department}/news/${newsHeadline}`;
+    const firestorePath = `news/${newsHeadline}`;
     const storagePath = `forms/${department}/news/${file.name}`;
 
     await uploadFileToStorageAndFirestore(

@@ -19,7 +19,7 @@ const NewsAndEvents = () => {
   const [newsItem, setNewsItem] = useState(null);
   const [eventsItem, setEventsItem] = useState(null);
   const [showAll, setShowAll] = useState(false);
-  const [filterNews, setFilterNews] = useState(null);
+  const [newsInRange, setNewsInRange] = useState(null);
   const [eventsInRange, setEventsInRange] = useState(null);
   const [customRange, setCustomRange] = useState([
     {
@@ -31,18 +31,18 @@ const NewsAndEvents = () => {
   ]);
   const userDepartment = currentUser?.department;
 
-  const newsRef = collection(db, `departments/${userDepartment}/news`);
+  const newsRef = collection(db, `news`);
   const queryNews = query(newsRef, orderBy("uploadTime", "desc"));
   const [newsData, loadingData, error] = useCollectionData(queryNews);
 
-  const eventsRef = collection(db, `departments/${userDepartment}/events`);
+  const eventsRef = collection(db, `events`);
   const queryEvents = query(eventsRef, orderBy("eventName", "desc"));
   const [eventsData, loadingEvents, errorEvents] =
     useCollectionData(queryEvents);
 
   useEffect(() => {
     if (!newsData || !eventsData) return;
-    setFilterNews(
+    setNewsInRange(
       newsData?.filter((news) => {
         const newsDate = new Date(news.uploadTime?.seconds * 1000);
         return (
@@ -66,7 +66,7 @@ const NewsAndEvents = () => {
 
   const toggleShowAll = () => setShowAll(!showAll);
   const displayedEvents = showAll ? eventsInRange : eventsData?.slice(0, 3);
-  const displayedNews = showAll ? filterNews : filterNews?.slice(0, 3);
+  const displayedNews = showAll ? newsInRange : newsInRange?.slice(0, 3);
   const handleDialog = () => setOpen(!open);
 
   return (
@@ -77,7 +77,7 @@ const NewsAndEvents = () => {
       </div>
       <div className="grid sm:grid-cols-3 space-x-2 gap-4 px-2 sm:h-[90vh] ">
         <div className="sm:col-span-2 overflow-y-scroll">
-          {filterNews ? (
+          {newsInRange ? (
             <div className=" grid grid-flow-row gap-5 m-1 ">
               {displayedNews?.map((item, index) => (
                 <NewsItem

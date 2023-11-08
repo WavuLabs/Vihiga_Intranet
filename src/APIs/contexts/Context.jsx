@@ -65,7 +65,7 @@ export const ContextProvider = ({ children }) => {
   const uploadFileToFireBase = async (data, path) => {
     const Ref = doc(db, path);
     await setDoc(Ref, data);
-    console.log("File uploaded to FireBase");
+    console.log("File uploaded to FireBase " + path + "successfully!!!");
   };
 
   const uploadFileToStorageAndFirestore = async (
