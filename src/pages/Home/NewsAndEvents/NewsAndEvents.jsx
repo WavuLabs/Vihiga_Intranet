@@ -70,7 +70,7 @@ const NewsAndEvents = () => {
   const handleDialog = () => setOpen(!open);
 
   return (
-    <div className="my-5 mx-3 w-90vw h-h-[90vh] overflow-clip border border-white/60">
+    <div className="my-5 mx-3 w-90vw h-h-[90vh] overflow-clip border border-white/10">
       <div className="row justify-between">
         <p className="p-title my-3 p-3">News & Events</p>
         <button onClick={() => toggleShowAll()}>Show All</button>
