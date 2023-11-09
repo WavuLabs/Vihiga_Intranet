@@ -148,6 +148,10 @@ const Signup = () => {
     e.preventDefault();
     handleSetProfilePicture(image);
   };
+  useEffect(() => {
+    if (!jobTitle || !department) return;
+    setJobDescription(jobTitle + " " + department);
+  }, [jobTitle, department]);
 
   return (
     <>
@@ -225,7 +229,7 @@ const Signup = () => {
               type="text"
               placeholder="Job Description i.e Chief Officer - Environment"
               value={jobDescription}
-              onChange={(e) => setJobDescription(jobTitle + " " + department)}
+              onChange={(e) => setJobDescription(e.target.value)}
             />
           )}
           <div className="flex flex-col px-3 ">
@@ -237,7 +241,7 @@ const Signup = () => {
                 <span className=" single-line">{image?.name}</span>
                 <button
                   size="small"
-                  className="m-1 self-start rows-center bg-green-800/30"
+                  className="m-1 self-start rows-center bg-primary/50"
                   onClick={handleUpLoadImage}
                 >
                   <PhotoCamera fontSize="small" />

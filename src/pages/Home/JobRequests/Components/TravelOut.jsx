@@ -22,16 +22,13 @@ const TravelOut = ({ handleClose }) => {
       color: "#901106",
     },
   ]);
-
   const Ref = doc(
     db,
-    "departments",
-    currentUser?.department,
-    "travelOutRequests",
-    uid
+    `departments/${currentUser?.department}/travelOutRequests/${uid}`
   );
 
   const handleDateRange = (item) => {
+    if (!item) return;
     const startDate = new Date(item.applicationDate.seconds * 1000);
     const todaysDate = new Date();
     const dateBetween = differenceInDays(todaysDate, startDate);
@@ -59,6 +56,7 @@ const TravelOut = ({ handleClose }) => {
     alert("Request successfully sent!");
   };
 
+  
   const travelOutStatus = async () => {
     const docSnap = await getDoc(Ref);
     if (docSnap.exists()) {
@@ -73,6 +71,7 @@ const TravelOut = ({ handleClose }) => {
   }, []);
 
   const handleDisplay = () => {
+    if (!applicationData) return;
     switch (approvalStatus) {
       case "approved":
         return <p className="text-3xl text-green">Aproved</p>;

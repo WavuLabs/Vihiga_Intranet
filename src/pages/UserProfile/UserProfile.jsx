@@ -10,10 +10,12 @@ import { ProgressIndicator } from "../../components/ProgressIndicator";
 import DialogComponent from "../../components/DialogComponent";
 import SelectDepartment from "../../components/SelectDepartment";
 import { set } from "date-fns";
+import { ContextData } from "../../APIs/contexts/Context";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const { uid, currentUser } = useOutletContext();
+  const { uploadFileToStorageAndFirestore } = ContextData();
   const [open, setOpen] = useState(false);
   const [department, setDepartment] = useState(currentUser?.department);
   const [image, setImage] = useState(null);
@@ -21,7 +23,9 @@ const UserProfile = () => {
   const [showProgressIndicator, setShowProgressIndicator] = useState(false);
   const [updatedUserValues, setUpdatedUserValues] = useState();
   const handleClose = () => setOpen(!open);
+
   const userDocRef = doc(db, "users", uid);
+  const storageRef = ref(storage, `DP/${uid}`);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -71,7 +75,6 @@ const UserProfile = () => {
   const uploadRestaurantImage = async () => {
     if (!image) return;
     setShowProgressIndicator(true);
-    const storageRef = ref(storage, `DP/${uid}`);
 
     try {
       const uploadResult = await uploadBytes(storageRef, image);
@@ -83,12 +86,13 @@ const UserProfile = () => {
       setImageUrl(downloadURL);
 
       if (!uid) return;
-      await setDoc(userDocRef, { profile_picture: imageUrl }, { merge: true });
+      await setDoc(
+        userDocRef,
+        { profile_picture: downloadURL },
+        { merge: true }
+      );
       console.log("image succefully Updated");
 
-      if (currentUser?.profile_picture == null) {
-        alert("Try to refresh the page to see the changes");
-      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -155,10 +159,7 @@ const UserProfile = () => {
           <p>Contacts</p>
           <p>{currentUser?.contacts}</p>
           <p>Physical Address</p>
-          <p>Emergency Contacts</p>
-          <p>Alternative Email</p>
-          <p>{currentUser?.contacts}</p>
-          <p>{updatedUserValues?.contacts}</p>
+          <p>{currentUser?.physicalAddress}</p>
         </div>
       </div>
       <div className=" grid grid-flow-col w-[40vw] h-[10vh]">
@@ -225,6 +226,14 @@ const UserProfile = () => {
             placeholder="Enter Next of kin"
             defaultValue={currentUser?.nextOfKin}
             onChange={(e) => handleFieldChange("nextOfKin", e.target.value)}
+          />
+          <TextInputComponents
+            label="Physical Address"
+            placeholder="Enter Physical Address"
+            defaultValue={currentUser?.address}
+            onChange={(e) =>
+              handleFieldChange("physicalAddress", e.target.value)
+            }
           />
           <div className="h-[3vh]" />
           <Button type="submit">Submit</Button>

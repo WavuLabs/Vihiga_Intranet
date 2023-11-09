@@ -28,7 +28,6 @@ const QuickLinks = () => {
 
   const checkForHeadOfDepartment = () => {
     setHead(titles.includes(userJobTitle));
-    console.log(head);
   };
 
   const handleClose = () => setOpen(!open);

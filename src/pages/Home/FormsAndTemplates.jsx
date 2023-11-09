@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import TuneIcon from "@mui/icons-material/Tune";
 import { TextField } from "@mui/material";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../APIs/firebase";
 import SelectDepartment from "../../components/SelectDepartment";
 import { useOutletContext } from "react-router-dom";
+import { set } from "date-fns";
 
 const FormsAndTemplates = () => {
   const { currentUser } = useOutletContext();
@@ -14,6 +15,7 @@ const FormsAndTemplates = () => {
   const [loading, setLoading] = useState(false);
   const [searchIntatiated, setSearchIntatiated] = useState(false);
   const [forms, setForms] = useState([]);
+
   const inputRef = useRef();
 
   const handleSubmit = (event) => {
@@ -21,15 +23,17 @@ const FormsAndTemplates = () => {
   };
 
   const getForms = async (name, department) => {
+    const dataArray = [];
     setLoading(true);
     setSearchIntatiated(true);
-    const Ref = collection(db, `departments/${department}/files`);
-    const dataArray = [];
+    const Ref = collection(db, `files`);
+    const queryByDepartment = query(Ref, where("department", "==", department));
     try {
-      const snapshotData = await getDocs(Ref);
+      const q = department === "All Departments" ? Ref : queryByDepartment;
+
+      const snapshotData = await getDocs(q);
       snapshotData.forEach((doc) => {
         dataArray.push(doc.data());
-        // console.log(doc.data(), "all data");
       });
 
       if (name === "") return setForms(dataArray);

@@ -23,10 +23,7 @@ const CarLoans = ({ handleClose }) => {
   const [loanType, setLoanType] = useState("");
   const Ref = doc(
     db,
-    "departments",
-    currentUser?.department,
-    "loanRequests",
-    uid
+    `departments/${currentUser?.department}/loanRequests/${uid}`
   );
 
   const handleDateRange = (item) => {

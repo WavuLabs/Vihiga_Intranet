@@ -96,6 +96,6 @@ const departments = [
   "Education, Science and Technical Vocational Training",
   "All Departments",
 ];
-const JobTitles = ["Exco", "CECM", "Chief Officer", "Director"];
+const JobTitles = ["Excutive", "CECM", "Chief Officer", "Director"];
 
 export { JobTitles, departments, styles, theme, colors, width, height };

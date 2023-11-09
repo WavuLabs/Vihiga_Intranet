@@ -58,7 +58,7 @@ const UpLoadForms = () => {
       name: fileName,
       uploadTime: serverTimestamp(),
     };
-    const Ref = doc(db, `departments/${department}/files`, file.name);
+    const Ref = doc(db, `files`, file.name);
     await setDoc(Ref, data);
     console.log("File uploaded to FireBase");
   };
