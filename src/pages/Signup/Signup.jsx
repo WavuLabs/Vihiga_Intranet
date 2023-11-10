@@ -170,7 +170,7 @@ const Signup = () => {
           <p className="text-gray-200">Create account</p>
 
           <TextInputComponents
-            label="Email"
+            label="Email" 
             type="email"
             placeholder="Email"
             value={email}
