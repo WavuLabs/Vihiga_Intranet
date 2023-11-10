@@ -57,7 +57,7 @@ const FormsAndTemplates = () => {
 
   useEffect(() => {
     getForms(searchQuery, department);
-  }, [department]);
+  }, [department, currentUser]);
 
   useEffect(() => {
     setDepartment(currentUser?.department);

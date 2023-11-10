@@ -62,8 +62,8 @@ const Signup = () => {
         await createUser(email, password)
           .then(async (userCredential) => {
             const uid = userCredential.user.uid;
+            
             // Signed in
-
             const userObject = {
               name: name,
               email: email,
@@ -115,7 +115,7 @@ const Signup = () => {
   const uploadRestaurantImage = async () => {
     if (!image) return;
     setShowProgressIndicator(true);
-    const storageRef = ref(storage, `DP/${new Date().getTime()}_${image.name}`);
+    const storageRef = ref(storage, `DP/${image.name}`);
 
     try {
       // 'file' comes from the Blob or File API
@@ -148,6 +148,7 @@ const Signup = () => {
     e.preventDefault();
     handleSetProfilePicture(image);
   };
+
   useEffect(() => {
     if (!jobTitle || !department) return;
     setJobDescription(jobTitle + " " + department);
@@ -161,7 +162,7 @@ const Signup = () => {
         </div>
       )}
       <div className="w-full h-full flex justify-center items-center -z-10">
-        <form
+        <form 
           onSubmit={HandleSignup}
           className="max-w-md w-full px-4 py-8 text-center overflow-clip"
         >
@@ -169,7 +170,7 @@ const Signup = () => {
           <p className="text-gray-200">Create account</p>
 
           <TextInputComponents
-            label="email"
+            label="Email"
             type="email"
             placeholder="Email"
             value={email}
@@ -183,7 +184,7 @@ const Signup = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <TextInputComponents
-            label="name"
+            label="Name"
             type="text"
             placeholder="Name"
             value={name}
@@ -191,7 +192,7 @@ const Signup = () => {
           />
 
           <TextInputComponents
-            label="number"
+            label="Number"
             type="number"
             placeholder="Enter Phone Number"
             value={number}
